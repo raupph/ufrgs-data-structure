@@ -1,0 +1,1247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+            
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Material Extra - Revisão de Linguagem C (Parte 2)</h1>
+</div>
+
+<p>
+Nesta aula daremos continuidade à revisão dos principais conceitos da linguagem C necessários para o restante da disciplina, iniciada no Material Extra — Revisão de Linguagem C (Parte 1). Assume-se que todos os alunos já cursaram uma disciplina introdutória de programação e possuem familiaridade com a linguagem C. Assim, o objetivo desta aula não é ensinar programação desde o início, mas revisar rapidamente os conceitos que servirão de base para as próximas aulas.
+</p>
+
+<p>
+Nesta segunda parte revisaremos os recursos mais importantes para Estruturas de Dados, como funções, modularização, ponteiros, <i>structs</i> e arquivos.
+</p>
+
+<hr />
+
+<h2>Subprogramação (Funções)</h2>
+
+<p>
+A <b>subprogramação</b> é uma técnica que consiste em dividir um programa complexo em partes menores, mais simples e independentes, chamadas de <b>funções</b>. A principal motivação é permitir o reaproveitamento de código, facilitar a manutenção, melhorar a legibilidade e evitar a repetição de trechos de lógica idênticos.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Diretriz de Projeto.</b>
+<ul>
+<li><b>Princípio da Responsabilidade Única:</b> Cada função deve executar apenas <b>uma tarefa específica</b>. Se uma função está fazendo muitas coisas diferentes (como ler dados, calcular valores e imprimir o resultado), ela deve ser dividida em funções menores.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<p>
+Em C, as funções podem ser classificadas em dois grupos:
+</p>
+
+<ul>
+<li><b>Pré-definidas (ou de biblioteca)</b>: Funções já implementadas pelo próprio compilador ou por bibliotecas padrão do sistema, como <code>sqrt()</code> (da biblioteca <code>math.h</code>), <code>strlen()</code> (da biblioteca <code>string.h</code>), ou <code>printf()</code> (da biblioteca <code>stdio.h</code>).</li>
+<li><b>Desenvolvidas pelo usuário</b>: Funções criadas pelo programador para resolver necessidades específicas do programa.</li>
+</ul>
+
+<h3>Estrutura e Utilização: Declaração, Protótipo e Chamada</h3>
+
+<p>
+O uso de uma função desenvolvida pelo usuário envolve três etapas essenciais:
+</p>
+
+<ol>
+<li><b>Protótipo (ou Assinatura)</b>: Declaração da existência da função para o compilador, informando seu tipo de retorno, nome e tipos dos parâmetros. Geralmente inserido no início do código (antes da função <code>main</code>), serve para que a função possa ser chamada mesmo se sua implementação física estiver escrita mais abaixo no arquivo.
+<br />
+<b>Sintaxe genérica:</b>
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 5px 0; display: inline-block;">
+tipo nome(tipo1 param1, tipo2 param2 … tipoN paramN);
+</pre>
+</li>
+
+<br />
+
+<li><b>Declaração (ou Definição)</b>: A implementação física da função, contendo o bloco de instruções (corpo da função) que realiza a tarefa.
+<br />
+<b>Sintaxe genérica:</b>
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 5px 0; display: inline-block;">
+tipo nome(tipo1 param1, tipo2 param2 … tipoN paramN) {
+    ...
+    return expressão; // Opcional (obrigatório se o tipo de retorno não for void)
+}
+</pre>
+</li>
+
+<br />
+
+<li><b>Chamada</b>: O momento em que a função é invocada e executada em algum ponto do programa (por exemplo, dentro da <code>main</code> ou de outra função).
+<br />
+<b>Sintaxe genérica:</b>
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 5px 0; display: inline-block;">
+var = nome(argum1, argum2, … argumN);
+</pre>
+</li>
+</ol>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #008000; font-style: italic;">// 1. PROTÓTIPO da função</span>
+<span style="color: #0000ff; font-weight: bold;">int</span> somar(<span style="color: #0000ff; font-weight: bold;">int</span> a, <span style="color: #0000ff; font-weight: bold;">int</span> b);
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> x = 5, y = 3;
+    
+    <span style="color: #008000; font-style: italic;">// 2. CHAMADA da função</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> resultado = somar(x, y);
+    
+    printf(<span style="color: #a31515;">"Soma: %d\n"</span>, resultado);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+
+<span style="color: #008000; font-style: italic;">// 3. DECLARAÇÃO (Definição) da função</span>
+<span style="color: #0000ff; font-weight: bold;">int</span> somar(<span style="color: #0000ff; font-weight: bold;">int</span> a, <span style="color: #0000ff; font-weight: bold;">int</span> b) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> a + b;
+}
+</pre>
+
+<h3>Argumentos, Parâmetros e Retorno</h3>
+
+<p>
+Para que as funções possam se comunicar e compartilhar dados entre si, utilizamos os conceitos de <b>parâmetros/argumentos</b> e <b>retorno</b>:
+</p>
+
+<ul>
+<li><b>Parâmetros</b>: São as variáveis declaradas na assinatura ou definição da função. Eles atuam como receptores locais para os valores que serão passados para a função.</li>
+<li><b>Argumentos</b>: São os valores reais ou variáveis fornecidos à função no momento da sua chamada (os valores reais passados).</li>
+<li><b>Retorno</b>: É o valor que a função devolve para a instrução que a chamou, através do comando <code>return</code>. Quando a instrução <code>return</code> é executada, a função é imediatamente encerrada.</li>
+</ul>
+
+<p>
+Uma função em C pode ou não ter parâmetros e pode ou não ter retorno.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #008000; font-style: italic;">// 1. Sem retorno (void) e sem parâmetros</span>
+<span style="color: #0000ff; font-weight: bold;">void</span> cabecalho() {
+    printf(<span style="color: #a31515;">"====================\n"</span>);
+    printf(<span style="color: #a31515;">"   SISTEMA DE TESTE \n"</span>);
+    printf(<span style="color: #a31515;">"====================\n"</span>);
+}
+
+<span style="color: #008000; font-style: italic;">// 2. Com retorno (float) e sem parâmetros</span>
+<span style="color: #0000ff; font-weight: bold;">float</span> obterPi() {
+    <span style="color: #0000ff; font-weight: bold;">return</span> 3.14159;
+}
+
+<span style="color: #008000; font-style: italic;">// 3. Sem retorno (void) e com parâmetros</span>
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimirMensagemRepetida(<span style="color: #0000ff; font-weight: bold;">char</span> texto[], <span style="color: #0000ff; font-weight: bold;">int</span> vezes) {
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; vezes; i++) {
+        printf(<span style="color: #a31515;">"%s\n"</span>, texto);
+    }
+}
+
+<span style="color: #008000; font-style: italic;">// 4. Com retorno (int) e com parâmetros</span>
+<span style="color: #0000ff; font-weight: bold;">int</span> quadrado(<span style="color: #0000ff; font-weight: bold;">int</span> num) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> num * num;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    cabecalho();
+    
+    printf(<span style="color: #a31515;">"Valor de PI: %f\n"</span>, obterPi());
+    
+    imprimirMensagemRepetida(<span style="color: #a31515;">"Ola!"</span>, 3);
+    
+    <span style="color: #0000ff; font-weight: bold;">int</span> val = 5;
+    printf(<span style="color: #a31515;">"O quadrado de %d eh %d\n"</span>, val, quadrado(val));
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Escopo de Variáveis</h3>
+
+<p>
+O escopo define a visibilidade e o tempo de vida de uma variável dentro de um programa. As variáveis pertencem a um determinado escopo (trecho de código delimitado por chaves <code>{ }</code>).
+</p>
+
+<ul>
+<li><b>Variáveis locais</b>:
+    <ul>
+    <li>São declaradas dentro do corpo de uma função (inclusive dentro da função <code>main</code>) ou de um bloco específico.</li>
+    <li>Apenas a função onde a variável foi declarada tem acesso a ela.</li>
+    <li>Seu tempo de vida se encerra quando a execução da função termina.</li>
+    <li><b>Regra de Ouro:</b> Devem ser amplamente utilizadas para garantir o encapsulamento e evitar efeitos colaterais em outras partes do código.</li>
+    </ul>
+</li>
+<li><b>Variáveis globais</b>:
+    <ul>
+    <li>São declaradas fora de qualquer função, geralmente no topo do arquivo.</li>
+    <li>Qualquer parte do programa (qualquer função) pode ler ou alterar seus valores livremente.</li>
+    <li>Seu tempo de vida dura toda a execução do programa.</li>
+    <li><b>Regra de Ouro:</b> <b>NÃO devem ser usadas</b>. Variáveis globais dificultam o rastreamento de erros, impedem a modularização e comprometem a segurança e legibilidade do código.</li>
+    </ul>
+</li>
+</ul>
+
+<h3>Passagem de Parâmetros: Passagem por Valor</h3>
+
+<p>
+Em C, a passagem de parâmetros padrão para tipos primitivos é sempre realizada <b>por valor</b>.
+</p>
+
+<p>
+Isso significa que, durante a chamada de uma função, o valor das variáveis enviadas como argumentos é <b>copiado</b> para as variáveis receptoras (parâmetros da função). Qualquer modificação feita nos parâmetros dentro da função afeta apenas as cópias locais, não alterando os valores das variáveis originais na função chamadora.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">void</span> incrementar(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    n = n + 1; <span style="color: #008000; font-style: italic;">// Modifica apenas a cópia local do parâmetro</span>
+    printf(<span style="color: #a31515;">"Valor dentro da função: %d\n"</span>, n);
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> num = 10;
+    incrementar(num); <span style="color: #008000; font-style: italic;">// Passagem por valor</span>
+    printf(<span style="color: #a31515;">"Valor na main: %d\n"</span>, num); <span style="color: #008000; font-style: italic;">// Imprime 10 (permanece inalterado)</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<hr />
+
+<h2>Ponteiros</h2>
+
+<p>
+Um <b>ponteiro</b> é uma variável que armazena o <b>endereço de memória</b> de outra variável. Ponteiros são um dos conceitos mais fundamentais em C e são essenciais para implementar estruturas de dados dinâmicas como listas encadeadas, árvores e grafos.
+</p>
+
+<p>
+Cada variável armazenada na memória possui um endereço, e ponteiros fornecem uma forma de acessar e manipular esses endereços diretamente.
+</p>
+
+<h3>Declaração de Ponteiros</h3>
+
+<p>
+A declaração de um ponteiro utiliza o operador <code>*</code> (asterisco). A sintaxe geral é:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+tipo *nome_do_ponteiro;
+</pre>
+
+<p>
+Por exemplo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> *p;      <span style="color: #008000; font-style: italic;">// Ponteiro para int</span>
+<span style="color: #0000ff; font-weight: bold;">float</span> *pf;   <span style="color: #008000; font-style: italic;">// Ponteiro para float</span>
+<span style="color: #0000ff; font-weight: bold;">char</span> *pc;    <span style="color: #008000; font-style: italic;">// Ponteiro para char</span>
+</pre>
+
+<p>
+O tipo do ponteiro deve corresponder ao tipo da variável para a qual ele apontará. Um ponteiro para <code>int</code> é declarado como <code>int *</code>, um ponteiro para <code>float</code> como <code>float *</code>, e assim por diante.
+</p>
+
+<h3>Operadores de Ponteiros</h3>
+
+<p>
+Dois operadores são fundamentais para trabalhar com ponteiros em C:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Operador</th>
+<th>Nome</th>
+<th>Significado</th>
+<th>Exemplo</th>
+</tr>
+
+<tr>
+<td><code>&amp;</code></td>
+<td>Endereço-de</td>
+<td>Obtém o endereço de memória de uma variável.</td>
+<td><code>p = &amp;num;</code></td>
+</tr>
+
+<tr>
+<td><code>*</code></td>
+<td>Desreferenciação</td>
+<td>Acessa o valor armazenado no endereço para o qual o ponteiro aponta.</td>
+<td><code>printf("%d", *p);</code></td>
+</tr>
+
+</table>
+
+<p>
+Considere o seguinte exemplo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> num = 42;       <span style="color: #008000; font-style: italic;">// Variável comum</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> *p = &amp;num;    <span style="color: #008000; font-style: italic;">// Ponteiro recebe o endereço de num</span>
+    
+    printf(<span style="color: #a31515;">"Valor de num: %d\n"</span>, num);      <span style="color: #008000; font-style: italic;">// Imprime: 42</span>
+    printf(<span style="color: #a31515;">"Endereço de num: %p\n"</span>, &amp;num);   <span style="color: #008000; font-style: italic;">// Imprime: 0x7fff5fbff8ac (exemplo)</span>
+    printf(<span style="color: #a31515;">"Valor do ponteiro p: %p\n"</span>, p);  <span style="color: #008000; font-style: italic;">// Imprime: 0x7fff5fbff8ac (mesmo endereço)</span>
+    printf(<span style="color: #a31515;">"Valor apontado por p: %d\n"</span>, *p); <span style="color: #008000; font-style: italic;">// Imprime: 42</span>
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Neste exemplo:
+</p>
+
+<ul>
+<li><code>num</code> é uma variável inteira que armazena o valor 42.</li>
+<li><code>p</code> é um ponteiro que armazena o endereço de <code>num</code>.</li>
+<li><code>&amp;num</code> obtém o endereço da variável <code>num</code>.</li>
+<li><code>*p</code> acessa o valor armazenado no endereço para o qual <code>p</code> aponta (ou seja, o valor de <code>num</code>).</li>
+</ul>
+
+<h3>Modificação de Valores através de Ponteiros</h3>
+
+<p>
+Uma das aplicações práticas de ponteiros é modificar o valor de uma variável através do seu ponteiro.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> num = 10;
+    <span style="color: #0000ff; font-weight: bold;">int</span> *p = &amp;num;
+    
+    printf(<span style="color: #a31515;">"Antes: %d\n"</span>, num);   <span style="color: #008000; font-style: italic;">// Imprime: 10</span>
+    
+    *p = 20; <span style="color: #008000; font-style: italic;">// Modificamos o valor de num através do ponteiro</span>
+    
+    printf(<span style="color: #a31515;">"Depois: %d\n"</span>, num);  <span style="color: #008000; font-style: italic;">// Imprime: 20</span>
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Ponteiros e Funções: Passagem por Referência</h3>
+
+<p>
+Uma das aplicações mais importantes de ponteiros em C é permitir que funções modifiquem valores de variáveis da função chamadora. Como vimos anteriormente, a passagem por valor não permite isso. Utilizando ponteiros, podemos implementar uma <b>passagem por referência</b>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #008000; font-style: italic;">// Função que incrementa o valor apontado pelo ponteiro</span>
+<span style="color: #0000ff; font-weight: bold;">void</span> incrementar(<span style="color: #0000ff; font-weight: bold;">int</span> *n) {
+    *n = *n + 1; <span style="color: #008000; font-style: italic;">// Modifica o valor original</span>
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> num = 10;
+    printf(<span style="color: #a31515;">"Antes: %d\n"</span>, num);  <span style="color: #008000; font-style: italic;">// Imprime: 10</span>
+    
+    incrementar(&amp;num); <span style="color: #008000; font-style: italic;">// Passamos o endereço de num</span>
+    
+    printf(<span style="color: #a31515;">"Depois: %d\n"</span>, num); <span style="color: #008000; font-style: italic;">// Imprime: 11</span>
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Note a diferença fundamental:
+</p>
+
+<ul>
+<li>Sem ponteiros (passagem por valor): Modificações dentro da função não afetam a variável original.</li>
+<li>Com ponteiros (passagem por referência): Modificações dentro da função afetam a variável original.</li>
+</ul>
+
+<h3>Aritmética de Ponteiros</h3>
+
+<p>
+Ponteiros suportam operações aritméticas que permitem navegar pela memória. As operações mais comuns são adição e subtração.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> vetor[5] = {10, 20, 30, 40, 50};
+    <span style="color: #0000ff; font-weight: bold;">int</span> *p = vetor; <span style="color: #008000; font-style: italic;">// p aponta para o primeiro elemento</span>
+    
+    printf(<span style="color: #a31515;">"Elemento 0: %d (endereço: %p)\n"</span>, *p, p);
+    
+    p++; <span style="color: #008000; font-style: italic;">// Avança o ponteiro para o próximo elemento</span>
+    printf(<span style="color: #a31515;">"Elemento 1: %d (endereço: %p)\n"</span>, *p, p);
+    
+    p = p + 2; <span style="color: #008000; font-style: italic;">// Avança 2 elementos</span>
+    printf(<span style="color: #a31515;">"Elemento 3: %d (endereço: %p)\n"</span>, *p, p);
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Quando incrementamos um ponteiro (por exemplo, <code>p++</code>), ele não avança simplesmente 1 byte na memória. Em vez disso, ele avança um número de bytes equivalente ao tamanho do tipo apontado. Se <code>p</code> aponta para um <code>int</code> (4 bytes), então <code>p++</code> avançará 4 bytes. Essa automatização é uma das razões pelas quais C oferece um controle tão fino sobre a memória.
+</p>
+
+<h3>Ponteiros NULL</h3>
+
+<p>
+Um ponteiro sem inicialização contém um valor impreciso (lixo de memória), e dereferenciá-lo (<code>*p</code>) resultará em comportamento indefinido. Para indicar que um ponteiro não aponta para nenhum local válido, utilizamos <code>NULL</code>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> *p = NULL; <span style="color: #008000; font-style: italic;">// Inicializa com NULL (seguro)</span>
+    
+    <span style="color: #0000ff; font-weight: bold;">if</span> (p != NULL) {
+        printf(<span style="color: #a31515;">"%d\n"</span>, *p); <span style="color: #008000; font-style: italic;">// Só será executado se p não for NULL</span>
+    } <span style="color: #0000ff; font-weight: bold;">else</span> {
+        printf(<span style="color: #a31515;">"Ponteiro é NULL\n"</span>);
+    }
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Ponteiros e Vetores/Strings</h3>
+
+<p>
+Em C, há uma relação muito próxima entre ponteiros e vetores. Na verdade, o nome de um vetor é um ponteiro para seu primeiro elemento. Isso significa que <code>vetor</code>, <code>&amp;vetor[0]</code> e <code>&amp;vetor</code> apontam para o mesmo endereço em memória.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> vetor[5] = {10, 20, 30, 40, 50};
+    <span style="color: #0000ff; font-weight: bold;">char</span> string[] = <span style="color: #a31515;">"Olá"</span>;
+    
+    <span style="color: #008000; font-style: italic;">// Três formas equivalentes de acessar o primeiro elemento</span>
+    printf(<span style="color: #a31515;">"vetor = %p\n"</span>, (<span style="color: #0000ff; font-weight: bold;">void</span>*)vetor);
+    printf(<span style="color: #a31515;">"&amp;vetor[0] = %p\n"</span>, (<span style="color: #0000ff; font-weight: bold;">void</span>*)&amp;vetor[0]);
+    printf(<span style="color: #a31515;">"&amp;vetor = %p\n"</span>, (<span style="color: #0000ff; font-weight: bold;">void</span>*)&amp;vetor);
+    
+    <span style="color: #008000; font-style: italic;">// vetor == &amp;vetor[0] == &amp;vetor (mesmo endereço)</span>
+    
+    <span style="color: #008000; font-style: italic;">// Acessar elementos via ponteiro</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> *p = vetor;
+    printf(<span style="color: #a31515;">"Primeiro: %d\n"</span>, *p);      <span style="color: #008000; font-style: italic;">// Acessa vetor[0]</span>
+    printf(<span style="color: #a31515;">"Segundo: %d\n"</span>, *(p + 1)); <span style="color: #008000; font-style: italic;">// Acessa vetor[1]</span>
+    printf(<span style="color: #a31515;">"Segundo: %d\n"</span>, p[1]);     <span style="color: #008000; font-style: italic;">// Equivalente: p[1] == *(p+1)</span>
+    
+    <span style="color: #008000; font-style: italic;">// Iterando com ponteiro</span>
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; 5; i++) {
+        printf(<span style="color: #a31515;">"%d "</span>, *(p + i));
+    }
+    printf(<span style="color: #a31515;">"\n"</span>);
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Isso explica por que você pode passar um vetor diretamente para uma função: na realidade, você está passando um ponteiro. Strings em C são apenas arrays de <code>char</code>, então a mesma lógica se aplica. Se você escrever <code>"Olá"</code>, você tem um ponteiro para o primeiro caractere.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Boas práticas com Ponteiros.</b>
+<ul>
+<li><b>Sempre inicialize ponteiros:</b> Nunca deixe um ponteiro sem inicialização ou sempre verifique se ele é diferente de NULL antes de desreferenciar.</li>
+<li><b>Mantenha a correspondência de tipos:</b> Um ponteiro para <code>int</code> deve sempre apontar para uma variável do tipo <code>int</code>, não para outro tipo.</li>
+<li><b>Use ponteiros com propósito:</b> Utilize ponteiros quando realmente necessário (passagem por referência, estruturas dinâmicas). Evite usá-los desnecessariamente, pois aumentam a complexidade do código.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Structs (Estruturas)</h2>
+
+<p>
+Uma <b>struct</b> (estrutura) é um tipo de dado composto que permite agrupar variáveis de diferentes tipos sob um único nome. Isso é fundamental para organizar dados relacionados e criar abstrações que facilitam o desenvolvimento de programas complexos.
+</p>
+
+<p>
+<b>Por que structs são importantes:</b> Sem structs, você precisaria manter múltiplas variáveis relacionadas separadas, dificultando a leitura do código e aumentando a chance de erros. Por exemplo, se você precisa armazenar informações sobre uma pessoa (nome, idade, altura), sem structs você teria três variáveis soltas. Com structs, você agrupa tudo em um único tipo, facilitando passagem para funções, armazenamento em arrays, e organização lógica dos dados.
+</p>
+
+<p>
+Em C moderno, é preferível sempre usar <code>typedef</code> ao definir structs, para simplificar a sintaxe e melhorar a legibilidade do código:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;string.h&gt;</span>
+
+<span style="color: #008000; font-style: italic;">// Definição de uma struct com typedef</span>
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[100];
+    <span style="color: #0000ff; font-weight: bold;">int</span> idade;
+    <span style="color: #0000ff; font-weight: bold;">float</span> altura;
+} Pessoa;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Pessoa pessoa1; <span style="color: #008000; font-style: italic;">// Declare normalmente, sem "struct"</span>
+    
+    strcpy(pessoa1.nome, <span style="color: #a31515;">"João"</span>);
+    pessoa1.idade = 30;
+    pessoa1.altura = 1.80;
+    
+    printf(<span style="color: #a31515;">"Nome: %s, Idade: %d\n"</span>, pessoa1.nome, pessoa1.idade);
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Structs e Funções</h3>
+
+<p>
+Structs podem ser passadas como argumentos para funções e retornadas. Isso permite código modular. Por valor: função recebe uma cópia. Por referência (ponteiro): função acessa o original.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> x;
+    <span style="color: #0000ff; font-weight: bold;">int</span> y;
+} Ponto;
+
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimir_ponto(Ponto p) {
+    printf(<span style="color: #a31515;">"Ponto: (%d, %d)\n"</span>, p.x, p.y);
+}
+
+<span style="color: #0000ff; font-weight: bold;">void</span> incrementar_ponto(Ponto *p) {
+    p-&gt;x++; <span style="color: #008000; font-style: italic;">// Operador -&gt; acessa membros via ponteiro</span>
+    p-&gt;y++;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Ponto p1 = {5, 10};
+    imprimir_ponto(p1); <span style="color: #008000; font-style: italic;">// Imprime: Ponto: (5, 10)</span>
+    
+    incrementar_ponto(&amp;p1);
+    imprimir_ponto(p1); <span style="color: #008000; font-style: italic;">// Imprime: Ponto: (6, 11)</span>
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Arrays de Structs</h3>
+
+<p>
+Um array de structs permite armazenar múltiplas instâncias de forma organizada.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;string.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">int</span> idade;
+} Aluno;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Aluno turma[3];
+    
+    strcpy(turma[0].nome, <span style="color: #a31515;">"Alice"</span>);
+    turma[0].idade = 20;
+    
+    strcpy(turma[1].nome, <span style="color: #a31515;">"Bob"</span>);
+    turma[1].idade = 21;
+    
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; 2; i++) {
+        printf(<span style="color: #a31515;">"%s tem %d anos\n"</span>, turma[i].nome, turma[i].idade);
+    }
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Ponteiros para Structs e o Operador -&gt;</h3>
+
+<p>
+Quando você tem um ponteiro para uma struct, acessa seus membros com o operador seta (<code>p-&gt;membro</code>). Isso é equivalente a <code>(*p).membro</code>, mas muito mais legível.
+</p>
+
+<p>
+<b>Por que o operador -&gt; é necessário:</b> O operador ponto (<code>.</code>) tem prioridade sobre o operador de desreferência (<code>*</code>). Se você escrever <code>*p.membro</code>, o compilador interpretará como <code>*(p.membro)</code>, tentando acessar um membro de p (que não é uma struct, mas um ponteiro) e depois desreferenciar o resultado. Isso não faz sentido e causaria um erro. Por isso, você <b>deve</b> usar parênteses: <code>(*p).membro</code>. O operador <code>-&gt;</code> foi criado exatamente para evitar essa confusão.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> dia;
+    <span style="color: #0000ff; font-weight: bold;">int</span> mes;
+    <span style="color: #0000ff; font-weight: bold;">int</span> ano;
+} Data;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Data *data = (Data*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Data));
+    
+    <span style="color: #008000; font-style: italic;">// Usando -&gt; (recomendado)</span>
+    data-&gt;dia = 25;
+    data-&gt;mes = 12;
+    data-&gt;ano = 2023;
+    
+    <span style="color: #008000; font-style: italic;">// Equivalente, mas menos legível: (*data).dia = 25;</span>
+    
+    printf(<span style="color: #a31515;">"%d/%d/%d\n"</span>, data-&gt;dia, data-&gt;mes, data-&gt;ano);
+    
+    <span style="color: #0000ff; font-weight: bold;">free</span>(data);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Structs Aninhadas (Structs dentro de Structs)</h3>
+
+<p>
+Uma struct pode conter outras structs como membros, permitindo criar estruturas complexas e bem organizadas.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;string.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> dia;
+    <span style="color: #0000ff; font-weight: bold;">int</span> mes;
+    <span style="color: #0000ff; font-weight: bold;">int</span> ano;
+} Data;
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[100];
+    Data data_nascimento; <span style="color: #008000; font-style: italic;">// Struct dentro de struct</span>
+} Contato;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Contato contato;
+    
+    strcpy(contato.nome, <span style="color: #a31515;">"Maria"</span>);
+    contato.data_nascimento.dia = 15;
+    contato.data_nascimento.mes = 6;
+    contato.data_nascimento.ano = 1995;
+    
+    printf(<span style="color: #a31515;">"%s nasceu em %d/%d/%d\n"</span>, 
+           contato.nome,
+           contato.data_nascimento.dia,
+           contato.data_nascimento.mes,
+           contato.data_nascimento.ano);
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Cópia de Structs</h3>
+
+<p>
+Em C, você pode copiar uma struct simplesmente atribuindo uma variável a outra. Isso copia todos os membros.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> x;
+    <span style="color: #0000ff; font-weight: bold;">int</span> y;
+} Ponto;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Ponto p1 = {10, 20};
+    Ponto p2 = p1; <span style="color: #008000; font-style: italic;">// Cópia: p2 recebe os valores de p1</span>
+    
+    p2.x = 30;
+    printf(<span style="color: #a31515;">"p1: (%d, %d)\n"</span>, p1.x, p1.y); <span style="color: #008000; font-style: italic;">// Ainda é (10, 20)</span>
+    printf(<span style="color: #a31515;">"p2: (%d, %d)\n"</span>, p2.x, p2.y); <span style="color: #008000; font-style: italic;">// Agora é (30, 20)</span>
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Comparação de Structs</h3>
+
+<p>
+Você não pode comparar structs diretamente com <code>==</code>. Implemente uma função de comparação que compara seus membros individualmente.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> x;
+    <span style="color: #0000ff; font-weight: bold;">int</span> y;
+} Ponto;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> pontos_iguais(Ponto p1, Ponto p2) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> (p1.x == p2.x) &amp;&amp; (p1.y == p2.y);
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Ponto p1 = {5, 10};
+    Ponto p2 = {5, 10};
+    Ponto p3 = {3, 7};
+    
+    <span style="color: #0000ff; font-weight: bold;">if</span> (pontos_iguais(p1, p2)) {
+        printf(<span style="color: #a31515;">"p1 e p2 são iguais\n"</span>);
+    }
+    
+    <span style="color: #0000ff; font-weight: bold;">if</span> (!pontos_iguais(p1, p3)) {
+        printf(<span style="color: #a31515;">"p1 e p3 são diferentes\n"</span>);
+    }
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Resumo: Boas Práticas com Structs.</b>
+<ul>
+<li><b>Use typedef:</b> Simplifica a sintaxe e torna o código mais legível.</li>
+<li><b>Passe por referência (ponteiros) quando possível:</b> Para structs grandes, evita cópias desnecessárias.</li>
+<li><b>Use o operador -&gt; com ponteiros:</b> É mais legível que dereferenciar <code>(*p).membro</code>.</li>
+<li><b>Compare manualmente:</b> Implemente funções de comparação ao invés de usar <code>==</code>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Arquivos</h2>
+
+<p>
+Um <b>arquivo</b> é um conjunto de dados armazenado em memória secundária (disco rígido, SSD, etc). Diferentemente da memória principal (RAM), que é volátil e rápida, a memória secundária é persistente: os dados sobrevivem mesmo após desligar o computador.
+</p>
+
+<p>
+<b>Comparação entre Memória Principal e Secundária:</b>
+</p>
+
+<ul>
+<li><b>Memória Principal (RAM):</b> Rápida, volátil (dados são perdidos ao desligar), limited (gigabytes). Usada para executar programas e armazenar dados temporários.</li>
+<li><b>Memória Secundária (Disco):</b> Lenta, persistente (dados sobrevivem), grande capacidade (terabytes). Usada para armazenar dados permanentemente.</li>
+</ul>
+
+<p>
+Arquivos são <b>streams de bytes</b>. Não importa se o arquivo é "texto" ou "binário": internamente, tudo são bytes (números de 0-255). A diferença está em como interpretamos esses bytes:
+</p>
+
+<ul>
+<li><b>Arquivos de Texto:</b> Bytes representam caracteres ASCII (ou UTF-8). Legíveis por humanos. Exemplos: .txt, .csv, .html.</li>
+<li><b>Arquivos Binários:</b> Bytes representam dados em formato compactado (imagens, áudio, executáveis). Não legíveis diretamente. Exemplos: .jpg, .mp3, .exe.</li>
+</ul>
+
+<h3>Abrindo e Fechando Arquivos</h3>
+
+<p>
+Para trabalhar com arquivos em C, usamos um ponteiro do tipo <code>FILE</code>. A função <code>fopen()</code> abre um arquivo e retorna um ponteiro para ele. Sempre verifique se a abertura foi bem-sucedida (não é NULL).
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #008000; font-style: italic;">// Abrindo arquivo em modo leitura</span>
+    FILE *arquivo = fopen(<span style="color: #a31515;">"dados.txt"</span>, <span style="color: #a31515;">"r"</span>);
+    
+    <span style="color: #008000; font-style: italic;">// Verificando se abriu corretamente</span>
+    <span style="color: #0000ff; font-weight: bold;">if</span> (arquivo == NULL) {
+        printf(<span style="color: #a31515;">"Erro: não foi possível abrir o arquivo\n"</span>);
+        <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    }
+    
+    <span style="color: #008000; font-style: italic;">// ... operações com o arquivo ...</span>
+    
+    <span style="color: #008000; font-style: italic;">// Fechando sempre ao final</span>
+    fclose(arquivo);
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+<b>Modos de Abertura:</b>
+</p>
+
+<ul>
+<li><code>"r"</code> - Leitura (arquivo deve existir)</li>
+<li><code>"w"</code> - Escrita (cria novo ou sobrescreve)</li>
+<li><code>"a"</code> - Anexação (escreve ao final)</li>
+<li><code>"r+"</code> - Leitura e escrita (arquivo deve existir)</li>
+<li><code>"w+"</code> - Leitura e escrita (cria novo ou sobrescreve)</li>
+<li><code>"rb"</code>, <code>"wb"</code>, <code>"ab"</code> - Modos binários (adicionando <code>b</code>)</li>
+</ul>
+
+<h3>Operações Gerais com Arquivos</h3>
+
+<p>
+Estas operações funcionam com qualquer tipo de arquivo (texto ou binário). Abaixo, explicamos cada uma com sua sintaxe e propósito.
+</p>
+
+<p>
+<b>rewind(FILE *arquivo)</b> - Volta o cursor do arquivo para o início (posição 0). Equivalente a <code>fseek(arquivo, 0, SEEK_SET)</code>.
+</p>
+
+<p>
+<b>long ftell(FILE *arquivo)</b> - Retorna a posição atual do cursor em bytes. Útil para saber onde você está no arquivo. Retorna -1 se houver erro.
+</p>
+
+<p>
+<b>int fseek(FILE *arquivo, long offset, int origem)</b> - Move o cursor para uma posição específica. O parâmetro <code>origem</code> pode ser:
+</p>
+
+<ul>
+<li><code>SEEK_SET</code> - Início do arquivo. <code>offset</code> é a posição absoluta.</li>
+<li><code>SEEK_CUR</code> - Posição atual. <code>offset</code> é relativo à posição atual.</li>
+<li><code>SEEK_END</code> - Fim do arquivo. <code>offset</code> é relativo ao fim (geralmente negativo).</li>
+</ul>
+
+<p>
+Retorna 0 se bem-sucedido, -1 se houver erro.
+</p>
+
+<p>
+<b>int fflush(FILE *arquivo)</b> - Envia imediatamente todos os dados do buffer para o arquivo. Útil quando você quer garantir que os dados foram escritos antes de continuar. Retorna 0 se bem-sucedido, EOF se houver erro.
+</p>
+
+<p>
+<b>int feof(FILE *arquivo)</b> - Retorna verdadeiro (não-zero) se o cursor atingiu o fim do arquivo, falso (zero) caso contrário. Use com <code>while (!feof(arquivo))</code> para ler até o final.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    FILE *arquivo = fopen(<span style="color: #a31515;">"dados.txt"</span>, <span style="color: #a31515;">"r"</span>);
+    <span style="color: #0000ff; font-weight: bold;">if</span> (arquivo == NULL) <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    
+    <span style="color: #008000; font-style: italic;">// rewind: volta para o início</span>
+    rewind(arquivo);
+    printf(<span style="color: #a31515;">"Posição após rewind: %ld\n"</span>, ftell(arquivo)); <span style="color: #008000; font-style: italic;">// 0</span>
+    
+    <span style="color: #008000; font-style: italic;">// fseek: posiciona em lugar específico</span>
+    fseek(arquivo, 10, SEEK_SET);   <span style="color: #008000; font-style: italic;">// Move para byte 10 do início</span>
+    printf(<span style="color: #a31515;">"Posição agora: %ld\n"</span>, ftell(arquivo)); <span style="color: #008000; font-style: italic;">// 10</span>
+    
+    fseek(arquivo, 5, SEEK_CUR);    <span style="color: #008000; font-style: italic;">// Avança 5 bytes da posição atual</span>
+    printf(<span style="color: #a31515;">"Posição após avançar 5: %ld\n"</span>, ftell(arquivo)); <span style="color: #008000; font-style: italic;">// 15</span>
+    
+    fseek(arquivo, -10, SEEK_END);  <span style="color: #008000; font-style: italic;">// Move 10 bytes antes do fim</span>
+    printf(<span style="color: #a31515;">"Posição (10 bytes antes do fim): %ld\n"</span>, ftell(arquivo));
+    
+    <span style="color: #008000; font-style: italic;">// fflush: garante que dados foram escritos</span>
+    fflush(arquivo);
+    
+    <span style="color: #008000; font-style: italic;">// feof com loop de leitura</span>
+    rewind(arquivo);
+    <span style="color: #0000ff; font-weight: bold;">char</span> buffer[256];
+    <span style="color: #0000ff; font-weight: bold;">while</span> (!feof(arquivo)) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (fgets(buffer, 256, arquivo) != NULL) {
+            printf(<span style="color: #a31515;">"%s"</span>, buffer);
+        }
+    }
+    
+    fclose(arquivo);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+<b>Nota sobre o cursor do arquivo:</b> Toda estrutura <code>FILE</code> contém um campo <code>pos_cursor</code> (interno) que controla onde o próximo byte será lido ou escrito. Quando você abre um arquivo em modo "r", o cursor começa no início (posição 0). Cada operação de leitura/escrita avança o cursor. Use <code>ftell()</code> para saber a posição atual e <code>fseek()</code> (ou <code>rewind()</code>) para mudar.
+</p>
+
+<h3>Leitura e Escrita em Arquivos Binários</h3>
+
+<p>
+Para arquivos binários, use <code>fread()</code> (leitura) e <code>fwrite()</code> (escrita). Elas trabalham com blocos de dados.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> id;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[100];
+    <span style="color: #0000ff; font-weight: bold;">float</span> salario;
+} Funcionario;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #008000; font-style: italic;">// Escrevendo struct binária</span>
+    FILE *arquivo = fopen(<span style="color: #a31515;">"dados.bin"</span>, <span style="color: #a31515;">"wb"</span>);
+    <span style="color: #0000ff; font-weight: bold;">if</span> (arquivo == NULL) <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    
+    Funcionario func = {1, <span style="color: #a31515;">"João"</span>, 5000.0};
+    
+    <span style="color: #008000; font-style: italic;">// fwrite: escreve 1 bloco de sizeof(Funcionario) bytes</span>
+    fwrite(&amp;func, <span style="color: #0000ff; font-weight: bold;">sizeof</span>(Funcionario), 1, arquivo);
+    fclose(arquivo);
+    
+    <span style="color: #008000; font-style: italic;">// Lendo struct binária</span>
+    arquivo = fopen(<span style="color: #a31515;">"dados.bin"</span>, <span style="color: #a31515;">"rb"</span>);
+    
+    Funcionario func_lido;
+    
+    <span style="color: #008000; font-style: italic;">// fread: lê 1 bloco de sizeof(Funcionario) bytes</span>
+    <span style="color: #0000ff; font-weight: bold;">size_t</span> bytes_lidos = fread(&amp;func_lido, <span style="color: #0000ff; font-weight: bold;">sizeof</span>(Funcionario), 1, arquivo);
+    
+    <span style="color: #0000ff; font-weight: bold;">if</span> (bytes_lidos == 1) {
+        printf(<span style="color: #a31515;">"ID: %d, Nome: %s, Salário: %.2f\n"</span>, 
+               func_lido.id, func_lido.nome, func_lido.salario);
+    }
+    
+    fclose(arquivo);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Leitura e Escrita em Arquivos de Texto</h3>
+
+<p>
+Para arquivos de texto, use <code>fprintf()</code> e <code>fscanf()</code> (como <code>printf()</code> e <code>scanf()</code>, mas para arquivo), ou <code>fgets()</code> e <code>fgetc()</code> para leitura linha por linha.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #008000; font-style: italic;">// Escrita formatada em arquivo</span>
+    FILE *arquivo = fopen(<span style="color: #a31515;">"output.txt"</span>, <span style="color: #a31515;">"w"</span>);
+    <span style="color: #0000ff; font-weight: bold;">if</span> (arquivo == NULL) <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    
+    fprintf(arquivo, <span style="color: #a31515;">"Nome: %s\n"</span>, <span style="color: #a31515;">"Maria"</span>);
+    fprintf(arquivo, <span style="color: #a31515;">"Idade: %d\n"</span>, 30);
+    fprintf(arquivo, <span style="color: #a31515;">"Salário: %.2f\n"</span>, 3500.50);
+    fclose(arquivo);
+    
+    <span style="color: #008000; font-style: italic;">// Leitura de arquivo de texto</span>
+    arquivo = fopen(<span style="color: #a31515;">"output.txt"</span>, <span style="color: #a31515;">"r"</span>);
+    
+    <span style="color: #0000ff; font-weight: bold;">char</span> linha[256];
+    
+    <span style="color: #008000; font-style: italic;">// fgets: lê até 255 caracteres ou \n (inclui \n na string)</span>
+    <span style="color: #0000ff; font-weight: bold;">while</span> (fgets(linha, 256, arquivo) != NULL) {
+        printf(<span style="color: #a31515;">"%s"</span>, linha); <span style="color: #008000; font-style: italic;">// Já contém \n</span>
+    }
+    
+    fclose(arquivo);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+<b>Outras funções úteis para texto:</b>
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #008000; font-style: italic;">// fgetc: lê um caractere</span>
+    FILE *arquivo = fopen(<span style="color: #a31515;">"dados.txt"</span>, <span style="color: #a31515;">"r"</span>);
+    <span style="color: #0000ff; font-weight: bold;">int</span> caractere = fgetc(arquivo); <span style="color: #008000; font-style: italic;">// Retorna int (ou EOF)</span>
+    
+    <span style="color: #008000; font-style: italic;">// fscanf: lê dados formatados (cuidado com buffer overflow)</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> idade;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    fscanf(arquivo, <span style="color: #a31515;">"%s %d"</span>, nome, &amp;idade);
+    
+    <span style="color: #008000; font-style: italic;">// atoi: converte string para inteiro</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> numero = atoi(<span style="color: #a31515;">"42"</span>); <span style="color: #008000; font-style: italic;">// 42</span>
+    
+    <span style="color: #008000; font-style: italic;">// atof: converte string para float</span>
+    <span style="color: #0000ff; font-weight: bold;">float</span> valor = atof(<span style="color: #a31515;">"3.14"</span>); <span style="color: #008000; font-style: italic;">// 3.14</span>
+    
+    fclose(arquivo);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Resumo: Boas Práticas com Arquivos.</b>
+<ul>
+<li><b>Sempre verifique se fopen retornou NULL:</b> O arquivo pode não existir ou não ter permissão de acesso.</li>
+<li><b>Sempre feche arquivos:</b> Use <code>fclose()</code> para liberar recursos. Em caso de erro, feche antes de retornar.</li>
+<li><b>Use modo apropriado:</b> "r" para leitura, "w" para escrita, "a" para anexar. Adicione "b" para binário se necessário.</li>
+<li><b>Cuidado com fgets vs fscanf:</b> <code>fgets()</code> é mais seguro (você controla o tamanho), <code>fscanf()</code> pode sofrer buffer overflow.</li>
+<li><b>Use fwrite/fread para estruturas complexas:</b> Para dados binários, são mais eficientes que fprintf/fscanf.</li>
+<li><b>Lembre do cursor:</b> Após ler/escrever, o cursor avança. Use <code>rewind()</code> ou <code>fseek()</code> para repositionar.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Recursão</h2>
+
+<p>
+A <b>recursão</b> é uma técnica de programação em que uma função chama a si mesma para resolver um problema. Um problema é resolvido recursivamente ao dividi-lo em subproblemas menores e mais simples, do mesmo tipo do problema original, até que se atinja um caso trivial, resolvido diretamente sem novas chamadas.
+</p>
+
+<p>
+Toda função recursiva bem definida deve possuir dois elementos fundamentais:
+</p>
+
+<ul>
+<li><b>Caso base:</b> condição de parada que interrompe as chamadas recursivas, retornando um valor diretamente, sem realizar nova chamada à função.</li>
+<li><b>Caso recursivo:</b> parte da função em que ocorre a chamada da própria função, aplicada a uma versão menor ou mais simples do problema original, aproximando-a do caso base.</li>
+</ul>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Diretriz de Projeto.</b>
+<ul>
+<li><b>Toda função recursiva precisa de um caso base:</b> A ausência de um caso base, ou um caso base nunca alcançado, resulta em <b>recursão infinita</b>, esgotando a pilha de execução do programa e causando o erro conhecido como <i>Stack Overflow</i>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<h3>Um Primeiro Exemplo: Fatorial</h3>
+
+<p>
+O cálculo do fatorial de um número é um exemplo clássico de recursão. O fatorial de <code>n</code> (representado por <code>n!</code>) é definido matematicamente como:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0; text-align: center;">
+0! = 1                    (caso base)
+n! = n × (n-1)!            (caso recursivo, para n &gt; 0)
+</pre>
+
+<p>
+Essa definição matemática pode ser traduzida quase diretamente para uma função em C:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> fatorial(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #008000; font-style: italic;">// Caso base</span>
+    <span style="color: #0000ff; font-weight: bold;">if</span> (n == 0) {
+        <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    }
+
+    <span style="color: #008000; font-style: italic;">// Caso recursivo</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> n * fatorial(n - 1);
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    printf(<span style="color: #a31515;">"5! = %d\n"</span>, fatorial(5)); <span style="color: #008000; font-style: italic;">// Imprime: 120</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<h3>Como Funciona: A Pilha de Chamadas</h3>
+
+<p>
+Cada chamada recursiva gera uma nova ativação da função, armazenada na <b>pilha de execução</b> (<i>call stack</i>) do programa. Cada uma dessas ativações mantém suas próprias variáveis locais e parâmetros, independentes das demais chamadas.
+</p>
+
+<p>
+As chamadas se acumulam na pilha até que o caso base seja alcançado. A partir desse momento, os valores de retorno começam a ser propagados de volta, em ordem inversa, para cada chamada pendente, até que a chamada original seja finalmente resolvida.
+</p>
+
+<p>
+Para <code>fatorial(3)</code>, essa sequência pode ser representada da seguinte forma:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Chamadas (empilhando)              Retornos (desempilhando)
+
+fatorial(3)                        fatorial(3) = 3 * 2  = 6
+  fatorial(2)                        fatorial(2) = 2 * 1  = 2
+    fatorial(1)                        fatorial(1) = 1 * 1  = 1
+      fatorial(0)                        fatorial(0) = 1   (caso base)
+</pre>
+
+<p>
+Observe que a função só começa a "devolver" valores após alcançar o caso base (<code>fatorial(0)</code>). Antes disso, todas as chamadas permanecem pendentes, aguardando o resultado da chamada seguinte.
+</p>
+
+<h3>Segundo Exemplo: Sequência de Fibonacci</h3>
+
+<p>
+A sequência de Fibonacci é outro exemplo clássico, no qual cada termo é definido como a soma dos dois termos anteriores. Diferentemente do fatorial, esse problema possui <b>dois casos base</b>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0; text-align: center;">
+fib(0) = 0                              (caso base)
+fib(1) = 1                              (caso base)
+fib(n) = fib(n-1) + fib(n-2)             (caso recursivo, para n &gt; 1)
+</pre>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> fib(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #008000; font-style: italic;">// Casos base</span>
+    <span style="color: #0000ff; font-weight: bold;">if</span> (n == 0) {
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+    }
+    <span style="color: #0000ff; font-weight: bold;">if</span> (n == 1) {
+        <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    }
+
+    <span style="color: #008000; font-style: italic;">// Caso recursivo: soma de duas chamadas</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> fib(n - 1) + fib(n - 2);
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; 8; i++) {
+        printf(<span style="color: #a31515;">"%d "</span>, fib(i)); <span style="color: #008000; font-style: italic;">// 0 1 1 2 3 5 8 13</span>
+    }
+    printf(<span style="color: #a31515;">"\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Note que, ao contrário do fatorial, cada chamada de <code>fib(n)</code> gera <b>duas</b> novas chamadas recursivas, o que faz o número de chamadas crescer rapidamente conforme <code>n</code> aumenta.
+</p>
+
+<h3>Recursão vs. Iteração</h3>
+
+<p>
+Praticamente todo problema resolvido de forma recursiva também pode ser resolvido de forma iterativa (utilizando <code>while</code> ou <code>for</code>), e vice-versa. A escolha entre uma abordagem e outra costuma depender da natureza do problema e da clareza da solução resultante.
+</p>
+
+<table border="1" cellpadding="5">
+<tr bgcolor="#EEEEEE">
+<th>Aspecto</th>
+<th>Recursão</th>
+<th>Iteração</th>
+</tr>
+<tr>
+<td><b>Legibilidade</b></td>
+<td>Costuma ser mais próxima da definição matemática do problema, especialmente em estruturas de dados recursivas (árvores, listas).</td>
+<td>Costuma ser mais direta em problemas simples de contagem ou repetição.</td>
+</tr>
+<tr>
+<td><b>Uso de memória</b></td>
+<td>Cada chamada consome espaço na pilha de execução, podendo causar <i>Stack Overflow</i> em recursões muito profundas.</td>
+<td>Não gera novas ativações de função, utilizando uma quantidade constante de memória adicional.</td>
+</tr>
+<tr>
+<td><b>Desempenho</b></td>
+<td>Pode ser mais lenta devido ao custo de empilhar e desempilhar chamadas de função.</td>
+<td>Geralmente mais eficiente, por evitar esse custo adicional.</td>
+</tr>
+</table>
+
+<p>
+Considere, por exemplo, a versão iterativa do fatorial, equivalente à versão recursiva apresentada anteriormente:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> fatorialIterativo(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> resultado = 1;
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 1; i &lt;= n; i++) {
+        resultado = resultado * i;
+    }
+    <span style="color: #0000ff; font-weight: bold;">return</span> resultado;
+}
+</pre>
+
+<p>
+Em Estruturas de Dados, entretanto, a recursão frequentemente se mostra especialmente útil, pois diversas estruturas (como listas encadeadas e árvores) são definidas de forma naturalmente recursiva, tornando os algoritmos recursivos sobre elas mais simples e legíveis do que suas versões iterativas equivalentes.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Resumo: Boas Práticas com Recursão.</b>
+<ul>
+<li><b>Defina claramente o(s) caso(s) base:</b> Sem eles, a recursão nunca termina.</li>
+<li><b>Garanta que o problema se aproxime do caso base:</b> Cada chamada recursiva deve trabalhar sobre uma versão menor ou mais simples do problema original.</li>
+<li><b>Evite recursões desnecessariamente profundas:</b> Problemas que exigem milhares de chamadas recursivas podem esgotar a pilha de execução.</li>
+<li><b>Prefira iteração quando o desempenho for crítico:</b> Especialmente em casos onde a recursão gera chamadas repetidas para os mesmos subproblemas, como ocorre em <code>fib()</code>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

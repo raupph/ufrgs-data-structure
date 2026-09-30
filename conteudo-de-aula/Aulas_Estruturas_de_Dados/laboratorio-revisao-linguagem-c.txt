@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Material Extra - Laboratório: Revisão de Linguagem C</h1>
+</div>
+
+<p>
+Este laboratório tem como objetivo revisar, através da prática, os principais recursos da linguagem C estudados nas Aulas 1b e 1c: funções, vetores, strings, passagem de parâmetros por valor e por referência (ponteiros), <i>structs</i> (incluindo o uso de <code>typedef</code> e do operador <code>-&gt;</code>), arquivos texto e binários, e uma introdução simples à recursão.
+</p>
+
+<p>
+O foco deste laboratório não está na complexidade dos algoritmos utilizados, mas sim na <b>correta aplicação dos fundamentos da linguagem C</b>. Todas as tarefas abaixo fazem parte de um único problema, dividido em itens que devem ser implementados na ordem apresentada.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Instruções Gerais.</b>
+<ul>
+<li><b>Trabalho individual:</b> a resolução deve ser feita individualmente. Trabalhos idênticos ou com fortes indícios de cópia serão tratados conforme as normas de ética acadêmica da disciplina.</li>
+<li><b>Linguagem:</b> o laboratório deve ser implementado inteiramente em linguagem C, em um único arquivo-fonte (<code>.c</code>).</li>
+<li><b>Entrega:</b> o arquivo <code>.c</code> deve ser submetido através do <b>Moodle</b> da disciplina, conforme a tarefa e o prazo já definidos por lá.</li>
+<li><b>Protótipos:</b> siga rigorosamente os protótipos indicados em cada item (tipo de retorno, nome da função e tipos dos parâmetros). A assinatura das funções <b>não</b> deve ser alterada, pois isso facilita a correção.</li>
+<li><b>Alocação de memória:</b> utilize vetores de tamanho fixo, definidos através de uma constante <code>MAX</code>.</li>
+<li><b>Uso de Inteligência Artificial:</b> o uso de ferramentas de IA (ChatGPT, Copilot, Claude, entre outras) é <b>totalmente proibido</b> na resolução deste laboratório, a menos que seja permitido explicitamente pelo professor.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Enunciado</h2>
+
+<p>
+Você deve implementar um pequeno sistema para cadastro e avaliação dos alunos de uma turma. Cada aluno é representado por uma <i>struct</i>, definida com <code>typedef</code>, contendo apenas seu nome, matrícula e média final.
+</p>
+
+<p>
+Utilize as seguintes definições como ponto de partida do seu programa:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;string.h&gt;</span>
+
+<span style="color: #800080;">#define</span> MAX 50
+<span style="color: #800080;">#define</span> NUM_NOTAS 3
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">int</span> matricula;
+    <span style="color: #0000ff; font-weight: bold;">float</span> media;
+} Aluno;
+</pre>
+
+<p>
+A partir dessas definições, implemente as funções descritas nos itens a seguir.
+</p>
+
+<h3>a) Leitura de um aluno (passagem por referência)</h3>
+
+<p>
+Implemente uma função que leia, via teclado, o nome e a matrícula de <b>um</b> aluno, armazenando-os na <i>struct</i> apontada por <code>aluno</code>, utilizando o operador <code>-&gt;</code> para acessar seus campos.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> lerAluno(Aluno *aluno);
+</pre>
+
+<h3>b) Leitura de um vetor de notas</h3>
+
+<p>
+Implemente uma função que leia, via teclado, <code>n</code> notas (<code>float</code>) e as armazene no vetor <code>notas</code>. Como vetores já são passados por referência em C, basta preencher as posições do vetor recebido.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> lerNotas(<span style="color: #0000ff; font-weight: bold;">float</span> notas[], <span style="color: #0000ff; font-weight: bold;">int</span> n);
+</pre>
+
+<h3>c) Cálculo da média de um vetor de notas</h3>
+
+<p>
+Implemente uma função que receba um vetor de notas e a quantidade de notas nesse vetor, e retorne a média aritmética dessas notas.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">float</span> calcularMedia(<span style="color: #0000ff; font-weight: bold;">float</span> notas[], <span style="color: #0000ff; font-weight: bold;">int</span> n);
+</pre>
+
+<h3>d) Atualização da média de um aluno (ponteiro + <code>-&gt;</code>)</h3>
+
+<p>
+Implemente uma função que receba um ponteiro para um aluno e um valor de média já calculado, e atualize o campo <code>media</code> da <i>struct</i> apontada, utilizando o operador <code>-&gt;</code>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> atualizarMedia(Aluno *aluno, <span style="color: #0000ff; font-weight: bold;">float</span> media);
+</pre>
+
+<h3>e) Impressão de um aluno (passagem por valor)</h3>
+
+<p>
+Implemente uma função que receba um aluno <b>por valor</b> (uma cópia da <i>struct</i>, e não um ponteiro) e imprima na tela seu nome, matrícula e média.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimirAluno(Aluno aluno);
+</pre>
+
+<h3>f) Contagem recursiva de aprovados</h3>
+
+<p>
+Implemente, de forma <b>recursiva</b> (sem <code>for</code> ou <code>while</code>), uma função que retorne quantos alunos do vetor possuem <code>media &gt;= 6.0</code>. Defina o caso base (<code>n == 0</code>) e o caso recursivo, sobre o restante da turma.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> contarAprovados(Aluno turma[], <span style="color: #0000ff; font-weight: bold;">int</span> n);
+</pre>
+
+<h3>g) Gravação da turma em arquivo binário</h3>
+
+<p>
+Implemente uma função que grave o vetor de alunos em um arquivo <b>binário</b>, cujo nome é recebido como parâmetro. Utilize as funções <code>fopen()</code> (modo <code>"wb"</code>), <code>fwrite()</code> e <code>fclose()</code>. Não esqueça de verificar se o arquivo foi aberto corretamente.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> salvarBinario(Aluno turma[], <span style="color: #0000ff; font-weight: bold;">int</span> n, <span style="color: #0000ff; font-weight: bold;">char</span> *nomeArquivo);
+</pre>
+
+<h3>h) Geração de um relatório em arquivo texto</h3>
+
+<p>
+Implemente uma função que grave um relatório <b>legível</b> (arquivo texto, não binário) com os dados de todos os alunos da turma, um por linha, utilizando <code>fprintf()</code>. O nome do arquivo é recebido como parâmetro.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> gerarRelatorioTexto(Aluno turma[], <span style="color: #0000ff; font-weight: bold;">int</span> n, <span style="color: #0000ff; font-weight: bold;">char</span> *nomeArquivo);
+</pre>
+
+<h3>Função <code>main()</code></h3>
+
+<p>
+A função <code>main()</code> já está pronta e integra todas as funções descritas acima, na ordem em que devem ser chamadas. Utilize-a como roteiro: cada comentário indica exatamente qual item (a-h) deve estar implementado naquele ponto do programa.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Aluno turma[MAX];
+    <span style="color: #0000ff; font-weight: bold;">float</span> notas[NUM_NOTAS];
+    <span style="color: #0000ff; font-weight: bold;">float</span> media;
+    <span style="color: #0000ff; font-weight: bold;">int</span> n, i;
+
+    printf(<span style="color: #a31515;">"Quantos alunos serão cadastrados? "</span>);
+    scanf(<span style="color: #a31515;">"%d"</span>, &amp;n);
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++) {
+        <span style="color: #008000; font-style: italic;">// Item (a): leitura do aluno (nome e matrícula) por referência</span>
+        lerAluno(&amp;turma[i]);
+
+        <span style="color: #008000; font-style: italic;">// Item (b): leitura das notas em um vetor</span>
+        lerNotas(notas, NUM_NOTAS);
+
+        <span style="color: #008000; font-style: italic;">// Item (c): cálculo da média do vetor de notas</span>
+        media = calcularMedia(notas, NUM_NOTAS);
+
+        <span style="color: #008000; font-style: italic;">// Item (d): atualização da média do aluno via ponteiro (-&gt;)</span>
+        atualizarMedia(&amp;turma[i], media);
+    }
+
+    printf(<span style="color: #a31515;">"\n--- Dados da turma ---\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++) {
+        <span style="color: #008000; font-style: italic;">// Item (e): impressão do aluno (passagem por valor)</span>
+        imprimirAluno(turma[i]);
+    }
+
+    <span style="color: #008000; font-style: italic;">// Item (f): contagem recursiva de aprovados</span>
+    printf(<span style="color: #a31515;">"\nTotal de aprovados: %d\n"</span>, contarAprovados(turma, n));
+
+    <span style="color: #008000; font-style: italic;">// Item (g): gravação da turma em arquivo binário</span>
+    salvarBinario(turma, n, <span style="color: #a31515;">"turma.dat"</span>);
+
+    <span style="color: #008000; font-style: italic;">// Item (h): geração do relatório em arquivo texto</span>
+    gerarRelatorioTexto(turma, n, <span style="color: #a31515;">"relatorio.txt"</span>);
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<hr />
+
+<h2>Resumo das funções a implementar</h2>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Item</th>
+<th>Protótipo</th>
+<th>Conceito revisado</th>
+</tr>
+<tr>
+<td>a</td>
+<td><code>void lerAluno(Aluno *aluno);</code></td>
+<td>Passagem por referência (ponteiro), operador <code>-&gt;</code>, strings</td>
+</tr>
+<tr>
+<td>b</td>
+<td><code>void lerNotas(float notas[], int n);</code></td>
+<td>Vetores, <code>void</code></td>
+</tr>
+<tr>
+<td>c</td>
+<td><code>float calcularMedia(float notas[], int n);</code></td>
+<td>Vetores, retorno de valor</td>
+</tr>
+<tr>
+<td>d</td>
+<td><code>void atualizarMedia(Aluno *aluno, float media);</code></td>
+<td>Ponteiro para <i>struct</i>, operador <code>-&gt;</code></td>
+</tr>
+<tr>
+<td>e</td>
+<td><code>void imprimirAluno(Aluno aluno);</code></td>
+<td>Passagem de <i>struct</i> por valor</td>
+</tr>
+<tr>
+<td>f</td>
+<td><code>int contarAprovados(Aluno turma[], int n);</code></td>
+<td>Recursão (caso base e caso recursivo)</td>
+</tr>
+<tr>
+<td>g</td>
+<td><code>void salvarBinario(Aluno turma[], int n, char *nomeArquivo);</code></td>
+<td>Arquivos binários (<code>fwrite</code>)</td>
+</tr>
+<tr>
+<td>h</td>
+<td><code>void gerarRelatorioTexto(Aluno turma[], int n, char *nomeArquivo);</code></td>
+<td>Arquivos texto (<code>fprintf</code>)</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Entrega</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>O que entregar:</b> um único arquivo <code>.c</code> contendo a <i>struct</i> <code>Aluno</code>, todas as funções descritas nos itens (a) a (h) e a função <code>main()</code> apresentada acima.</li>
+<li><b>Onde e quando entregar:</b> a entrega deste laboratório já está configurada no <b>Moodle</b> da disciplina, na tarefa correspondente. Consulte lá o prazo e o formato de envio.</li>
+<li><b>Quem entrega:</b> trabalho individual — cada aluno deve enviar sua própria implementação.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

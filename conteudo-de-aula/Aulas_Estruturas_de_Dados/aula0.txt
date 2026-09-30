@@ -1,0 +1,605 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+            
+            <!-- Conteudo começa aqui -->
+            
+	
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 0 - Informações Gerais</h1>
+</div>
+
+<p>
+Sejam bem-vindos à disciplina de <b>Estruturas de Dados</b>. Nesta página encontram-se as principais informações administrativas da disciplina, incluindo sua ementa, bibliografia, organização das aulas e formas de contato. Recomenda-se consultar este material sempre que surgir alguma dúvida ao longo do semestre.
+</p>
+
+<hr />
+
+<h2>Sobre a disciplina</h2>
+
+<p>
+Estruturas de Dados é uma das disciplinas fundamentais da formação em Ciência da Computação. Seu objetivo é apresentar técnicas para representação, organização e manipulação eficiente de dados, permitindo o desenvolvimento de algoritmos escaláveis e de alto desempenho.
+</p>
+
+<p>
+Ao longo do semestre estudaremos tanto estruturas armazenadas na memória principal quanto estruturas utilizadas para organização de dados em memória secundária (disco), sempre utilizando a linguagem <b>C</b> como linguagem de implementação.
+</p>
+
+<p>
+Espera-se que o aluno já possua conhecimentos básicos de programação em C, incluindo funções, vetores, matrizes, registros (<i>structs</i>), ponteiros e alocação dinâmica de memória, adquiridos na disciplina de Algoritmos e Programação.
+</p>
+
+<hr />
+
+<h2>Ementa da disciplina</h2>
+
+<p>
+A disciplina aborda os principais conceitos relacionados à representação e manipulação eficiente de dados na memória principal e em memória secundária.
+</p>
+
+<p>
+Os principais tópicos estudados são:
+</p>
+
+<ul>
+
+<li>Fundamentos de Estruturas de Dados.</li>
+
+<li>Algoritmos de ordenação (Insertion Sort, Shell Sort, Merge Sort e Quick Sort).</li>
+
+<li>Tipos Abstratos de Dados.</li>
+
+<li>Listas lineares utilizando vetores.</li>
+
+<li>Listas simplesmente, duplamente e circularmente encadeadas.</li>
+
+<li>Pilhas, filas e deques.</li>
+
+<li>Heaps e filas de prioridade.</li>
+
+<li>Árvores binárias, árvores binárias de busca e árvores balanceadas.</li>
+
+<li>Estruturas para processamento de strings (Trie, Patricia e Ternary Search Tree).</li>
+
+<li>Técnicas de ordenação de strings e arquivos invertidos.</li>
+
+<li>Tabelas Hash e tratamento de colisões.</li>
+
+<li>Árvores B e B+ para indexação em memória secundária.</li>
+
+<li>Técnicas clássicas de compressão de dados (Run-Length Encoding, Huffman e LZW).</li>
+
+</ul>
+
+<p>
+Ao final da disciplina espera-se que o aluno seja capaz de selecionar, implementar e analisar diferentes estruturas de dados, escolhendo a solução mais adequada para cada problema computacional.
+</p>
+
+<hr />
+
+<h2>Professor</h2>
+
+<p>
+
+<b>Prof. Dr. Dennis Giovani Balreira</b><br /><br />
+
+<b>E-mail:</b><br />
+dgbalreira at inf.ufrgs.br<br /><br />
+
+<b>Página pessoal:</b><br />
+<a href="http://www.inf.ufrgs.br/~dgbalreira">
+www.inf.ufrgs.br/~dgbalreira
+</a>
+
+</p>
+
+<p>
+<b>Áreas de pesquisa</b>
+</p>
+
+<ul>
+
+<li>Processamento de Linguagem Natural.</li>
+
+<li>Extração de Informação.</li>
+
+<li>Aprendizado de Máquina.</li>
+
+</ul>
+
+<hr />
+
+<h2>Material da disciplina</h2>
+
+<p>
+Todo o material utilizado durante o semestre será disponibilizado por meio dos seguintes canais:
+</p>
+
+<ul>
+
+<li>
+<b>Moodle da UFRGS</b>, utilizado para avisos, entrega de atividades e divulgação de notas.
+</li>
+
+<li>
+<b>Página da disciplina</b>, contendo as aulas, materiais complementares e demais informações:
+</li>
+
+</ul>
+
+<p align="center">
+
+<a href="http://www.inf.ufrgs.br/~dgbalreira/ed">
+www.inf.ufrgs.br/~dgbalreira/ed
+</a>
+
+</p>
+
+<p>
+As páginas da disciplina funcionarão como um livro-texto eletrônico, contendo explicações detalhadas dos conteúdos apresentados em aula, exemplos em linguagem C, exercícios e materiais de apoio.
+</p>
+
+<p>
+Recomenda-se acompanhar regularmente tanto o Moodle quanto a página da disciplina.
+</p>
+
+<hr />
+
+<h2>Bibliografia</h2>
+
+<p>
+Os seguintes livros serão utilizados como principais referências ao longo do semestre.
+</p>
+
+<h3>Bibliografia Básica Essencial</h3>
+
+<ul>
+
+<li>
+
+Thomas H. Cormen et al.<br />
+
+<i>Algoritmos: Teoria e Prática.</i><br />
+
+Campus, 2002.<br />
+
+ISBN 8535209263.
+
+</li>
+
+<br />
+
+<li>
+
+Nina Edelweiss e Renata de Matos Galante.<br />
+
+<i>Estruturas de Dados.</i><br />
+
+Bookman, 2009.<br />
+
+ISBN 9788577803811.
+
+</li>
+
+</ul>
+
+<h3>Bibliografia Básica</h3>
+
+<ul>
+
+<li>
+
+Nivio Ziviani.<br />
+
+<i>Projeto de Algoritmos com Implementações em Pascal e C.</i><br />
+
+Bookman, 2011.<br />
+
+ISBN 9788522110506.
+
+</li>
+
+<br />
+
+<li>
+
+Robert Sedgewick e Kevin Wayne.<br />
+
+<i>Algorithms (4th Edition).</i><br />
+
+Addison-Wesley Professional, 2011.<br />
+
+ISBN 032157351X.
+
+</li>
+
+</ul>
+
+<p>
+Embora as aulas forneçam uma visão completa dos conteúdos da disciplina, recomenda-se fortemente a consulta à bibliografia para aprofundamento dos conceitos e realização dos exercícios.
+</p>
+
+<hr />
+
+<h2>Organização das aulas</h2>
+
+<p>
+A disciplina será dividida em dois tipos de encontros: aulas teóricas e aulas práticas.
+</p>
+
+<h3>Aulas teóricas</h3>
+
+<ul>
+
+<li>Apresentação e discussão dos conceitos fundamentais.</li>
+
+<li>Resolução de exemplos em sala de aula.</li>
+
+<li>Exercícios conceituais realizados pelos alunos.</li>
+
+<li>Discussão de aplicações práticas das estruturas estudadas.</li>
+
+</ul>
+
+<h3>Aulas práticas</h3>
+
+<ul>
+
+<li>Implementação das estruturas em linguagem C.</li>
+
+<li>Resolução de exercícios nos laboratórios.</li>
+
+<li>Correção de dúvidas de implementação.</li>
+
+<li>Desenvolvimento gradual das habilidades de programação exigidas pela disciplina.</li>
+
+</ul>
+
+<p>
+A participação ativa durante as aulas é fortemente incentivada. Estruturas de Dados é uma disciplina essencialmente prática, e a implementação das estruturas é parte fundamental do processo de aprendizagem.
+</p>
+
+<hr />
+
+<h2>Critérios de avaliação</h2>
+
+<p>
+A avaliação da disciplina será composta por atividades teóricas e práticas realizadas ao longo do semestre. O objetivo é avaliar tanto a compreensão dos conceitos quanto a capacidade de implementar corretamente as estruturas de dados estudadas.
+</p>
+
+<p>
+Serão atribuídas quatro notas principais:
+</p>
+
+<table border="1" cellpadding="5">
+
+<tr>
+
+<th>Atividade</th>
+
+<th>Peso</th>
+
+<th>Descrição</th>
+
+</tr>
+
+<tr>
+
+<td>P1</td>
+
+<td>35%</td>
+
+<td>Primeira prova teórico-prática, abrangendo os conteúdos da primeira parte da disciplina.</td>
+
+</tr>
+
+<tr>
+
+<td>P2</td>
+
+<td>40%</td>
+
+<td>Segunda prova teórico-prática, abrangendo os conteúdos da segunda parte da disciplina.</td>
+
+</tr>
+
+<tr>
+
+<td>TF</td>
+
+<td>15%</td>
+
+<td>Trabalho final envolvendo implementação e apresentação de um projeto utilizando estruturas de dados estudadas na disciplina.</td>
+
+</tr>
+
+<tr>
+
+<td>E</td>
+
+<td>10%</td>
+
+<td>Exercícios realizados em aula e extraclasse.</td>
+
+</tr>
+
+</table>
+
+<p>
+A Média Final (MF) será calculada da seguinte forma:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+MF = 0,35 × P1 + 0,40 × P2 + 0,15 × TF + 0,10 × E
+</pre>
+
+<p>
+A conversão da média em conceito seguirá as normas da UFRGS:
+</p>
+
+<table border="1" cellpadding="5">
+
+<tr>
+
+<th>Conceito</th>
+
+<th>Critério</th>
+
+</tr>
+
+<tr>
+
+<td>A</td>
+
+<td>MF ≥ 9,0</td>
+
+</tr>
+
+<tr>
+
+<td>B</td>
+
+<td>7,5 ≤ MF < 9,0</td>
+
+</tr>
+
+<tr>
+
+<td>C</td>
+
+<td>6,0 ≤ MF < 7,5</td>
+
+</tr>
+
+<tr>
+
+<td>D</td>
+
+<td>MF < 6,0</td>
+
+</tr>
+
+<tr>
+
+<td>FF</td>
+
+<td>Frequência inferior a 75%, independentemente da nota.</td>
+
+</tr>
+
+</table>
+
+<p>
+As atividades extraclasse, incluindo listas de exercícios e o trabalho final, fazem parte da carga horária da disciplina e são fundamentais para consolidar os conceitos apresentados em aula.
+</p>
+
+<hr />
+
+<h2>Recuperação</h2>
+
+<p>
+Caso o aluno não obtenha Média Final igual ou superior a 6,0, será oferecida uma prova de recuperação abrangendo todo o conteúdo da disciplina.
+</p>
+
+<p>
+A nota final será recalculada utilizando a seguinte expressão:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+(MF × 0,40 + Recuperação × 0,60) ≥ 6,0
+</pre>
+
+<p>
+Se essa condição for satisfeita, o aluno será aprovado com conceito <b>C</b>, conforme previsto nas normas da disciplina. Caso contrário, o aluno é reprovado com conceito <b>D</b>.
+</p>
+
+<hr />
+
+<h2>Frequência</h2>
+
+<p>
+A presença nas aulas é obrigatória, conforme o Regimento da UFRGS.
+</p>
+
+<p>
+É necessária frequência mínima de <b>75%</b> para aprovação.
+</p>
+
+<p align="center">
+
+<b>Isso significa que o número máximo de faltas permitido é de 8 aulas.</b>
+
+</p>
+
+<p>
+Mesmo que todas as avaliações tenham sido aprovadas, frequência inferior ao mínimo exigido resulta em conceito <b>FF</b>.
+</p>
+
+<hr />
+
+<h2>Conduta em sala de aula</h2>
+
+<p>
+Um ambiente de aprendizagem depende da colaboração de todos. Espera-se que cada estudante contribua para manter uma sala de aula organizada e respeitosa.
+</p>
+
+<p>
+Em particular:
+</p>
+
+<ul>
+
+<li>Respeite os colegas que estão acompanhando a aula.</li>
+
+<li>Evite conversas paralelas durante as explicações.</li>
+
+<li>Mantenha o celular no modo silencioso.</li>
+
+<li>Participe das discussões e faça perguntas sempre que necessário.</li>
+
+<li>Durante as aulas práticas, procure resolver os exercícios antes de solicitar ajuda.</li>
+
+<li>Respeite colegas, monitores e professor.</li>
+
+</ul>
+
+<p>
+Dúvidas são sempre bem-vindas. Perguntar faz parte do processo de aprendizagem e normalmente ajuda diversos colegas que possuem a mesma dificuldade.
+</p>
+
+<hr />
+
+<h2>Como aproveitar melhor a disciplina</h2>
+
+<p>
+Estruturas de Dados costuma ser considerada uma das disciplinas mais importantes do curso porque fornece ferramentas utilizadas em praticamente todas as demais áreas da Computação.
+</p>
+
+<p>
+Algumas recomendações podem tornar o aprendizado muito mais eficiente:
+</p>
+
+<ul>
+
+<li>Não deixe acumular conteúdo entre as aulas.</li>
+
+<li>Implemente todos os algoritmos apresentados em sala.</li>
+
+<li>Teste seus programas utilizando diferentes casos de entrada.</li>
+
+<li>Desenhe listas e árvores no papel antes de programá-las.</li>
+
+<li>Não memorize algoritmos; procure compreender por que eles funcionam.</li>
+
+<li>Compare diferentes soluções para um mesmo problema.</li>
+
+<li>Leia o material da disciplina antes e depois das aulas.</li>
+
+</ul>
+
+<p>
+O objetivo da disciplina não é apenas aprender estruturas clássicas, mas desenvolver a capacidade de analisar problemas e escolher a representação mais adequada para cada situação.
+</p>
+
+<hr />
+
+<h2>Perguntas frequentes</h2>
+
+<h3>É necessário utilizar linguagem C?</h3>
+
+<p>
+Sim. Todas as implementações da disciplina serão realizadas em linguagem C, permitindo compreender detalhadamente como as estruturas de dados são representadas na memória.
+</p>
+
+<h3>Preciso decorar os algoritmos?</h3>
+
+<p>
+Não. É muito mais importante compreender o funcionamento, as vantagens, limitações e aplicações de cada estrutura do que memorizar código.
+</p>
+
+<h3>Vale a pena implementar novamente os exemplos vistos em aula?</h3>
+
+<p>
+Sim. A implementação é uma parte essencial do aprendizado. Muitas dificuldades aparecem apenas durante a programação e ajudam a consolidar os conceitos discutidos nas aulas teóricas.
+</p>
+
+<h3>Posso utilizar bibliotecas prontas?</h3>
+
+<p>
+Durante a disciplina o foco será compreender como as estruturas funcionam internamente. Por esse motivo, a maior parte dos exercícios exigirá implementações próprias, sem utilizar bibliotecas que já resolvam o problema.
+</p>
+
+<hr />
+
+<h2>Mensagem final</h2>
+
+<p>
+Vocês ingressaram em uma das principais universidades do país e têm a oportunidade de cursar uma disciplina fundamental para a formação em Ciência da Computação.
+</p>
+
+<p>
+Aproveitem essa oportunidade. Participem das aulas, implementem os exercícios, discutam soluções com os colegas e procurem compreender os conceitos em profundidade. O conhecimento adquirido nesta disciplina será utilizado diversas vezes ao longo do curso e da carreira profissional.
+</p>
+
+<p align="center">
+
+<b>Sejam todos bem-vindos e tenham um excelente semestre!</b>
+
+</p>
+   
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

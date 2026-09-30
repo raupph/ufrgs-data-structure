@@ -1,0 +1,523 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 2a - Introdução à Complexidade de Algoritmos</h1>
+</div>
+
+<p>
+Até agora nos preocupamos principalmente em fazer os programas <b>funcionarem corretamente</b>. A partir desta aula, começamos a nos preocupar também com o quão <b>eficientes</b> eles são — o que nos leva ao estudo da <b>complexidade de algoritmos</b>, um dos temas centrais do restante da disciplina.
+</p>
+
+<hr />
+
+<h2>Motivação: por que estudar complexidade?</h2>
+
+<p>
+Uma pergunta natural: <b>como decidir qual algoritmo é melhor</b>? Suponha dois algoritmos que resolvem o mesmo problema. Em um computador, o algoritmo A leva 2 ms e o algoritmo B leva 5 ms. Podemos concluir que A é sempre melhor?
+</p>
+
+<p>
+A resposta é <b>não</b>. O tempo medido depende de diversos fatores alheios ao algoritmo em si:
+</p>
+
+<ul>
+<li>o computador utilizado;</li>
+<li>o compilador;</li>
+<li>a linguagem de programação;</li>
+<li>o sistema operacional;</li>
+<li>detalhes da implementação.</li>
+</ul>
+
+<p>
+Além disso, o desempenho pode mudar completamente quando o tamanho da entrada aumenta: um algoritmo mais rápido para poucos dados pode se tornar inviável para milhões de elementos.
+</p>
+
+<p>
+Por isso, em vez de medir tempo em milissegundos, estudamos <b>como o número de operações cresce</b> em função do tamanho da entrada.
+</p>
+
+<hr />
+
+<h2>O que é complexidade?</h2>
+
+<p>
+A <b>complexidade</b> de um algoritmo é uma estimativa dos recursos necessários para executá-lo à medida que o tamanho da entrada aumenta. Os dois recursos mais estudados são:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Recurso</th>
+<th>Corresponde a</th>
+</tr>
+<tr>
+<td><b>Tempo</b></td>
+<td>Número de operações executadas.</td>
+</tr>
+<tr>
+<td><b>Espaço (memória)</b></td>
+<td>Quantidade adicional de memória utilizada.</td>
+</tr>
+</table>
+
+<p>
+Nesta disciplina, o foco será principalmente a <b>complexidade de tempo</b>.
+</p>
+
+<hr />
+
+<h2>O tamanho da entrada</h2>
+
+<p>
+A análise de complexidade é feita em função do <b>tamanho da entrada</b>, normalmente representado por <code>n</code>. O significado de <code>n</code> depende do problema:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Problema</th>
+<th>Significado de <code>n</code></th>
+</tr>
+<tr>
+<td>Vetor de inteiros ou de <i>structs</i> (ex: <code>turma</code>)</td>
+<td>Número de elementos (alunos) no vetor.</td>
+</tr>
+<tr>
+<td><i>String</i> (vetor de <code>char</code>)</td>
+<td>Número de caracteres.</td>
+</tr>
+<tr>
+<td>Matriz</td>
+<td>Número de linhas e colunas.</td>
+</tr>
+</table>
+
+<p>
+Ao longo da disciplina, à medida que estudarmos novas estruturas de dados (listas encadeadas, árvores, grafos, etc.), o significado de <code>n</code> será adaptado para cada uma delas — a ideia geral, porém, é sempre a mesma: <code>n</code> representa a quantidade de dados que o algoritmo precisa processar.
+</p>
+
+<hr />
+
+<h2>Contando operações</h2>
+
+<p>
+Antes de introduzir a notação assintótica, é útil praticar a estimativa do número de operações executadas por um trecho de código.
+</p>
+
+<h3>Percorrer um vetor</h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++)
+    printf(<span style="color: #a31515;">"%d\n"</span>, vetor[i]);
+</pre>
+
+<p>
+O laço executa aproximadamente <code>n</code> iterações.
+</p>
+
+<h3>Percorrer todos os pares de elementos</h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++)
+    <span style="color: #0000ff; font-weight: bold;">for</span> (j = 0; j &lt; n; j++)
+        <span style="color: #008000; font-style: italic;">// ...</span>
+</pre>
+
+<p>
+Agora são aproximadamente <code>n²</code> iterações — para cada uma das <code>n</code> voltas do laço externo, o laço interno executa outras <code>n</code> voltas.
+</p>
+
+<h3>Reduzir um valor pela metade repetidamente</h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">while</span> (n &gt; 1)
+    n /= 2;
+</pre>
+
+<p>
+O número de iterações cresce aproximadamente como <code>log n</code>, já que <code>n</code> é dividido pela metade a cada passo.
+</p>
+
+<p>
+O objetivo dessa contagem é entender <b>como o custo cresce</b> quando aumentamos o tamanho da entrada — e não obter um número exato de operações.
+</p>
+
+<h3>Exemplo mais completo: contando as operações de uma função em C</h3>
+
+<p>
+Considere a função abaixo, que processa um vetor de inteiros:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> processarVetor(<span style="color: #0000ff; font-weight: bold;">int</span> vetor[], <span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> soma = 0;                              <span style="color: #008000; font-style: italic;">// operação 1</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+    printf(<span style="color: #a31515;">"Processando vetor...\n"</span>);            <span style="color: #008000; font-style: italic;">// operação 2</span>
+    printf(<span style="color: #a31515;">"Tamanho do vetor: %d\n"</span>, n);         <span style="color: #008000; font-style: italic;">// operação 3</span>
+                                                    <span style="color: #008000; font-style: italic;">// 3 operações fixas, antes do laço</span>
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++) {
+        soma += vetor[i];                       <span style="color: #008000; font-style: italic;">// operação</span>
+        printf(<span style="color: #a31515;">"Elemento %d: %d\n"</span>, i, vetor[i]); <span style="color: #008000; font-style: italic;">// operação</span>
+        printf(<span style="color: #a31515;">"Soma parcial: %d\n"</span>, soma);       <span style="color: #008000; font-style: italic;">// operação</span>
+    }                                            <span style="color: #008000; font-style: italic;">// 3 operações a cada iteração, repetidas n vezes = 3n</span>
+
+    printf(<span style="color: #a31515;">"Soma final: %d\n"</span>, soma);             <span style="color: #008000; font-style: italic;">// operação 4</span>
+    printf(<span style="color: #a31515;">"Media: %.2f\n"</span>, (<span style="color: #0000ff; font-weight: bold;">float</span>) soma / n); <span style="color: #008000; font-style: italic;">// operação 5</span>
+    printf(<span style="color: #a31515;">"Elementos processados: %d\n"</span>, n);     <span style="color: #008000; font-style: italic;">// operação 6</span>
+    printf(<span style="color: #a31515;">"Processamento concluido\n"</span>);          <span style="color: #008000; font-style: italic;">// operação 7</span>
+                                                    <span style="color: #008000; font-style: italic;">// 7 operações fixas, depois do laço</span>
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> soma;
+}
+</pre>
+
+<p>
+Somando cada parte: <code>3</code> operações fixas antes do laço, <code>3n</code> operações dentro do laço (3 por iteração, repetidas <code>n</code> vezes) e <code>7</code> operações fixas depois do laço. O total é <code>3 + 3n + 7 = 3n + 10</code>.
+</p>
+
+<hr />
+
+<h2>Notação Big-O</h2>
+
+<p>
+A notação <b>Big-O</b> descreve o <b>crescimento assintótico</b> do custo de um algoritmo, ou seja, como esse custo se comporta quando <code>n</code> tende a ficar arbitrariamente grande. "Assintótico" aqui quer dizer que não estamos interessados no comportamento exato para um <code>n</code> pequeno específico, mas sim na <b>tendência de crescimento</b> à medida que <code>n</code> aumenta cada vez mais.
+</p>
+
+<p>
+Por isso, a notação Big-O <b>ignora constantes multiplicativas e termos de menor ordem</b>. Por exemplo, o resultado <code>3n + 10</code> que obtivemos para <code>processarVetor</code> é dito <code>O(n)</code>: para valores grandes de <code>n</code>, o que domina o crescimento do custo é o termo <code>n</code>, e não a constante <code>3</code> nem o <code>+10</code>. Da mesma forma, um algoritmo com <code>n² + 100n</code> operações é <code>O(n²)</code>, pois o termo <code>n²</code> cresce muito mais rápido que <code>100n</code> conforme <code>n</code> aumenta. Comparar dois algoritmos dessa forma — pela sua taxa de crescimento, e não pelo número exato de operações — é o que torna a análise independente de computador, linguagem ou compilador.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+Os detalhes formais da notação assintótica (definições matemáticas precisas de <code>O</code>, <code>Ω</code> e <code>Θ</code>, e como demonstrá-las) serão vistos com mais profundidade na disciplina de <b>Projeto e Análise de Algoritmos I</b>. Aqui, o objetivo é apenas desenvolver a intuição necessária para comparar as estruturas de dados que estudaremos.
+</td>
+</tr>
+</table>
+
+<p>
+As classes de complexidade mais comuns, da mais rápida para a mais lenta, são:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Complexidade</th>
+<th>Nome</th>
+</tr>
+<tr>
+<td><code>O(1)</code></td>
+<td>constante</td>
+</tr>
+<tr>
+<td><code>O(log n)</code></td>
+<td>logarítmica</td>
+</tr>
+<tr>
+<td><code>O(n)</code></td>
+<td>linear</td>
+</tr>
+<tr>
+<td><code>O(n log n)</code></td>
+<td>linear-logarítmica</td>
+</tr>
+<tr>
+<td><code>O(n²)</code></td>
+<td>quadrática</td>
+</tr>
+<tr>
+<td><code>O(2ⁿ)</code></td>
+<td>exponencial</td>
+</tr>
+</table>
+
+<p>
+Alguns exemplos, incluindo casos já vistos na disciplina:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Complexidade</th>
+<th>Exemplo</th>
+</tr>
+<tr>
+<td><code>O(1)</code></td>
+<td>Acessar um elemento de um vetor pelo índice (<code>vetor[i]</code>).</td>
+</tr>
+<tr>
+<td><code>O(n)</code></td>
+<td>Busca sequencial em um vetor; percorrer um vetor para calcular sua soma.</td>
+</tr>
+<tr>
+<td><code>O(log n)</code></td>
+<td>Busca binária em um vetor ordenado.</td>
+</tr>
+<tr>
+<td><code>O(n²)</code></td>
+<td>Comparação de todos os pares de elementos de um vetor (dois laços aninhados, cada um percorrendo <code>n</code> posições).</td>
+</tr>
+</table>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Atenção.</b> Big-O mede <b>crescimento</b>, não velocidade absoluta. Um algoritmo com complexidade melhor pode ser mais lento para entradas pequenas, mas tende a superar algoritmos menos eficientes conforme a entrada aumenta.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Melhor, pior e caso médio</h2>
+
+<p>
+O custo de um algoritmo pode variar dependendo da entrada, e não apenas do seu tamanho. Costumamos analisar três cenários:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Caso</th>
+<th>Descrição</th>
+</tr>
+<tr>
+<td><b>Melhor caso</b></td>
+<td>Situação mais favorável para o algoritmo.</td>
+</tr>
+<tr>
+<td><b>Pior caso</b></td>
+<td>Situação mais desfavorável para o algoritmo.</td>
+</tr>
+<tr>
+<td><b>Caso médio</b></td>
+<td>Comportamento esperado para entradas típicas.</td>
+</tr>
+</table>
+
+<p>
+Nesta disciplina, normalmente utilizaremos a análise de <b>pior caso</b>, por fornecer um limite superior garantido para o tempo de execução do algoritmo, independentemente da entrada recebida.
+</p>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Complexidade:</b> estimativa de como os recursos (tempo, espaço) crescem em função do tamanho da entrada <code>n</code> — não é uma medida de tempo em segundos.</li>
+<li><b>Contar operações:</b> somar as operações fixas e as repetidas em laços permite chegar a expressões como <code>3n + 10</code>.</li>
+<li><b>Big-O:</b> descreve o crescimento assintótico, ignorando constantes e termos de menor ordem — <code>3n + 10</code> é <code>O(n)</code>.</li>
+<li><b>Classes comuns:</b> da mais rápida para a mais lenta, <code>O(1)</code>, <code>O(log n)</code>, <code>O(n)</code>, <code>O(n log n)</code>, <code>O(n²)</code>, <code>O(2ⁿ)</code>.</li>
+<li><b>Pior caso:</b> é a análise padrão desta disciplina, por garantir um limite superior independente da entrada.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Por que não é confiável comparar dois algoritmos apenas medindo o tempo de execução (em milissegundos) de suas implementações?
+</li>
+
+<li>
+Explique por que a notação Big-O ignora constantes multiplicativas e termos de menor ordem. Isso significa que essas constantes nunca importam na prática?
+</li>
+
+<li>
+Um algoritmo executa exatamente <code>5n² + 20n + 100</code> operações. Qual é a sua complexidade em notação Big-O? Justifique olhando para o termo dominante.
+</li>
+
+<li>
+Considerando o vetor <code>turma</code> (visto no laboratório de revisão de linguagem C — Material Extra —, na Aula 1b e na Aula 3), classifique a complexidade, em função de <code>n</code> (o número de alunos), de: (a) acessar <code>turma[3]</code>; (b) imprimir todos os alunos da turma; (c) comparar a média de cada aluno com a de todos os outros alunos da turma.
+</li>
+
+<li>
+Por que, nesta disciplina, normalmente analisamos o <b>pior caso</b> de um algoritmo, em vez do melhor caso ou do caso médio?
+</li>
+
+<li>
+Escreva uma função em C, <code>int contarOperacoes(int n)</code>, que <b>retorne</b> o número de vezes que uma instrução seria executada por um laço equivalente a <code>for (i = 0; i &lt; n; i++) for (j = 0; j &lt; n; j++) contador++;</code>, sem de fato usar dois laços aninhados — ou seja, calcule o valor diretamente a partir de <code>n</code>. Qual é a complexidade dessa nova função, e por que ela é mais rápida do que a versão com os dois laços, apesar de "contarem a mesma coisa"?
+</li>
+
+<li>
+Escreva uma função em C, <code>int contarIteracoes(int n)</code>, que simule o laço <code>while (n &gt; 1) n /= 2;</code> e retorne quantas iterações ele executou. Teste mentalmente (ou no papel) para <code>n = 16</code> e confirme que o resultado é compatível com uma complexidade <code>O(log n)</code>.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque o tempo medido depende de fatores alheios ao algoritmo em si — o computador utilizado, o compilador, a linguagem de programação, o sistema operacional e detalhes de implementação. Um algoritmo pode parecer mais rápido apenas por ter sido executado em uma máquina mais potente, por exemplo, mesmo sendo, em essência, um algoritmo pior. Além disso, o resultado da comparação pode mudar completamente para entradas maiores.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Big-O ignora constantes e termos de menor ordem porque seu objetivo é descrever a <b>tendência de crescimento</b> do custo quando <code>n</code> se torna arbitrariamente grande — e, para valores muito grandes de <code>n</code>, é o termo de maior ordem que domina o resultado, tornando os demais termos irrelevantes em comparação.
+</p>
+
+<p>
+Isso não significa que as constantes nunca importem na prática: para entradas pequenas ou médias, um algoritmo <code>O(n)</code> com uma constante muito grande pode, na prática, ser mais lento que um algoritmo <code>O(n²)</code> com constantes pequenas. Big-O é uma ferramenta para comparar o comportamento <b>assintótico</b> (para <code>n</code> grande), não uma previsão exata de tempo de execução para qualquer tamanho de entrada.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+A complexidade é <code>O(n²)</code>. O termo que domina o crescimento, conforme <code>n</code> aumenta, é <code>5n²</code> — tanto a constante multiplicativa (<code>5</code>) quanto os termos de menor ordem (<code>20n</code> e <code>100</code>) são ignorados pela notação Big-O.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<ul>
+<li><b>(a) <code>turma[3]</code>:</b> <code>O(1)</code> — acesso direto por índice, não depende do tamanho da turma.</li>
+<li><b>(b) Imprimir todos os alunos:</b> <code>O(n)</code> — é preciso percorrer cada um dos <code>n</code> alunos uma única vez.</li>
+<li><b>(c) Comparar a média de cada aluno com a de todos os outros:</b> <code>O(n²)</code> — para cada um dos <code>n</code> alunos, é preciso comparar com os outros <code>n</code> alunos (dois laços aninhados, como vimos em "Contando operações").</li>
+</ul>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+Porque o pior caso fornece uma <b>garantia</b>: um limite superior para o tempo de execução que vale para <b>qualquer</b> entrada de tamanho <code>n</code>, independentemente de quão favorável ou desfavorável ela seja. O melhor caso costuma ser pouco informativo (nem sempre acontece), e o caso médio, apesar de útil, exige assumir uma distribuição de probabilidade sobre as entradas, o que é mais complexo de determinar e analisar.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> contarOperacoes(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> n * n; <span style="color: #008000; font-style: italic;">// equivalente ao total de "contador++" nos dois laços aninhados</span>
+}
+</pre>
+
+<p>
+A complexidade dessa nova função é <code>O(1)</code>: ela realiza sempre a mesma quantidade de operações (uma multiplicação), independentemente do valor de <code>n</code>. Ela é mais rápida do que a versão com dois laços porque, embora ambas cheguem ao mesmo <b>resultado</b> (o valor <code>n²</code>), a versão com laços de fato <b>executa</b> <code>n²</code> incrementos um por um, enquanto a versão direta calcula o resultado com uma única operação — a diferença está em <i>como</i> o resultado é obtido, não apenas em qual é o resultado final.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> contarIteracoes(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> iteracoes = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (n &gt; 1) {
+        n /= 2;
+        iteracoes++;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> iteracoes;
+}
+</pre>
+
+<p>
+Para <code>n = 16</code>, a sequência de valores é <code>16 -&gt; 8 -&gt; 4 -&gt; 2 -&gt; 1</code>, totalizando <b>4 iterações</b>. Isso é compatível com <code>O(log n)</code>, já que <code>log2(16) = 4</code>: o número de vezes que é possível dividir <code>n</code> por 2 até chegar a 1 é exatamente o logaritmo de <code>n</code> na base 2.
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

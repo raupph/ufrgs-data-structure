@@ -1,0 +1,1506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+            
+            <!-- Conteudo começa aqui -->
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Material Extra - Revisão de Linguagem C (Parte 1)</h1>
+</div>
+
+<p>
+Nesta aula faremos uma revisão dos principais conceitos da linguagem C necessários para o restante da disciplina. Assume-se que todos os alunos já cursaram uma disciplina introdutória de programação e possuem familiaridade com a linguagem C. Assim, o objetivo desta aula não é ensinar programação desde o início, mas revisar rapidamente os conceitos que servirão de base para as próximas aulas.
+</p>
+
+<p>
+Nesta primeira parte revisaremos conceitos fundamentais de algoritmos, programas, compilação, variáveis, operadores, estruturas básicas da linguagem, vetores, matrizes e strings. No laboratório de revisão de linguagem C (Material Extra) revisaremos os recursos mais importantes para Estruturas de Dados, como funções, modularização, ponteiros, <i>structs</i> e arquivos.
+</p>
+
+<hr />
+
+<h2>Algoritmos e programas</h2>
+
+<p>
+Antes de escrever qualquer programa é necessário desenvolver um algoritmo.
+</p>
+
+<p>
+Um <b>algoritmo</b> é uma sequência finita e ordenada de instruções capaz de resolver um problema bem definido. Um algoritmo deve sempre produzir um resultado correto após um número finito de passos.
+</p>
+
+<p>
+Considere, por exemplo, o problema de calcular o quadrado de um número inteiro. Um algoritmo simples para essa tarefa poderia ser descrito da seguinte forma:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+1. Ler um número inteiro N.
+2. Calcular N × N.
+3. Exibir o resultado.
+</pre>
+
+<p>
+Observe que esse algoritmo independe da linguagem de programação utilizada. Ele descreve apenas a lógica necessária para resolver o problema.
+</p>
+
+<p>
+Um <b>programa</b>, por outro lado, é a implementação de um algoritmo utilizando uma linguagem de programação.
+</p>
+
+<p>
+Por exemplo, o algoritmo anterior pode ser implementado em linguagem C da seguinte maneira:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> n;
+    scanf(<span style="color: #a31515;">"%d"</span>, &amp;n);
+    printf(<span style="color: #a31515;">"%d\n"</span>, n * n);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Durante toda a disciplina utilizaremos a linguagem C para implementar algoritmos e estruturas de dados.
+</p>
+
+<hr />
+
+<h2>Pensamento computacional</h2>
+
+<p>
+Resolver problemas utilizando computadores envolve muito mais do que escrever código.
+</p>
+
+<p>
+O desenvolvimento de um programa normalmente segue uma sequência semelhante à apresentada abaixo:
+</p>
+
+<pre style="line-height: 1.1; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0; text-align: center;">
+Problema
+   ↓
+Análise
+   ↓
+Algoritmo
+   ↓
+Programa em C
+   ↓
+Compilação
+   ↓
+Execução
+   ↓
+Testes
+   ↓
+Correções
+</pre>
+
+<p>
+Nas disciplinas introdutórias o foco costuma estar na aprendizagem da linguagem de programação. Em Estruturas de Dados, entretanto, o foco passa a ser a escolha das representações e algoritmos mais adequados para resolver problemas de maneira eficiente.
+</p>
+
+<hr />
+
+<h2>A linguagem C</h2>
+
+<p>
+A linguagem C foi desenvolvida no início da década de 1970 por Dennis Ritchie e permanece, até hoje, uma das linguagens mais importantes da Computação.
+</p>
+
+<p>
+Entre suas principais características destacam-se:
+</p>
+
+<ul>
+
+<li>linguagem compilada;</li>
+
+<li>linguagem imperativa;</li>
+
+<li>alto desempenho;</li>
+
+<li>controle explícito da memória;</li>
+
+<li>grande portabilidade entre sistemas operacionais.</li>
+
+</ul>
+
+<p>
+Essas características tornam C uma excelente linguagem para compreender como estruturas de dados são realmente representadas e manipuladas na memória do computador.
+</p>
+
+<hr />
+
+<h2>Estrutura básica de um programa em C</h2>
+
+<p>
+Todo programa em C possui uma estrutura semelhante à apresentada abaixo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    printf(<span style="color: #a31515;">"Olá, mundo!\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Nesse exemplo podemos identificar alguns elementos importantes:
+</p>
+
+<ul>
+
+<li><b>#include</b>: importa bibliotecas que serão utilizadas pelo programa.</li>
+
+<li><b>main()</b>: função principal, onde a execução do programa começa.</li>
+
+<li><b>printf()</b>: função utilizada para escrever informações na saída padrão.</li>
+
+<li><b>return 0</b>: indica que o programa terminou sua execução corretamente.</li>
+
+</ul>
+
+<p>
+À medida que os programas crescerem, novas funções serão adicionadas, mas a estrutura geral permanecerá bastante semelhante.
+</p>
+
+<hr />
+
+<h2>Compilação e execução</h2>
+
+<p>
+Os programas escritos em C precisam ser traduzidos para linguagem de máquina antes de serem executados. Esse processo é chamado de <b>compilação</b>.
+</p>
+
+<p>
+Durante a disciplina utilizaremos o compilador <b>gcc</b>.
+</p>
+
+<p>
+Supondo que o programa esteja armazenado em um arquivo chamado <i>main.c</i>, sua compilação pode ser realizada através do comando:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+gcc main.c
+</pre>
+
+<p>
+Após a compilação será gerado um programa executável.
+</p>
+
+<p>
+Em sistemas Linux sua execução normalmente é realizada através do comando:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+./a.out
+</pre>
+
+<p>
+É recomendável utilizar sempre a opção <b>-Wall</b>, que habilita diversos avisos importantes emitidos pelo compilador:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+gcc -Wall main.c -o programa
+</pre>
+
+<p>
+Os avisos do compilador frequentemente indicam erros que podem produzir comportamentos inesperados durante a execução. Uma boa prática é corrigir todos os avisos antes de executar qualquer programa.
+</p>
+
+<hr />
+
+<h2>Variáveis</h2>
+
+<p>
+Variáveis representam posições da memória utilizadas para armazenar informações durante a execução de um programa. Sempre que uma variável é declarada, o compilador reserva um espaço na memória suficiente para armazenar um valor daquele tipo.
+</p>
+
+<p>
+Toda variável possui quatro características principais:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr bgcolor="#EEEEEE">
+<th>Atributo</th>
+<th>Descrição</th>
+</tr>
+
+<tr>
+<td><b>Identificador</b></td>
+<td>Nome utilizado para acessar a variável no programa.</td>
+</tr>
+
+<tr>
+<td><b>Tipo</b></td>
+<td>Define quais valores podem ser armazenados e quanto espaço será reservado na memória.</td>
+</tr>
+
+<tr>
+<td><b>Endereço</b></td>
+<td>Posição da memória onde a variável está armazenada.</td>
+</tr>
+
+<tr>
+<td><b>Valor</b></td>
+<td>Conteúdo atualmente armazenado na variável.</td>
+</tr>
+
+</table>
+
+<p>
+Os principais tipos primitivos utilizados nesta disciplina ocupam aproximadamente o seguinte espaço na memória:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr bgcolor="#EEEEEE">
+<th>Tipo</th>
+<th>Tamanho</th>
+<th>Exemplo</th>
+</tr>
+
+<tr>
+<td><code>char</code></td>
+<td>1 byte</td>
+<td><code>char letra = 'A';</code></td>
+</tr>
+
+<tr>
+<td><code>int</code></td>
+<td>4 bytes</td>
+<td><code>int idade = 20;</code></td>
+</tr>
+
+<tr>
+<td><code>float</code></td>
+<td>4 bytes</td>
+<td><code>float nota = 8.5;</code></td>
+</tr>
+
+<tr>
+<td><code>double</code></td>
+<td>8 bytes</td>
+<td><code>double media = 7.35;</code></td>
+</tr>
+
+</table>
+
+<p>
+Considere o seguinte programa:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> idade = 20;
+    <span style="color: #0000ff; font-weight: bold;">float</span> nota = 8.5;
+    <span style="color: #0000ff; font-weight: bold;">char</span> sexo = <span style="color: #a31515;">'F'</span>;
+    <span style="color: #0000ff; font-weight: bold;">double</span> media = 7.35;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Durante a execução do programa, o compilador reserva espaço para cada variável. A tabela abaixo apresenta uma representação simplificada da memória. Os endereços são fictícios e utilizados apenas para fins didáticos.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr bgcolor="#EEEEEE">
+<th>Endereço</th>
+<th>Identificador</th>
+<th>Tipo</th>
+<th>Tamanho</th>
+<th>Valor</th>
+</tr>
+
+<tr>
+<td><code>E1000</code></td>
+<td><code>idade</code></td>
+<td><code>int</code></td>
+<td>4 bytes</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td><code>E1004</code></td>
+<td><code>nota</code></td>
+<td><code>float</code></td>
+<td>4 bytes</td>
+<td>8.5</td>
+</tr>
+
+<tr>
+<td><code>E1008</code></td>
+<td><code>sexo</code></td>
+<td><code>char</code></td>
+<td>1 byte</td>
+<td>'F'</td>
+</tr>
+
+<tr>
+<td><code>E1009</code></td>
+<td><code>media</code></td>
+<td><code>double</code></td>
+<td>8 bytes</td>
+<td>7.35</td>
+</tr>
+
+</table>
+
+<p>
+Podemos representar essa mesma situação através de um mapa simplificado da memória:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Endereço      Conteúdo
+E1000  ───►  idade = 20
+E1004  ───►  nota = 8.5
+E1008  ───►  sexo = 'F'
+E1009  ───►  media = 7.35
+</pre>
+
+<p>
+Observe que variáveis de tipos diferentes ocupam quantidades diferentes de memória. O endereço da próxima variável depende da quantidade de bytes ocupada pela variável anterior.
+</p>
+
+<p>
+Por exemplo, como um <code>int</code> ocupa 4 bytes, a variável <code>nota</code> começa quatro bytes após <code>idade</code>. Como um <code>char</code> ocupa apenas 1 byte, a variável seguinte inicia logo após ele.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+
+<tr bgcolor="#EEEEEE">
+
+<td>
+
+<b>Observação sobre a notação de endereços.</b> Os endereços apresentados nesta seção são apenas exemplos. Em um programa real, o sistema operacional e o compilador escolhem automaticamente onde cada variável será armazenada. Na prática, endereços de memória são normalmente representados em <b>hexadecimal</b> (com o prefixo <code>0x</code>, como <code>0x1000</code>). Para não misturar essa conversão de base com os conceitos de memória que estamos revisando agora, vamos usar aqui uma notação simplificada, em <b>decimal</b>: a letra <code>E</code> seguida de um número, como <code>E1000</code> — lendo-se "endereço 1000". Assim, as contas de "quanto cada variável ocupa" podem ser feitas em decimal, sem a etapa extra de converter para hexadecimal.
+
+</td>
+
+</tr>
+
+</table>
+
+<p>
+Além do valor armazenado em uma variável, também é possível manipular diretamente seu endereço utilizando <b>ponteiros</b>. Esse conceito será revisado e é fundamental para implementar listas encadeadas, árvores e diversas outras estruturas de dados.
+</p>
+
+<hr />
+
+<h2>Operadores</h2>
+
+<p>
+Os operadores permitem realizar operações sobre variáveis e constantes. Em linguagem C eles podem ser classificados em três grupos principais: operadores aritméticos, relacionais e lógicos.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr bgcolor="#EEEEEE">
+<th>Categoria</th>
+<th>Operador</th>
+<th>Descrição</th>
+<th>Exemplo</th>
+</tr>
+
+<tr>
+<td rowspan="5"><b>Aritméticos</b></td>
+<td><code>+</code></td>
+<td>Adição</td>
+<td><code>a + b</code></td>
+</tr>
+
+<tr>
+<td><code>-</code></td>
+<td>Subtração</td>
+<td><code>a - b</code></td>
+</tr>
+
+<tr>
+<td><code>*</code></td>
+<td>Multiplicação</td>
+<td><code>a * b</code></td>
+</tr>
+
+<tr>
+<td><code>/</code></td>
+<td>Divisão</td>
+<td><code>a / b</code></td>
+</tr>
+
+<tr>
+<td><code>%</code></td>
+<td>Resto da divisão inteira</td>
+<td><code>a % b</code></td>
+</tr>
+
+<tr>
+<td rowspan="6"><b>Relacionais</b></td>
+<td><code>&gt;</code></td>
+<td>Maior que</td>
+<td><code>a &gt; b</code></td>
+</tr>
+
+<tr>
+<td><code>&lt;</code></td>
+<td>Menor que</td>
+<td><code>a &lt; b</code></td>
+</tr>
+
+<tr>
+<td><code>&gt;=</code></td>
+<td>Maior ou igual</td>
+<td><code>a &gt;= b</code></td>
+</tr>
+
+<tr>
+<td><code>&lt;=</code></td>
+<td>Menor ou igual</td>
+<td><code>a &lt;= b</code></td>
+</tr>
+
+<tr>
+<td><code>==</code></td>
+<td>Igual</td>
+<td><code>a == b</code></td>
+</tr>
+
+<tr>
+<td><code>!=</code></td>
+<td>Diferente</td>
+<td><code>a != b</code></td>
+</tr>
+
+<tr>
+<td rowspan="3"><b>Lógicos</b></td>
+<td><code>&amp;&amp;</code></td>
+<td>E lógico (AND)</td>
+<td><code>x &gt; 0 &amp;&amp; y &gt; 0</code></td>
+</tr>
+
+<tr>
+<td><code>||</code></td>
+<td>OU lógico (OR)</td>
+<td><code>x == 0 || y == 0</code></td>
+</tr>
+
+<tr>
+<td><code>!</code></td>
+<td>Negação lógica (NOT)</td>
+<td><code>!encontrou</code></td>
+</tr>
+
+</table>
+
+<p>
+Os operadores relacionais produzem um valor lógico (verdadeiro ou falso), sendo amplamente utilizados em estruturas condicionais e de repetição. Os operadores lógicos permitem combinar ou inverter condições.
+</p>
+
+<p>
+Por exemplo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (idade &gt;= 18 &amp;&amp; nota &gt;= 6.0) {
+    printf(<span style="color: #a31515;">"Aprovado.\n"</span>);
+}
+</pre>
+<hr />
+
+<hr />
+
+<h2>Entrada e saída de dados</h2>
+
+<p>
+A maioria dos programas precisa receber informações do usuário, processá-las e apresentar algum resultado. Em linguagem C, essas operações são realizadas principalmente através das funções da biblioteca <code>stdio.h</code>, responsável pela entrada e saída padrão de dados.
+</p>
+
+<p>
+As duas funções mais utilizadas são <code>printf()</code> e <code>scanf()</code>, apresentadas na tabela abaixo.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr bgcolor="#EEEEEE">
+<th>Função</th>
+<th>Sintaxe</th>
+<th>Finalidade</th>
+</tr>
+
+<tr>
+<td><code>printf()</code></td>
+<td><code>printf("formato", argumentos);</code></td>
+<td>Escreve informações na saída padrão (normalmente, o terminal).</td>
+</tr>
+
+<tr>
+<td><code>scanf()</code></td>
+<td><code>scanf("formato", &variáveis);</code></td>
+<td>Lê informações da entrada padrão (normalmente, o teclado).</td>
+</tr>
+
+</table>
+
+<p>
+A função <code>printf()</code> recebe como primeiro parâmetro uma <b>string de formatação</b>, que determina como as informações serão apresentadas ao usuário. Caso seja necessário imprimir valores armazenados em variáveis, esses valores são informados como parâmetros adicionais, respeitando a mesma ordem em que aparecem os especificadores de formato.
+</p>
+
+<p>
+A função <code>scanf()</code> também recebe uma string de formatação, mas sua finalidade é indicar quais tipos de dados deverão ser lidos. Os parâmetros seguintes correspondem às variáveis onde os valores digitados pelo usuário serão armazenados.
+</p>
+
+<p>
+Considere o exemplo abaixo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> idade;
+<span style="color: #0000ff; font-weight: bold;">float</span> nota;
+
+printf(<span style="color: #a31515;">"Informe a idade e a nota: "</span>);
+scanf(<span style="color: #a31515;">"%d %f"</span>, &amp;idade, &amp;nota);
+printf(<span style="color: #a31515;">"Idade: %d\n"</span>, idade);
+printf(<span style="color: #a31515;">"Nota: %.1f\n"</span>, nota);
+printf(<span style="color: #a31515;">"Idade: %d  Nota: %.1f\n"</span>, idade, nota);
+</pre>
+
+<p>
+Observe que os especificadores presentes na string de formatação (<code>%d</code> e <code>%f</code>) correspondem exatamente aos parâmetros informados após a string. Em <code>printf()</code>, esses parâmetros são os valores que serão exibidos. Em <code>scanf()</code>, são os endereços das variáveis onde os valores lidos serão armazenados.
+</p>
+
+<h3>Especificadores de formato</h3>
+
+<p>
+Os especificadores de formato indicam o tipo de dado que será lido ou escrito. Os principais utilizados nesta disciplina são apresentados na tabela abaixo.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr bgcolor="#EEEEEE">
+<th>Especificador</th>
+<th>Tipo de dado</th>
+<th>Exemplo</th>
+</tr>
+
+<tr>
+<td><code>%d</code></td>
+<td>Inteiro (<code>int</code>)</td>
+<td><code>printf("%d", idade);</code></td>
+</tr>
+
+<tr>
+<td><code>%f</code></td>
+<td>Real (<code>float</code>)</td>
+<td><code>printf("%.2f", nota);</code></td>
+</tr>
+
+<tr>
+<td><code>%lf</code></td>
+<td>Real (<code>double</code>)</td>
+<td><code>scanf("%lf", &media);</code></td>
+</tr>
+
+<tr>
+<td><code>%c</code></td>
+<td>Caractere (<code>char</code>)</td>
+<td><code>printf("%c", letra);</code></td>
+</tr>
+
+<tr>
+<td><code>%s</code></td>
+<td>String (<code>char[]</code>)</td>
+<td><code>printf("%s", nome);</code></td>
+</tr>
+
+</table>
+
+<table border="1" cellpadding="8" width="100%">
+
+<tr bgcolor="#EEEEEE">
+
+<td>
+
+<b>Observação 1.</b> Na função <code>scanf()</code>, normalmente é necessário utilizar o operador <code>&amp;</code>, que fornece o endereço da variável onde o valor lido será armazenado. Esse conceito será estudado em detalhes quando revisarmos ponteiros. A principal exceção ocorre com <b>strings</b>, pois um vetor de caracteres já representa um endereço de memória e, portanto, normalmente não utilizamos o operador <code>&amp;</code>.
+
+<br /><br />
+
+<b>Observação 2.</b> Embora seja bastante utilizada em exemplos introdutórios, a função <code>scanf()</code> possui algumas limitações e deve ser utilizada com cuidado. Leituras incorretas, entradas inválidas ou o uso inadequado de especificadores de formato podem causar comportamentos inesperados. Além disso, funções como <code>scanf("%s", ...)</code> podem provocar problemas de segurança caso o tamanho do vetor não seja controlado. Ao longo da disciplina veremos alternativas mais robustas para leitura de dados quando necessário.
+
+<br /><br />
+
+<b>Observação 3.</b> A função <code>printf()</code>, por outro lado, é considerada segura para exibição de dados quando utilizada corretamente. Ela continuará sendo empregada durante toda a disciplina para apresentar mensagens, resultados de algoritmos e conteúdo das estruturas de dados implementadas.
+
+</td>
+
+</tr>
+
+</table>
+
+<p>
+As funções de entrada e saída serão utilizadas em praticamente todos os programas desenvolvidos ao longo da disciplina, seja para receber dados do usuário, seja para exibir o conteúdo de vetores, listas, árvores e demais estruturas de dados estudadas.
+</p>
+
+<hr />
+
+<h2>Operador de atribuição</h2>
+
+<p>
+O operador de atribuição é utilizado para armazenar um valor em uma variável. Em linguagem C, esse operador é representado pelo símbolo <code>=</code>.
+</p>
+
+<p>
+Ao executar uma atribuição, o valor da expressão localizada à direita do operador é calculado e armazenado na variável localizada à esquerda.
+</p>
+
+<p>
+Alguns exemplos são apresentados na tabela abaixo.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+
+<tr bgcolor="#EEEEEE">
+<th>Instrução</th>
+<th>Descrição</th>
+</tr>
+
+<tr>
+<td><code>idade = 20;</code></td>
+<td>A variável <code>idade</code> recebe o valor 20.</td>
+</tr>
+
+<tr>
+<td><code>nota = 8.5;</code></td>
+<td>A variável <code>nota</code> recebe o valor 8.5.</td>
+</tr>
+
+<tr>
+<td><code>x = y;</code></td>
+<td>O valor armazenado em <code>y</code> é copiado para <code>x</code>.</td>
+</tr>
+
+<tr>
+<td><code>x = y + 10;</code></td>
+<td>Primeiro calcula-se <code>y + 10</code>; em seguida o resultado é armazenado em <code>x</code>.</td>
+</tr>
+
+</table>
+
+<p>
+Considere o programa abaixo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> a = 10;
+<span style="color: #0000ff; font-weight: bold;">int</span> b = 20;
+a = b;
+printf(<span style="color: #a31515;">"%d\n"</span>, a);
+</pre>
+
+<p>
+Após a atribuição, a variável <code>a</code> passa a armazenar o mesmo valor de <code>b</code>.
+</p>
+
+<table border="1" cellpadding="5">
+
+<tr bgcolor="#EEEEEE">
+<th>Variável</th>
+<th>Valor inicial</th>
+<th>Valor final</th>
+</tr>
+
+<tr>
+<td><code>a</code></td>
+<td>10</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td><code>b</code></td>
+<td>20</td>
+<td>20</td>
+</tr>
+
+</table>
+
+<table border="1" cellpadding="8" width="100%">
+
+<tr bgcolor="#EEEEEE">
+
+<td>
+
+<b>Observação.</b> Não confunda o operador de atribuição (<code>=</code>) com o operador de comparação (<code>==</code>). O primeiro altera o valor de uma variável, enquanto o segundo verifica se dois valores são iguais.
+
+</td>
+
+</tr>
+
+</table>
+
+<hr />
+
+<h2>Estruturas condicionais</h2>
+
+<p>
+Em muitos algoritmos é necessário executar determinadas instruções apenas quando uma determinada condição é satisfeita. Para isso utilizamos as <b>estruturas condicionais</b>.
+</p>
+
+<p>
+Uma condição é uma expressão lógica cujo resultado pode ser apenas <b>verdadeiro</b> ou <b>falso</b>. Esse resultado é normalmente obtido através da combinação de operadores relacionais e lógicos.
+</p>
+
+<p>
+A linguagem C oferece três estruturas condicionais principais.
+</p>
+
+<table border="1" cellpadding="5">
+
+<tr bgcolor="#EEEEEE">
+<th>Estrutura</th>
+<th>Aplicação</th>
+</tr>
+
+<tr>
+<td><code>if</code></td>
+<td>Executa um bloco de código somente quando uma condição é verdadeira.</td>
+</tr>
+
+<tr>
+<td><code>if...else</code></td>
+<td>Escolhe entre dois blocos de código.</td>
+</tr>
+
+<tr>
+<td><code>switch</code></td>
+<td>Seleciona uma entre diversas alternativas.</td>
+</tr>
+
+</table>
+
+<hr />
+
+<h3>Estrutura <code>if</code></h3>
+
+<p>
+A estrutura <code>if</code> executa um bloco de instruções apenas quando uma determinada condição é verdadeira.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (nota &gt;= 6.0) {
+    printf(<span style="color: #a31515;">"Aprovado!\n"</span>);
+}
+</pre>
+
+<p>
+Caso a condição seja falsa, nenhuma instrução será executada e o programa continuará normalmente após o bloco do <code>if</code>.
+</p>
+
+<hr />
+
+<h3>Estrutura <code>if...else</code></h3>
+
+<p>
+Quando desejamos executar um bloco caso a condição seja verdadeira e outro bloco caso seja falsa, utilizamos a estrutura <code>if...else</code>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (nota &gt;= 6.0) {
+    printf(<span style="color: #a31515;">"Aprovado!\n"</span>);
+} <span style="color: #0000ff; font-weight: bold;">else</span> {
+    printf(<span style="color: #a31515;">"Reprovado!\n"</span>);
+}
+</pre>
+
+<p>
+Observe que apenas um dos blocos será executado.
+</p>
+
+<hr />
+
+<h3>Estruturas condicionais aninhadas</h3>
+
+<p>
+É bastante comum que um teste dependa do resultado de outro teste. Nesses casos utilizamos estruturas condicionais aninhadas.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (nota &gt;= 6.0) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (frequencia &gt;= 75) {
+        printf(<span style="color: #a31515;">"Aprovado!\n"</span>);
+    } <span style="color: #0000ff; font-weight: bold;">else</span> {
+        printf(<span style="color: #a31515;">"Reprovado por frequência.\n"</span>);
+    }
+} <span style="color: #0000ff; font-weight: bold;">else</span> {
+    printf(<span style="color: #a31515;">"Reprovado por nota.\n"</span>);
+}
+</pre>
+
+<p>
+Outra forma bastante utilizada consiste em escrever uma sequência de testes utilizando <code>else if</code>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (nota &gt;= 9.0) {
+    printf(<span style="color: #a31515;">"Conceito A\n"</span>);
+} <span style="color: #0000ff; font-weight: bold;">else if</span> (nota &gt;= 7.5) {
+    printf(<span style="color: #a31515;">"Conceito B\n"</span>);
+} <span style="color: #0000ff; font-weight: bold;">else if</span> (nota &gt;= 6.0) {
+    printf(<span style="color: #a31515;">"Conceito C\n"</span>);
+} <span style="color: #0000ff; font-weight: bold;">else</span> {
+    printf(<span style="color: #a31515;">"Conceito D\n"</span>);
+}
+</pre>
+
+<p>
+Essa construção torna o código mais organizado do que utilizar diversos <code>if</code> independentes.
+</p>
+
+<hr />
+
+<h3>Indentação</h3>
+
+<p>
+Embora a linguagem C não exija indentação para funcionar corretamente, ela é uma das principais ferramentas para tornar um programa legível.
+</p>
+
+<p>
+Um código mal indentado é difícil de compreender e aumenta significativamente a chance de erros durante o desenvolvimento e manutenção do programa.
+</p>
+
+<p>
+Compare os dois exemplos abaixo.
+</p>
+
+<p>
+<b>Exemplo com indentação inadequada:</b>
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (nota &gt;= 6.0){
+printf(<span style="color: #a31515;">"Aprovado\n"</span>);
+<span style="color: #0000ff; font-weight: bold;">if</span>(frequencia&gt;=75){
+printf(<span style="color: #a31515;">"Frequência suficiente\n"</span>);
+}
+<span style="color: #0000ff; font-weight: bold;">else</span>{
+printf(<span style="color: #a31515;">"Reprovado por frequência\n"</span>);
+}
+}
+</pre>
+
+<p>
+<b>Exemplo corretamente indentado:</b>
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (nota &gt;= 6.0) {
+    printf(<span style="color: #a31515;">"Aprovado\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">if</span> (frequencia &gt;= 75) {
+        printf(<span style="color: #a31515;">"Frequência suficiente\n"</span>);
+    } <span style="color: #0000ff; font-weight: bold;">else</span> {
+        printf(<span style="color: #a31515;">"Reprovado por frequência\n"</span>);
+    }
+}
+</pre>
+
+<p>
+Observe que a indentação permite identificar facilmente quais instruções pertencem a cada bloco do programa.
+</p>
+
+<p>
+Ao longo desta disciplina adotaremos sempre uma indentação consistente utilizando quatro espaços por nível de bloco.
+</p>
+
+<hr />
+
+<h3>Estrutura <code>switch</code></h3>
+
+<p>
+Quando existem diversas alternativas baseadas no valor de uma variável inteira ou caractere, pode ser mais conveniente utilizar a estrutura <code>switch</code>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">switch</span> (opcao) {
+<span style="color: #0000ff; font-weight: bold;">case</span> 1:
+    printf(<span style="color: #a31515;">"Inserir\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">break;</span>
+<span style="color: #0000ff; font-weight: bold;">case</span> 2:
+    printf(<span style="color: #a31515;">"Remover\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">break;</span>
+<span style="color: #0000ff; font-weight: bold;">case</span> 3:
+    printf(<span style="color: #a31515;">"Buscar\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">break;</span>
+<span style="color: #0000ff; font-weight: bold;">default:</span>
+    printf(<span style="color: #a31515;">"Opção inválida\n"</span>);
+}
+</pre>
+
+<p>
+A instrução <code>break</code> interrompe a execução do <code>switch</code>. Caso ela seja omitida, o programa continuará executando os casos seguintes, comportamento conhecido como <i>fall-through</i>.
+</p>
+
+<table border="1" cellpadding="5">
+
+<tr bgcolor="#EEEEEE">
+<th>Estrutura</th>
+<th>Quando utilizar</th>
+</tr>
+
+<tr>
+<td><code>if</code></td>
+<td>Quando existe apenas uma condição a ser testada.</td>
+</tr>
+
+<tr>
+<td><code>if...else</code></td>
+<td>Quando existem duas alternativas.</td>
+</tr>
+
+<tr>
+<td><code>else if</code></td>
+<td>Quando há várias condições mutuamente exclusivas.</td>
+</tr>
+
+<tr>
+<td><code>switch</code></td>
+<td>Quando diversas alternativas dependem do valor de uma mesma variável.</td>
+</tr>
+
+</table>
+
+<table border="1" cellpadding="8" width="100%">
+
+<tr bgcolor="#EEEEEE">
+
+<td>
+
+<b>Boas práticas.</b>
+
+<ul>
+
+<li>Sempre utilize chaves (<code>{ }</code>), mesmo quando o bloco possui apenas uma instrução.</li>
+
+<li>Mantenha uma indentação consistente em todo o programa.</li>
+
+<li>Prefira <code>else if</code> em vez de vários <code>if</code> independentes quando as condições são mutuamente exclusivas.</li>
+
+<li>Não esqueça a instrução <code>break</code> nos comandos <code>switch</code>, exceto quando o comportamento de <i>fall-through</i> for realmente desejado.</li>
+
+</ul>
+
+</td>
+
+</tr>
+
+</table>
+
+<hr />
+
+<h2>Estruturas de repetição</h2>
+
+<p>
+Diversos algoritmos precisam executar um mesmo conjunto de instruções várias vezes. Para isso utilizamos as <b>estruturas de repetição</b>, também chamadas de <b>laços</b> (<i>loops</i>).
+</p>
+
+<p>
+A linguagem C oferece três estruturas principais de repetição:
+</p>
+
+<table border="1" cellpadding="5">
+
+<tr bgcolor="#EEEEEE">
+<th>Estrutura</th>
+<th>Quando utilizar</th>
+</tr>
+
+<tr>
+<td><code>while</code></td>
+<td>Quando não sabemos previamente quantas repetições serão necessárias.</td>
+</tr>
+
+<tr>
+<td><code>for</code></td>
+<td>Quando o número de repetições é conhecido ou pode ser determinado antes do início do laço.</td>
+</tr>
+
+<tr>
+<td><code>do...while</code></td>
+<td>Quando o bloco precisa ser executado pelo menos uma vez.</td>
+</tr>
+
+</table>
+
+<hr />
+
+<h3>Estrutura <code>while</code></h3>
+
+<p>
+A estrutura <code>while</code> executa um bloco de código enquanto uma determinada condição permanecer verdadeira.
+</p>
+
+<p>
+Ela é normalmente utilizada quando <b>não sabemos previamente quantas vezes o laço será executado</b>. Em outras palavras, o término da repetição depende de alguma condição que será verificada durante a execução do programa.
+</p>
+
+<p>
+Considere o exemplo abaixo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> numero = -1;
+<span style="color: #0000ff; font-weight: bold;">while</span> (numero != 0) {
+    printf(<span style="color: #a31515;">"Digite um número (0 para sair): "</span>);
+    scanf(<span style="color: #a31515;">"%d"</span>, &amp;numero);
+}
+</pre>
+
+<p>
+Nesse caso, não sabemos quantos números o usuário irá digitar. O laço continuará sendo executado até que o valor informado seja igual a zero.
+</p>
+
+<p>
+Outro exemplo bastante comum consiste em percorrer uma estrutura de dados até encontrar um determinado elemento ou até que ela fique vazia. Situações como essas aparecem frequentemente nesta disciplina.
+</p>
+
+<hr />
+
+<h3>Estrutura <code>for</code></h3>
+
+<p>
+A estrutura <code>for</code> é utilizada principalmente quando <b>já sabemos quantas repetições deverão ser realizadas</b>.
+</p>
+
+<p>
+Ela reúne em uma única instrução três informações importantes:
+</p>
+
+<ul>
+
+<li>inicialização da variável de controle;</li>
+
+<li>condição de repetição;</li>
+
+<li>atualização da variável de controle.</li>
+
+</ul>
+
+<p>
+Sua sintaxe geral é:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">for</span> (inicialização; condição; atualização) {
+    instruções;
+}
+</pre>
+
+<p>
+Por exemplo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; 10; i++) {
+    printf(<span style="color: #a31515;">"%d\n"</span>, i);
+}
+</pre>
+
+<p>
+Nesse exemplo sabemos exatamente quantas vezes o laço será executado: dez vezes, uma para cada valor da variável <code>i</code>, de 0 até 9.
+</p>
+
+<p>
+Em Estruturas de Dados, o comando <code>for</code> será utilizado principalmente para percorrer vetores e matrizes, onde normalmente conhecemos o número de elementos armazenados.
+</p>
+
+<hr />
+
+<h3>Estrutura <code>do...while</code></h3>
+
+<p>
+A estrutura <code>do...while</code> é semelhante ao <code>while</code>, porém a condição é testada apenas após a execução do bloco de código.
+</p>
+
+<p>
+Isso garante que o bloco será executado pelo menos uma vez.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> numero;
+<span style="color: #0000ff; font-weight: bold;">do</span> {
+    printf(<span style="color: #a31515;">"Digite um número: "</span>);
+    scanf(<span style="color: #a31515;">"%d"</span>, &amp;numero);
+} <span style="color: #0000ff; font-weight: bold;">while</span> (numero != 0);
+</pre>
+
+<p>
+Essa estrutura é bastante utilizada em menus e programas interativos, nos quais é necessário executar uma ação antes de decidir se o laço continuará.
+</p>
+
+<hr />
+
+<h3>Comparando as estruturas</h3>
+
+<table border="1" cellpadding="5">
+
+<tr bgcolor="#EEEEEE">
+<th>Estrutura</th>
+<th>Quando utilizar</th>
+<th>Exemplo típico</th>
+</tr>
+
+<tr>
+<td><code>while</code></td>
+<td>Não sabemos previamente quantas repetições serão necessárias.</td>
+<td>Leitura de dados até o usuário informar um valor de parada.</td>
+</tr>
+
+<tr>
+<td><code>for</code></td>
+<td>Sabemos antecipadamente quantas repetições serão realizadas.</td>
+<td>Percorrer um vetor de tamanho <code>n</code>.</td>
+</tr>
+
+<tr>
+<td><code>do...while</code></td>
+<td>O bloco deve ser executado pelo menos uma vez.</td>
+<td>Menus e interfaces interativas.</td>
+</tr>
+
+</table>
+
+<p>
+A principal diferença entre <code>while</code> e <code>for</code> não está na capacidade de resolver problemas — ambos podem implementar praticamente qualquer algoritmo iterativo —, mas na <b>intenção do programador</b>. Quando a repetição depende de um teste cujo número de execuções é desconhecido, normalmente utilizamos <code>while</code>. Quando a repetição é controlada por uma contagem conhecida, o <code>for</code> costuma produzir um código mais claro e organizado.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+
+<tr bgcolor="#EEEEEE">
+
+<td>
+
+<b>Boas práticas.</b>
+
+<ul>
+
+<li>Utilize <code>for</code> sempre que houver uma variável de contagem claramente definida.</li>
+
+<li>Prefira <code>while</code> quando o término do laço depender de uma condição ou evento ocorrido durante a execução.</li>
+
+<li>Evite laços infinitos não intencionais, certificando-se de que a condição de parada poderá ser satisfeita.</li>
+
+<li>Escolha nomes significativos para as variáveis de controle. Embora <code>i</code>, <code>j</code> e <code>k</code> sejam comuns em exemplos simples, variáveis com nomes descritivos facilitam a leitura de programas maiores.</li>
+
+</ul>
+
+</td>
+
+</tr>
+
+</table>
+
+<hr />
+
+<h2>Vetores e Matrizes (Arrays)</h2>
+
+<p>
+Um <b>vetor</b> (ou <i>array</i> unidimensional) é uma estrutura de dados homogênea e estática que armazena uma sequência de elementos do mesmo tipo em posições consecutivas da memória.
+</p>
+
+<p>
+Em C, a indexação de vetores começa sempre no índice <code>0</code> e termina no índice <code>N-1</code>, onde <code>N</code> é o tamanho total do vetor.
+</p>
+
+<h3>Declaração e Inicialização</h3>
+
+<p>
+Para declarar um vetor, especificamos o tipo de dados dos elementos, o nome do vetor e a quantidade de elementos entre colchetes:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> notas[5]; <span style="color: #008000; font-style: italic;">// Declara um vetor de inteiros com 5 posições</span>
+</pre>
+
+<p>
+Também é possível inicializar os elementos do vetor no momento da declaração:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> primos[5] = {2, 3, 5, 7, 11};
+</pre>
+
+<h3>Acesso e Modificação</h3>
+
+<p>
+O acesso e a modificação de elementos individuais são realizados através de seus índices correspondentes:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+primos[0] = 2; <span style="color: #008000; font-style: italic;">// Acessa o primeiro elemento</span>
+<span style="color: #0000ff; font-weight: bold;">int</span> x = primos[3]; <span style="color: #008000; font-style: italic;">// Lê o quarto elemento (valor 7)</span>
+</pre>
+
+<h3>Representação na Memória</h3>
+
+<p>
+Como os elementos de um vetor são armazenados de forma contígua, a distância física entre os elementos na memória é uniforme e depende diretamente do tamanho do tipo de dado do vetor.
+</p>
+
+<p>
+Se um vetor de inteiros (onde cada <code>int</code> ocupa 4 bytes) começa no endereço <code>E2000</code>, seus elementos estarão localizados da seguinte forma na memória:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Endereço</th>
+<th>Tipo</th>
+<th>Identificador</th>
+<th>Valor</th>
+</tr>
+<tr>
+<td><code>E2000</code></td>
+<td><code>int</code></td>
+<td><code>primos[0]</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>E2004</code></td>
+<td><code>int</code></td>
+<td><code>primos[1]</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>E2008</code></td>
+<td><code>int</code></td>
+<td><code>primos[2]</code></td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>E2012</code></td>
+<td><code>int</code></td>
+<td><code>primos[3]</code></td>
+<td>7</td>
+</tr>
+<tr>
+<td><code>E2016</code></td>
+<td><code>int</code></td>
+<td><code>primos[4]</code></td>
+<td>11</td>
+</tr>
+</table>
+
+<h3>Matrizes (Arrays Multidimensionais)</h3>
+
+<p>
+Uma <b>matriz</b> é um vetor de vetores, ideal para representar estruturas bidimensionais (como grades, tabelas ou imagens). A declaração de uma matriz em C requer a especificação do número de linhas e de colunas:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> matriz[3][4]; <span style="color: #008000; font-style: italic;">// Declara uma matriz de inteiros com 3 linhas e 4 colunas</span>
+</pre>
+
+<p>
+Para percorrer ou manipular uma matriz, normalmente utilizamos laços de repetição aninhados (geralmente um laço <code>for</code> dentro de outro):
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; 3; i++) {
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> j = 0; j &lt; 4; j++) {
+        matriz[i][j] = i + j;
+    }
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Boas práticas e Cuidados importantes.</b>
+<ul>
+<li><b>Limites de índices:</b> A linguagem C não verifica se o índice acessado está dentro dos limites declarados do vetor (ausência de <i>bounds checking</i>). Acessar um índice fora dos limites (por exemplo, tentar ler ou escrever em <code>primos[5]</code> em um vetor de tamanho 5) resulta em comportamento indefinido, podendo corromper dados de outras variáveis ou causar o encerramento inesperado do programa (erro de <i>Segmentation Fault</i>).</li>
+<li><b>Inicialização:</b> Elementos de vetores locais declarados sem inicialização contêm lixo de memória (valores imprevisíveis). É uma boa prática inicializar os vetores com zero ou valores padrão adequados antes do uso.</li>
+<li><b>Passagem para funções:</b> Em C, ao passar um vetor para uma função, ele é sempre passado por referência (a função recebe o endereço de memória do primeiro elemento do vetor). Qualquer alteração feita nos elementos do vetor dentro da função altera diretamente os valores do vetor original.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Strings</h2>
+
+<p>
+Uma <b>string</b> é um vetor do tipo <code>char</code> terminado pelo caractere nulo <code>'\0'</code> (null terminator). Esse caractere especial indica o fim da string, permitindo que as funções saibam onde o texto termina.
+</p>
+
+<h3>Declaração e Inicialização</h3>
+
+<p>
+Podemos declarar e inicializar strings de várias maneiras:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">char</span> nome1[10] = {<span style="color: #a31515;">'J'</span>, <span style="color: #a31515;">'o'</span>, <span style="color: #a31515;">'a'</span>, <span style="color: #a31515;">'o'</span>, <span style="color: #a31515;">'\0'</span>}; <span style="color: #008000; font-style: italic;">// Declaração explícita com terminador</span>
+<span style="color: #0000ff; font-weight: bold;">char</span> nome2[10] = <span style="color: #a31515;">"Joao"</span>;                  <span style="color: #008000; font-style: italic;">// O compilador adiciona o '\0' automaticamente</span>
+<span style="color: #0000ff; font-weight: bold;">char</span> nome3[] = <span style="color: #a31515;">"Maria"</span>;                    <span style="color: #008000; font-style: italic;">// Tamanho definido automaticamente (6 bytes)</span>
+</pre>
+
+<h3>Entrada e Saída de Strings</h3>
+
+<p>
+Para exibir uma string na tela, podemos utilizar a função <code>printf()</code> com o especificador de formato <code>%s</code> tranquilamente:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+printf(<span style="color: #a31515;">"Nome: %s\n"</span>, nome2);
+</pre>
+
+<p>
+No entanto, para a leitura de strings, a função <code>scanf()</code> tradicional apresenta limitações. Ao utilizar <code>scanf("%s", nome)</code>, a função lê a entrada apenas até encontrar o primeiro caractere de espaço em branco (como espaço, tabulação ou quebra de linha). Se o usuário digitar "João Silva", apenas "João" será armazenado.
+</p>
+
+<p>
+Para solucionar esse problema e ler strings contendo espaços, podemos utilizar as seguintes funções:
+</p>
+
+<ul>
+<li><b>gets()</b>: Lê uma linha inteira da entrada padrão. <b>Atenção:</b> Esta função é considerada obsoleta e insegura (removida dos padrões modernos da linguagem C), pois não limita o número de caracteres lidos, o que pode causar estouro de buffer (<i>buffer overflow</i>).</li>
+<li><b>fgets()</b>: A alternativa segura. Ela lê uma linha limitando a quantidade máxima de caracteres a serem lidos, evitando invasão de memória. Sua sintaxe é: <code>fgets(destino, tamanho_maximo, fluxo)</code>.</li>
+</ul>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+printf(<span style="color: #a31515;">"Digite seu nome completo: "</span>);
+fgets(nome, 50, stdin); <span style="color: #008000; font-style: italic;">// Lê com segurança da entrada padrão (stdin)</span>
+</pre>
+
+<h3>A Biblioteca <code>string.h</code></h3>
+
+<p>
+A biblioteca padrão <code>&lt;string.h&gt;</code> oferece um conjunto de funções prontas para a manipulação de strings. As principais funções são:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Função</th>
+<th>Descrição</th>
+<th>Exemplo de Uso</th>
+</tr>
+<tr>
+<td><code>strlen()</code></td>
+<td>Retorna o comprimento da string (desconsiderando o terminador <code>'\0'</code>).</td>
+<td><code>int tam = strlen(nome);</code></td>
+</tr>
+<tr>
+<td><code>strcpy()</code></td>
+<td>Copia o conteúdo da string de origem para a string de destino.</td>
+<td><code>strcpy(destino, origem);</code></td>
+</tr>
+<tr>
+<td><code>strcmp()</code></td>
+<td>Compara duas strings. Retorna 0 se forem iguais, um valor menor que 0 se a primeira for menor lexicograficamente, ou maior que 0 se for maior.</td>
+<td><code>if (strcmp(senha, "123") == 0)</code></td>
+</tr>
+<tr>
+<td><code>strcat()</code></td>
+<td>Concatena (junta) a string de origem ao final da string de destino.</td>
+<td><code>strcat(destino, origem);</code></td>
+</tr>
+</table>
+
+<br />
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;string.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">char</span> str1[20] = <span style="color: #a31515;">"Ola "</span>;
+    <span style="color: #0000ff; font-weight: bold;">char</span> str2[10] = <span style="color: #a31515;">"Mundo"</span>;
+    
+    <span style="color: #008000; font-style: italic;">// Concatenação</span>
+    strcat(str1, str2);
+    printf(<span style="color: #a31515;">"Concatenação: %s\n"</span>, str1); <span style="color: #008000; font-style: italic;">// Imprime "Ola Mundo"</span>
+    
+    <span style="color: #008000; font-style: italic;">// Tamanho da string</span>
+    printf(<span style="color: #a31515;">"Comprimento: %lu\n"</span>, strlen(str1));
+    
+    <span style="color: #008000; font-style: italic;">// Comparação</span>
+    <span style="color: #0000ff; font-weight: bold;">if</span> (strcmp(str2, <span style="color: #a31515;">"Mundo"</span>) == 0) {
+        printf(<span style="color: #a31515;">"As strings são iguais!\n"</span>);
+    }
+    
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Cuidados importantes.</b>
+<ul>
+<li>Sempre garanta que o vetor de caracteres de destino possua tamanho suficiente para armazenar o resultado de operações como <code>strcpy</code> e <code>strcat</code>, incluindo o caractere terminador <code>'\0'</code>. Caso contrário, ocorrerá invasão de memória.</li>
+<li>Não tente comparar strings em C usando o operador <code>==</code> (por exemplo, <code>str1 == str2</code>). Isso compara os <i>endereços</i> de memória das variáveis, e não o conteúdo do texto. Use sempre <code>strcmp</code>.</li>
+<li>A atribuição direta de strings após a declaração (por exemplo, <code>str1 = "novo texto"</code>) não é permitida em C. Deve-se utilizar a função <code>strcpy</code>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 6b - Listas Circulares</h1>
+</div>
+
+<p>
+Nesta aula vemos uma segunda variação sobre as listas encadeadas: a <b>lista circular</b>, em que o último nodo, em vez de apontar para <code>NULL</code>, aponta de volta para o primeiro — fechando a lista em um "círculo".
+</p>
+
+<hr />
+
+<h2>1. A ideia central</h2>
+
+<p>
+Em uma lista circular (a partir da simplesmente encadeada da Aula 4), o último nodo aponta para o primeiro em vez de para <code>NULL</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+l.ini
+  |
+  v
++-------+     +-------+     +-------+
+| Dados | --&gt; | Dados | --&gt; | Dados | --+
++-------+     +-------+     +-------+   |
+    ^                                    |
+    +------------------------------------+
+</pre>
+
+<p>
+Não existe mais um nodo cujo <code>prox</code> seja <code>NULL</code> — todos os nodos apontam para algum outro nodo da lista, inclusive o último, que aponta de volta para o início. Isso muda a forma como percorremos a lista: <b>não podemos mais usar <code>aux != NULL</code></b> como condição de parada, pois esse caso nunca ocorre.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Cuidado.</b> Percorrer uma lista circular com a mesma condição de parada de uma lista comum (<code>while (aux != NULL)</code>) resulta em um <b>laço infinito</b> — o ponteiro nunca chega a <code>NULL</code>, pois sempre há um próximo nodo.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>2. Percorrendo uma lista circular</h2>
+
+<p>
+A forma usual de percorrer uma lista circular é comparar o ponteiro auxiliar com o próprio <b>início</b> da lista, parando quando voltarmos a ele. Como a comparação só faz sentido <b>depois</b> de avançar pelo menos uma vez, usamos um <code>do-while</code> em vez de um <code>while</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprime(ListaCirc *l) {
+    Nodo *aux;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;ini == NULL) <span style="color: #008000; font-style: italic;">// lista vazia: nada a imprimir</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span>;
+
+    aux = l-&gt;ini;
+    <span style="color: #0000ff; font-weight: bold;">do</span> {
+        printf(<span style="color: #a31515;">"%d - %s - %.2f\n"</span>, aux-&gt;dado.cod, aux-&gt;dado.nome, aux-&gt;dado.preco);
+        aux = aux-&gt;prox;
+    } <span style="color: #0000ff; font-weight: bold;">while</span> (aux != l-&gt;ini);
+}
+</pre>
+
+<p>
+Note o teste explícito de lista vazia <b>antes</b> do <code>do-while</code>: como o corpo de um <code>do-while</code> sempre executa pelo menos uma vez, seria necessário garantir que <code>l-&gt;ini</code> não é <code>NULL</code> antes de acessar <code>aux-&gt;dado</code>.
+</p>
+
+<hr />
+
+<h2>3. Inserção em uma lista circular</h2>
+
+<p>
+A principal diferença em relação à Aula 4 é que, ao inserir um novo nodo, o <b>último</b> nodo da lista (e não <code>NULL</code>) precisa apontar para o novo início — ou, de forma equivalente, o novo nodo precisa apontar de volta para o início da lista:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> insereInicio(ListaCirc *l, Produto prod) {
+    Nodo *novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    Nodo *ultimo;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo-&gt;dado = prod;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;ini == NULL) { <span style="color: #008000; font-style: italic;">// lista vazia: o novo nodo aponta para si mesmo</span>
+        novo-&gt;prox = novo;
+    } <span style="color: #0000ff; font-weight: bold;">else</span> {
+        ultimo = l-&gt;ini;
+        <span style="color: #0000ff; font-weight: bold;">while</span> (ultimo-&gt;prox != l-&gt;ini) <span style="color: #008000; font-style: italic;">// percorre até achar quem aponta para o início</span>
+            ultimo = ultimo-&gt;prox;
+
+        novo-&gt;prox = l-&gt;ini;
+        ultimo-&gt;prox = novo;
+    }
+
+    l-&gt;ini = novo;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Observação.</b> Assim como na lista simplesmente encadeada da Aula 4, localizar o último nodo aqui custa <code>O(n)</code>. Assim como discutimos na Aula 6a, guardar também um ponteiro para o último nodo na <i>struct</i> da lista resolveria esse problema — a mesma ideia se aplica a uma lista circular.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>4. Aplicações</h2>
+
+<p>
+Listas circulares são úteis sempre que o conceito de "início" e "fim" não faz muito sentido, e o que importa é poder <b>percorrer indefinidamente</b> os elementos, voltando ao começo depois do último:
+</p>
+
+<ul>
+<li><b>Escalonamento <i>round-robin</i>:</b> um sistema operacional distribuindo tempo de processador entre processos, sempre voltando ao primeiro processo da fila após passar pelo último;</li>
+<li><b>Buffers circulares:</b> estruturas que reaproveitam posições já utilizadas, comuns em sistemas de streaming e comunicação;</li>
+<li><b>Jogos por turno:</b> alternar entre jogadores de forma cíclica (jogador 1, 2, 3, ..., voltando ao jogador 1).</li>
+</ul>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Lista circular:</b> o último nodo aponta de volta para o início, em vez de para <code>NULL</code>.</li>
+<li><b>Percurso:</b> usa-se um <code>do-while</code>, comparando o ponteiro auxiliar com o início da lista (<code>aux != l-&gt;ini</code>) como condição de parada — nunca <code>aux != NULL</code>.</li>
+<li><b>Cuidado com laços infinitos:</b> esquecer de adaptar a condição de parada é o erro mais comum ao lidar com listas circulares.</li>
+<li><b>Aplicações típicas:</b> escalonamento <i>round-robin</i>, buffers circulares, jogos por turno — qualquer cenário onde faz sentido "voltar ao início" repetidamente.</li>
+<li>É possível combinar os dois conceitos vistos nesta unidade: uma lista pode ser, ao mesmo tempo, <b>duplamente encadeada e circular</b>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Por que a condição <code>while (aux != NULL)</code>, usada para percorrer listas na Aula 4, nunca é verdadeira em uma lista circular?
+</li>
+
+<li>
+Por que a função <code>imprime</code> desta aula verifica <code>l-&gt;ini == NULL</code> <b>antes</b> do <code>do-while</code>, em vez de deixar essa verificação apenas na condição de parada do laço?
+</li>
+
+<li>
+Cite um cenário (diferente dos vistos em aula) em que uma lista circular seria uma escolha natural, e explique por quê.
+</li>
+
+<li>
+Implemente uma função <code>int tamanho(ListaCirc *l)</code> que retorne o número de nodos de uma lista circular, tomando cuidado para não entrar em laço infinito.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque, em uma lista circular, não existe nenhum nodo cujo <code>prox</code> seja <code>NULL</code> — mesmo o último nodo aponta de volta para o início da lista. Como a condição <code>aux != NULL</code> nunca se torna falsa, um laço que dependa dela nunca termina.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque o corpo de um <code>do-while</code> sempre é executado <b>pelo menos uma vez</b>, antes mesmo de a condição ser testada. Se a lista estivesse vazia (<code>l-&gt;ini == NULL</code>) e não houvesse essa verificação antes, a primeira iteração tentaria acessar <code>aux-&gt;dado</code> com <code>aux</code> valendo <code>NULL</code>, o que é um erro.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Um exemplo é um <b>carrossel de imagens</b> (slideshow) em um site: ao chegar na última imagem e clicar em "próxima", o usuário espera voltar para a primeira, e não receber um erro de "fim da lista". Representar as imagens como uma lista circular torna essa navegação natural, sem precisar de tratamento especial para o caso de "chegar ao fim".
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(ListaCirc *l) {
+    Nodo *aux;
+    <span style="color: #0000ff; font-weight: bold;">int</span> contador = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;ini == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    aux = l-&gt;ini;
+    <span style="color: #0000ff; font-weight: bold;">do</span> {
+        contador++;
+        aux = aux-&gt;prox;
+    } <span style="color: #0000ff; font-weight: bold;">while</span> (aux != l-&gt;ini);
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> contador;
+}
+</pre>
+
+<p>
+O padrão é o mesmo de <code>imprime</code>: trata o caso da lista vazia separadamente, e usa <code>do-while</code> com <code>aux != l-&gt;ini</code> como condição de parada, evitando o laço infinito discutido no Exercício 1.
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

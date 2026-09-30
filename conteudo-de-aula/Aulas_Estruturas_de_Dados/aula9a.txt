@@ -1,0 +1,530 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 9a - Pilhas</h1>
+</div>
+
+<p>
+Nesta aula estudamos o TAD <b>Pilha</b>, a primeira de três estruturas de dados especializadas que veremos nesta unidade (pilhas, filas e deques). Diferente das listas gerais vistas até agora, uma pilha restringe <b>onde</b> é possível inserir e remover elementos — e é exatamente essa restrição que a torna útil e eficiente para uma série de problemas.
+</p>
+
+<hr />
+
+<h2>1. O TAD Pilha</h2>
+
+<p>
+Uma <b>pilha</b> (<i>stack</i>) é uma lista em que todas as inserções e remoções ocorrem em uma única extremidade, chamada de <b>topo</b>. Isso faz com que o último elemento inserido seja sempre o primeiro a ser removido — comportamento conhecido pela sigla <b>LIFO</b> (<i>Last-In, First-Out</i>).
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+        +-------+
+ topo -&gt; |   C   |  (último a entrar, primeiro a sair)
+        +-------+
+        |   B   |
+        +-------+
+        |   A   |  (primeiro a entrar, último a sair)
+        +-------+
+</pre>
+
+<p>
+A analogia mais comum é a de uma <b>pilha de pratos</b>: só é possível colocar um novo prato no topo, e só é possível retirar o prato que está no topo — nunca um prato do meio ou do fundo da pilha.
+</p>
+
+<h3>Operações</h3>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Operação</th>
+<th>Descrição</th>
+</tr>
+<tr>
+<td><b>empilhar</b> (<i>push</i>)</td>
+<td>Insere um novo elemento no topo da pilha.</td>
+</tr>
+<tr>
+<td><b>desempilhar</b> (<i>pop</i>)</td>
+<td>Remove e retorna o elemento do topo da pilha.</td>
+</tr>
+<tr>
+<td><b>topo</b> (<i>peek</i> / <i>top</i>)</td>
+<td>Retorna o elemento do topo, sem removê-lo.</td>
+</tr>
+<tr>
+<td><b>estaVazia</b></td>
+<td>Indica se a pilha não possui elementos.</td>
+</tr>
+<tr>
+<td><b>tamanho</b></td>
+<td>Retorna o número de elementos na pilha.</td>
+</tr>
+</table>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Terminologia.</b> Tentar desempilhar (ou consultar o topo) de uma pilha vazia é chamado de <i>underflow</i>. Tentar empilhar em uma pilha que já atingiu sua capacidade máxima é chamado de <i>overflow</i> — algo que só ocorre em implementações com capacidade fixa, como veremos nos exercícios.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>2. Implementação por lista encadeada</h2>
+
+<p>
+Implementamos a pilha sobre uma lista encadeada (Aula 4), sem limite de capacidade. A ideia central: o <b>topo</b> da pilha é sempre o <b>início</b> da lista — e empilhar/desempilhar tornam-se, respectivamente, inserir e remover no início:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> cod;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">float</span> preco;
+} Produto;
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> str_Nodo Nodo;
+
+<span style="color: #0000ff; font-weight: bold;">struct</span> str_Nodo {
+    Nodo *prox;
+    Produto dado;
+};
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    Nodo *topo;
+} PilhaEnc;
+</pre>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializa(PilhaEnc *p) {
+    p-&gt;topo = NULL;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> estaVazia(PilhaEnc *p) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> p-&gt;topo == NULL;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> empilha(PilhaEnc *p, Produto valor) {
+    Nodo *novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo-&gt;dado = valor;
+    novo-&gt;prox = p-&gt;topo; <span style="color: #008000; font-style: italic;">// aponta para o antigo topo</span>
+    p-&gt;topo = novo;        <span style="color: #008000; font-style: italic;">// o novo nodo passa a ser o topo</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> desempilha(PilhaEnc *p, Produto *valorRemovido) {
+    Nodo *removido;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (estaVazia(p)) <span style="color: #008000; font-style: italic;">// underflow</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    removido = p-&gt;topo;
+    *valorRemovido = removido-&gt;dado;
+    p-&gt;topo = removido-&gt;prox;
+    free(removido);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> topo(PilhaEnc *p, Produto *valor) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (estaVazia(p))
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    *valor = p-&gt;topo-&gt;dado;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(PilhaEnc *p) {
+    Nodo *aux = p-&gt;topo;
+    <span style="color: #0000ff; font-weight: bold;">int</span> contador = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        contador++;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> contador;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Por que sempre no início, e não no fim?</b> Em uma lista simplesmente encadeada (Aula 4), inserir e remover no <b>início</b> é <code>O(1)</code>, mas no <b>final</b> seria <code>O(n)</code> (sem um ponteiro <code>fim</code>, como discutido na Aula 6a). Como a pilha só precisa de uma extremidade "rápida", faz todo sentido escolher o início.
+</td>
+</tr>
+</table>
+
+<p>
+Todas as operações desta implementação são <code>O(1)</code>, e a pilha cresce dinamicamente sem nenhum limite predefinido — o único limite passa a ser a memória disponível no sistema. É por isso que adotamos a lista encadeada como implementação principal do TAD Pilha nesta disciplina.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>E a implementação por vetor?</b> Também é possível implementar uma pilha sobre um vetor de capacidade fixa (como fizemos com listas na Aula 2c), guardando apenas o índice do elemento no topo. Ela também alcança <code>O(1)</code> em todas as operações, mas introduz uma capacidade máxima e a possibilidade de <i>overflow</i>. Deixamos essa implementação como exercício ao final da aula.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>3. Aplicações</h2>
+
+<h3>Pilha de execução de funções</h3>
+
+<p>
+Já usamos uma pilha sem perceber: a própria <b>pilha de chamadas de função</b> (Material Extra — Conceitos de Linguagens de Programação) é uma pilha no sentido deste TAD. Cada chamada de função "empilha" um quadro de ativação, e o retorno da função "desempilha" esse quadro — sempre na mesma ordem LIFO: a última função chamada é a primeira a retornar.
+</p>
+
+<h3>Verificação de parênteses balanceados</h3>
+
+<p>
+Um uso clássico de pilhas é verificar se os parênteses (ou colchetes, chaves) de uma expressão estão corretamente balanceados. A ideia: percorrer a expressão da esquerda para a direita, empilhando cada abertura, e desempilhando a cada fechamento correspondente. Para isso, usamos o campo <code>cod</code> de um <code>Produto</code> apenas para guardar o caractere empilhado — os demais campos ficam sem uso nesta aplicação específica, já que a pilha desta aula é definida sobre <code>Produto</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> parentesesBalanceados(<span style="color: #0000ff; font-weight: bold;">char</span> *expressao) {
+    PilhaEnc p;
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+    <span style="color: #0000ff; font-weight: bold;">char</span> c;
+    Produto simbolo, removido;
+
+    inicializa(&amp;p);
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; expressao[i] != <span style="color: #a31515;">'\0'</span>; i++) {
+        c = expressao[i];
+
+        <span style="color: #0000ff; font-weight: bold;">if</span> (c == <span style="color: #a31515;">'('</span>) {
+            simbolo.cod = c;
+            empilha(&amp;p, simbolo);
+        } <span style="color: #0000ff; font-weight: bold;">else</span> <span style="color: #0000ff; font-weight: bold;">if</span> (c == <span style="color: #a31515;">')'</span>) {
+            <span style="color: #0000ff; font-weight: bold;">if</span> (!desempilha(&amp;p, &amp;removido)) <span style="color: #008000; font-style: italic;">// fechou sem ter aberto: desbalanceado</span>
+                <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+        }
+    }
+
+    <span style="color: #008000; font-style: italic;">// se sobrou algo na pilha, há aberturas sem fechamento correspondente</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> estaVazia(&amp;p);
+}
+</pre>
+
+<p>
+Por exemplo, <code>"(a(b)c)"</code> é balanceado (a pilha termina vazia), enquanto <code>"(a(b)c"</code> não é (sobra um <code>(</code> na pilha) e <code>"a)b("</code> também não é (o primeiro <code>)</code> tenta desempilhar uma pilha já vazia).
+</p>
+
+<h3>Outras aplicações</h3>
+
+<ul>
+<li><b>Desfazer/refazer (<i>undo/redo</i>):</b> cada ação do usuário é empilhada; "desfazer" desempilha a última ação.</li>
+<li><b>Navegação "voltar" de um navegador:</b> cada página visitada é empilhada; "voltar" desempilha a página atual e exibe a anterior.</li>
+<li><b>Avaliação de expressões em notação pós-fixa</b> (ex: calculadoras), e conversão de expressões infixas para pós-fixas — assuntos que costumam ser aprofundados em Análise e Projeto de Algoritmos I.</li>
+</ul>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Pilha (LIFO):</b> inserções e remoções sempre no <b>topo</b> — o último elemento inserido é o primeiro removido.</li>
+<li><b>Operações:</b> <code>empilha</code> (<i>push</i>), <code>desempilha</code> (<i>pop</i>), <code>topo</code> (<i>peek</i>), <code>estaVazia</code>.</li>
+<li><b>Implementação principal: lista encadeada</b> (<code>PilhaEnc</code>), com o topo representado pelo início da lista — todas as operações são <code>O(1)</code>, sem limite de capacidade.</li>
+<li><b>Também é possível implementar por vetor</b> (capacidade fixa, com risco de <i>overflow</i>) — veja o Exercício 7.</li>
+<li><b>Aplicações:</b> pilha de chamadas de função, parênteses balanceados, undo/redo, navegação "voltar", avaliação de expressões pós-fixas.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique, com suas próprias palavras, o que significa a sigla <b>LIFO</b> e como ela se relaciona com a operação <code>desempilha</code>.
+</li>
+
+<li>
+Por que a pilha implementada sobre lista encadeada usa o <b>início</b> da lista como topo, e não o final?
+</li>
+
+<li>
+Explique por que a pilha de chamadas de função (Material Extra — Conceitos de Linguagens de Programação) é um exemplo de estrutura LIFO. O que corresponde a "empilhar" e o que corresponde a "desempilhar" nesse contexto?
+</li>
+
+<li>
+Na função <code>parentesesBalanceados</code>, o que aconteceria se trocássemos a pilha por uma fila (que veremos na próxima aula, com comportamento FIFO)? O algoritmo continuaria funcionando corretamente?
+</li>
+
+<li>
+Implemente uma função <code>int inverterVetor(Produto vetor[], int n)</code> que utilize uma <code>PilhaEnc</code> para inverter a ordem dos elementos de um vetor de <code>Produto</code> (empilhando todos os elementos e depois desempilhando de volta no próprio vetor).
+</li>
+
+<li>
+Estenda o exercício de parênteses balanceados: implemente <code>int expressaoBalanceada(char *expressao)</code>, que verifique o balanceamento de <b>três</b> tipos de símbolos — <code>()</code>, <code>[]</code> e <code>{}</code> — garantindo também que eles fecham na <b>ordem correta</b> (por exemplo, <code>"(a[b)c]"</code> deve ser considerado desbalanceado, mesmo tendo a mesma quantidade de aberturas e fechamentos).
+</li>
+
+<li>
+<b>Implemente a pilha por vetor.</b> Defina a <i>struct</i> <code>PilhaVet</code>, com um vetor de capacidade fixa (<code>CAPACIDADE</code>) e um índice <code>topo</code>, e implemente as funções <code>inicializa</code>, <code>estaVazia</code>, <code>empilha</code> e <code>desempilha</code> (tratando tanto <i>overflow</i> quanto <i>underflow</i>). Explique, com base na sua implementação, por que todas as operações continuam sendo <code>O(1)</code>, assim como na versão por lista encadeada.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+LIFO significa <i>Last-In, First-Out</i> — "o último a entrar é o primeiro a sair". Isso se relaciona diretamente com <code>desempilha</code>: essa operação sempre remove o elemento que foi inserido <b>mais recentemente</b> (o topo), nunca o elemento mais antigo da pilha.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque, em uma lista simplesmente encadeada sem um ponteiro para o final (como vimos na Aula 4), inserir e remover no <b>início</b> são operações <code>O(1)</code>, enquanto inserir e remover no <b>final</b> seriam <code>O(n)</code> (seria preciso percorrer a lista inteira para achar o último nodo). Como todas as operações da pilha acontecem sempre na mesma ponta, escolher o início garante que todas sejam <code>O(1)</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Cada chamada de função <b>empilha</b> um novo quadro de ativação na pilha de execução, contendo seus parâmetros e variáveis locais. Quando a função retorna, esse quadro é <b>desempilhado</b>. Como o retorno de uma função sempre acontece antes do retorno de quem a chamou, a última função chamada é sempre a primeira a retornar — exatamente o comportamento LIFO.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+Não, o algoritmo pararia de funcionar corretamente. Uma fila (FIFO) removeria sempre a abertura <b>mais antiga</b> ainda não fechada, e não a mais recente. Para expressões com parênteses aninhados, como <code>"(a(b)c)"</code>, isso faria o algoritmo fechar o parêntese errado — o primeiro <code>)</code> deveria fechar o <code>(</code> mais interno (o mais recente), e uma fila devolveria o mais externo (o mais antigo) no lugar.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inverterVetor(Produto vetor[], <span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    PilhaEnc p;
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+    Produto valor;
+
+    inicializa(&amp;p);
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (!empilha(&amp;p, vetor[i]))
+            <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// falha na alocação de algum nodo</span>
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++) {
+        desempilha(&amp;p, &amp;valor);
+        vetor[i] = valor;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+Como a pilha inverte a ordem naturalmente (o último elemento empilhado é o primeiro desempilhado), basta empilhar o vetor inteiro e depois desempilhá-lo de volta nas mesmas posições.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> expressaoBalanceada(<span style="color: #0000ff; font-weight: bold;">char</span> *expressao) {
+    PilhaEnc p;
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+    <span style="color: #0000ff; font-weight: bold;">char</span> c;
+    Produto simbolo, removido;
+
+    inicializa(&amp;p);
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; expressao[i] != <span style="color: #a31515;">'\0'</span>; i++) {
+        c = expressao[i];
+
+        <span style="color: #0000ff; font-weight: bold;">if</span> (c == <span style="color: #a31515;">'('</span> || c == <span style="color: #a31515;">'['</span> || c == <span style="color: #a31515;">'{'</span>) {
+            simbolo.cod = c;
+            empilha(&amp;p, simbolo);
+        } <span style="color: #0000ff; font-weight: bold;">else</span> <span style="color: #0000ff; font-weight: bold;">if</span> (c == <span style="color: #a31515;">')'</span> || c == <span style="color: #a31515;">']'</span> || c == <span style="color: #a31515;">'}'</span>) {
+            <span style="color: #0000ff; font-weight: bold;">if</span> (!desempilha(&amp;p, &amp;removido))
+                <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// fechou sem ter aberto nada</span>
+
+            <span style="color: #008000; font-style: italic;">// o símbolo desempilhado precisa ser exatamente a abertura correspondente</span>
+            <span style="color: #0000ff; font-weight: bold;">if</span> ((c == <span style="color: #a31515;">')'</span> &amp;&amp; removido.cod != <span style="color: #a31515;">'('</span>) ||
+                (c == <span style="color: #a31515;">']'</span> &amp;&amp; removido.cod != <span style="color: #a31515;">'['</span>) ||
+                (c == <span style="color: #a31515;">'}'</span> &amp;&amp; removido.cod != <span style="color: #a31515;">'{'</span>)) {
+                <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// fechou o símbolo errado</span>
+            }
+        }
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> estaVazia(&amp;p);
+}
+</pre>
+
+<p>
+A diferença em relação a <code>parentesesBalanceados</code> é que, ao desempilhar, agora verificamos <b>qual</b> símbolo foi desempilhado, e não apenas <i>se</i> havia algo para desempilhar — garantindo que os fechamentos correspondam exatamente às aberturas mais recentes, na ordem correta.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#define</span> CAPACIDADE 50
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    Produto dados[CAPACIDADE];
+    <span style="color: #0000ff; font-weight: bold;">int</span> topo; <span style="color: #008000; font-style: italic;">// índice do elemento no topo; -1 significa pilha vazia</span>
+} PilhaVet;
+
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializa(PilhaVet *p) {
+    p-&gt;topo = -1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> estaVazia(PilhaVet *p) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> p-&gt;topo == -1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> empilha(PilhaVet *p, Produto valor) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (p-&gt;topo == CAPACIDADE - 1) <span style="color: #008000; font-style: italic;">// overflow</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    p-&gt;topo++;
+    p-&gt;dados[p-&gt;topo] = valor;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> desempilha(PilhaVet *p, Produto *valorRemovido) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (estaVazia(p)) <span style="color: #008000; font-style: italic;">// underflow</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    *valorRemovido = p-&gt;dados[p-&gt;topo];
+    p-&gt;topo--;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+Todas as operações mexem apenas na posição <code>p-&gt;topo</code> (lendo, escrevendo, incrementando ou decrementando um único índice) — diferente do que acontecia com listas por contiguidade física (Aula 2c), aqui nunca é preciso deslocar elementos, pois inserções e remoções acontecem sempre na mesma ponta do vetor. Por isso, assim como na versão por lista encadeada, todas as operações são <code>O(1)</code> — a diferença prática é que esta versão tem uma capacidade máxima fixa (<code>CAPACIDADE</code>) e pode sofrer <i>overflow</i>, o que não acontece na versão dinâmica por lista encadeada.
+</p>
+
+</details>
+
+<hr />
+
+<h2>Código para Download</h2>
+
+<p>
+O TAD <code>PilhaEnc</code> completo, exatamente como visto nesta aula, dividido em interface (<code>pilhaEnc.h</code>) e implementação (<code>pilhaEnc.c</code>), junto com um <code>main.c</code> de exemplo:
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<a href="pilhaEnc.zip">pilhaEnc.zip</a> — <code>pilhaEnc.h</code>, <code>pilhaEnc.c</code> e <code>main.c</code>.
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

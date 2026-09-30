@@ -1,0 +1,1154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+            
+            <!-- Conteudo começa aqui -->
+            
+		<div align="center">
+			<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+		</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 1a - Introdução</h1>
+</div>
+
+<p>
+Bem-vindos à disciplina de <b>Estruturas de Dados</b>. Ao longo deste semestre estudaremos como representar informações de forma organizada e eficiente, permitindo que programas manipulem grandes quantidades de dados utilizando algoritmos rápidos e escaláveis.
+</p>
+
+<p>
+Ao chegar nesta disciplina, espera-se que vocês já estejam familiarizados com programação em linguagem C, incluindo o uso de variáveis, funções, vetores, matrizes, registros (<i>structs</i>), ponteiros e alocação dinâmica de memória. Esses conceitos constituem a base necessária para estudarmos estruturas de dados, mas, sozinhos, eles não são suficientes para resolver problemas mais complexos.
+</p>
+
+<p>
+Nesta primeira aula faremos uma visão geral da disciplina, procurando responder uma pergunta bastante importante:
+</p>
+
+<p align="center">
+<b>Se eu já sei programar em C, por que preciso estudar Estruturas de Dados?</b>
+</p>
+
+<hr />
+
+<h2>Programar não é apenas escrever código</h2>
+
+<p>
+Considere alguns sistemas utilizados diariamente:
+</p>
+
+<ul>
+
+<li>um aplicativo de mensagens instantâneas;</li>
+
+<li>uma rede social;</li>
+
+<li>um sistema bancário;</li>
+
+<li>um mecanismo de busca na Internet;</li>
+
+<li>um sistema de gerenciamento de biblioteca.</li>
+
+</ul>
+
+<p>
+Todos esses sistemas possuem algo em comum: eles armazenam e manipulam uma enorme quantidade de informações.
+</p>
+
+<p>
+Não basta que os dados estejam armazenados. É necessário responder perguntas rapidamente:
+</p>
+
+<ul>
+
+<li>Como localizar um usuário específico?</li>
+
+<li>Como encontrar um livro pelo ISBN?</li>
+
+<li>Como listar todos os alunos matriculados em uma disciplina?</li>
+
+<li>Como manter milhares de registros organizados?</li>
+
+<li>Como remover ou inserir novos dados sem comprometer o desempenho?</li>
+
+</ul>
+
+<p>
+Esses problemas não são resolvidos apenas utilizando variáveis, vetores ou registros. É necessário organizar os dados de maneira adequada e escolher algoritmos eficientes para manipulá-los. Esse é exatamente o objetivo das Estruturas de Dados.
+</p>
+
+<hr />
+
+<h2>Tipos de dados</h2>
+
+<p>
+Toda linguagem de programação oferece mecanismos para representar informações. Em linguagem C esses mecanismos são chamados de <b>tipos de dados</b>.
+</p>
+
+<p>
+Os tipos de dados definem quais valores podem ser armazenados e quais operações podem ser realizadas sobre eles.
+</p>
+
+<h3>Tipos primitivos</h3>
+
+<p>
+Os tipos primitivos representam valores simples e indivisíveis.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> idade = 20;
+<span style="color: #0000ff; font-weight: bold;">float</span> nota = 8.5;
+<span style="color: #0000ff; font-weight: bold;">char</span> sexo = <span style="color: #a31515;">'F'</span>;
+<span style="color: #0000ff; font-weight: bold;">double</span> pi = 3.1415926535;
+</pre>
+
+<p>
+Cada variável armazena apenas um único valor.
+</p>
+
+<h3>Tipos estruturados</h3>
+
+<p>
+Além dos tipos primitivos, a linguagem C permite construir tipos mais complexos combinando diversos valores em uma única estrutura.
+</p>
+
+<p>
+O exemplo mais conhecido é o <i>struct</i>.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> matricula;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[100];
+    <span style="color: #0000ff; font-weight: bold;">float</span> media;
+} Aluno;
+</pre>
+
+<p>
+Nesse exemplo foi criado um novo tipo chamado <b>Aluno</b>, composto por três campos diferentes.
+</p>
+
+<p>
+Também fazem parte dos tipos estruturados recursos como vetores, matrizes, strings e ponteiros.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Aluno turma[50];
+<span style="color: #0000ff; font-weight: bold;">char</span> disciplina[40];
+Aluno *p;
+</pre>
+
+<p>
+Esses recursos serão utilizados durante toda a disciplina.
+</p>
+
+<hr />
+
+<h2>Tipos de dados não são estruturas de dados</h2>
+
+<p>
+É importante não confundir esses dois conceitos.
+</p>
+
+<p>
+Os tipos de dados fornecem uma maneira de representar informações na memória. Entretanto, eles não dizem como essas informações devem ser organizadas nem quais operações podem ser realizadas de forma eficiente.
+</p>
+
+<p>
+Por exemplo, suponha que desejamos armazenar todos os alunos de um curso.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Aluno alunos[1000];
+</pre>
+
+<p>
+Esse vetor permite armazenar mil registros, mas ainda permanecem diversas perguntas importantes:
+</p>
+
+<ul>
+
+<li>Como localizar rapidamente um aluno pela matrícula?</li>
+
+<li>Como inserir um novo aluno mantendo a organização?</li>
+
+<li>Como remover um aluno?</li>
+
+<li>Como listar os alunos em ordem alfabética?</li>
+
+<li>Como lidar com uma quantidade de alunos maior que o tamanho do vetor?</li>
+
+</ul>
+
+<p>
+Observe que nenhuma dessas perguntas é respondida pelo tipo de dado utilizado.
+</p>
+
+<p>
+O vetor apenas fornece espaço para armazenar os registros. Ainda precisamos decidir como esses registros serão organizados e quais algoritmos utilizar para manipulá-los.
+</p>
+
+<p>
+É exatamente nesse ponto que entram as estruturas de dados.
+</p>
+
+<hr />
+
+<h2>O que é uma estrutura de dados?</h2>
+
+<p>
+Uma estrutura de dados é uma forma organizada de representar informações juntamente com mecanismos eficientes para manipulá-las.
+</p>
+
+<p>
+Uma estrutura de dados define:
+</p>
+
+<ul>
+
+<li>como os dados serão armazenados;</li>
+
+<li>como os elementos estarão relacionados;</li>
+
+<li>quais operações poderão ser realizadas;</li>
+
+<li>como essas operações serão implementadas.</li>
+
+</ul>
+
+<p>
+Diferentes estruturas são adequadas para diferentes problemas. Não existe uma estrutura de dados que seja a melhor em todas as situações.
+</p>
+
+<p>
+Durante a disciplina aprenderemos a escolher a estrutura mais adequada para cada contexto.
+</p>
+
+<hr />
+
+<h2>Do mundo real ao computador</h2>
+
+<p>
+Antes de implementar qualquer sistema é necessário compreender o problema que desejamos resolver.
+</p>
+
+<p>
+Considere, por exemplo, um sistema para gerenciamento de uma biblioteca.
+</p>
+
+<p>
+No mundo real existem livros, autores, usuários, empréstimos, devoluções e diversas relações entre esses elementos.
+</p>
+
+<p>
+Nosso primeiro objetivo é compreender essas entidades e como elas se relacionam. Somente depois pensamos em como representá-las no computador.
+</p>
+
+<p align="center">
+
+<b>Mundo Real</b><br />
+&#8595;<br />
+<b>Abstração</b><br />
+&#8595;<br />
+<b>Modelo Lógico</b><br />
+&#8595;<br />
+<b>Modelo Físico</b><br />
+&#8595;<br />
+<b>Implementação em C</b>
+
+</p>
+
+<p>
+Essa sequência aparece em praticamente qualquer projeto de software, independentemente da linguagem utilizada.
+</p>
+
+<hr />
+
+<h2>Abstração</h2>
+
+<p>
+Abstração consiste em identificar apenas as características relevantes de um problema, ignorando detalhes que não são importantes naquele momento.
+</p>
+
+<p>
+Voltando ao exemplo da biblioteca, não interessa ao sistema saber a cor da capa de um livro ou o tipo de tinta utilizado em sua impressão.
+</p>
+
+<p>
+Por outro lado, informações como título, autor, ISBN e disponibilidade para empréstimo são relevantes e precisam ser representadas.
+</p>
+
+<p>
+Abstrair significa justamente selecionar quais informações são importantes para resolver o problema.
+</p>
+
+<hr />
+
+<h2>Modelo lógico</h2>
+
+<p>
+Após identificar as entidades do problema, construímos um modelo lógico.
+</p>
+
+<p>
+O modelo lógico descreve <b>quais dados existem</b> e <b>como eles se relacionam</b>, sem se preocupar ainda com detalhes de implementação.
+</p>
+
+<p>
+No exemplo da biblioteca podemos identificar entidades como:
+</p>
+
+<ul>
+
+<li>Livro;</li>
+
+<li>Autor;</li>
+
+<li>Usuário;</li>
+
+<li>Empréstimo.</li>
+
+</ul>
+
+<p>
+Também identificamos os relacionamentos entre elas, por exemplo:
+</p>
+
+<ul>
+
+<li>um livro possui um ou mais autores;</li>
+
+<li>um usuário pode realizar diversos empréstimos;</li>
+
+<li>cada empréstimo está associado a um livro e a um usuário.</li>
+
+</ul>
+
+<p>
+Nesse momento ainda não discutimos vetores, listas, árvores ou tabelas hash. Estamos apenas modelando o problema.
+</p>
+
+<hr />
+
+<h2>Modelo físico</h2>
+
+<p>
+Depois que o modelo lógico está definido, precisamos decidir como essas informações serão representadas na memória do computador.
+</p>
+
+<p>
+Essa etapa é chamada de <b>modelo físico</b>.
+</p>
+
+<p>
+Agora surgem perguntas como:
+</p>
+
+<ul>
+
+<li>Devemos utilizar um vetor ou uma lista encadeada?</li>
+
+<li>Uma árvore permitiria buscas mais rápidas?</li>
+
+<li>Uma tabela hash seria mais adequada?</li>
+
+<li>Como implementar inserções e remoções?</li>
+
+</ul>
+
+<p>
+Observe que diferentes escolhas produzem diferentes desempenhos. Em muitos casos, dois programas resolvem exatamente o mesmo problema, mas apresentam tempos de execução completamente diferentes apenas porque utilizam estruturas de dados distintas.
+</p>
+
+<p>
+Ao longo desta disciplina aprenderemos justamente como realizar essas escolhas de maneira fundamentada.
+</p>
+
+<hr />
+
+<h2>Estruturas de dados existem para suportar operações</h2>
+
+<p>
+Um erro bastante comum é pensar que uma estrutura de dados serve apenas para armazenar informações.
+</p>
+
+<p>
+Na realidade, sua principal função é permitir que determinadas operações sejam realizadas de maneira eficiente.
+</p>
+
+<p>
+Considere novamente um cadastro de alunos.
+</p>
+
+<p>
+Se os registros estiverem armazenados em um vetor, algumas perguntas surgem naturalmente:
+</p>
+
+<ul>
+
+<li>Como inserir um novo aluno?</li>
+
+<li>Como remover um aluno?</li>
+
+<li>Como localizar uma matrícula?</li>
+
+<li>Como manter os registros ordenados?</li>
+
+<li>Como percorrer todos os alunos?</li>
+
+</ul>
+
+<p>
+Essas operações serão utilizadas repetidamente durante toda a disciplina.
+</p>
+
+<p>
+Cada estrutura de dados oferece vantagens e limitações diferentes para cada uma delas.
+</p>
+
+<hr />
+
+<h2>Um exemplo em linguagem C</h2>
+
+<p>
+Em C não existe suporte nativo ao conceito de classes, mas é perfeitamente possível implementar um TAD utilizando um <i>struct</i> juntamente com um conjunto de funções.
+</p>
+
+<p>
+Considere, por exemplo, uma conta bancária.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef</span> <span style="color: #0000ff; font-weight: bold;">struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> numero;
+    <span style="color: #0000ff; font-weight: bold;">char</span> titular[100];
+    <span style="color: #0000ff; font-weight: bold;">float</span> saldo;
+} Conta;
+</pre>
+
+<p>
+Os dados da conta ficam armazenados na estrutura.
+</p>
+
+<p>
+As operações podem ser implementadas através de funções:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> depositar(Conta *c, <span style="color: #0000ff; font-weight: bold;">float</span> valor);
+<span style="color: #0000ff; font-weight: bold;">void</span> sacar(Conta *c, <span style="color: #0000ff; font-weight: bold;">float</span> valor);
+<span style="color: #0000ff; font-weight: bold;">float</span> consultarSaldo(Conta *c);
+</pre>
+
+<p>
+Observe que a estrutura representa apenas os dados. As funções representam o comportamento esperado desse tipo abstrato.
+</p>
+
+<p>
+Ao longo da disciplina utilizaremos esse mesmo padrão para implementar listas, pilhas, filas, árvores e diversas outras estruturas.
+</p>
+
+<hr />
+
+<h2>Exemplo: quando um vetor deixa de ser suficiente</h2>
+
+<p>
+Imagine um sistema que armazena milhares de músicas.
+</p>
+
+<p>
+Inicialmente, um vetor pode parecer suficiente.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Musica playlist[10000];
+</pre>
+
+<p>
+Agora suponha que desejamos inserir uma nova música exatamente na quinta posição da lista.
+</p>
+
+<p>
+Para abrir espaço, será necessário deslocar todos os elementos seguintes uma posição à frente.
+</p>
+
+<p>
+Da mesma forma, remover uma música do início do vetor exige deslocar todos os demais elementos.
+</p>
+
+<p>
+Embora o vetor seja extremamente eficiente para acessar elementos por posição, ele não é necessariamente a melhor escolha para inserções e remoções frequentes.
+</p>
+
+<p>
+Essa observação motiva o estudo das listas encadeadas, que veremos mais adiante na disciplina.
+</p>
+
+<hr />
+
+<h2>Motivação para listas</h2>
+
+<p>
+Diversos problemas envolvem coleções de elementos cujo tamanho varia durante a execução do programa.
+</p>
+
+<p>
+Alguns exemplos são:
+</p>
+
+<ul>
+
+<li>lista de reprodução de músicas;</li>
+
+<li>lista de tarefas;</li>
+
+<li>histórico de mensagens;</li>
+
+<li>cadastro de usuários;</li>
+
+<li>agenda telefônica.</li>
+
+</ul>
+
+<p>
+Nesses casos é comum realizar inserções e remoções constantemente.
+</p>
+
+<p>
+Durante a disciplina estudaremos listas simplesmente encadeadas, listas duplamente encadeadas e listas circulares, comparando suas vantagens e limitações em relação aos vetores.
+</p>
+
+<hr />
+
+<h2>Motivação para árvores</h2>
+
+<p>
+Nem todo problema pode ser representado por uma sequência linear de elementos.
+</p>
+
+<p>
+Em muitas situações os dados possuem uma organização hierárquica.
+</p>
+
+<p>
+Alguns exemplos são:
+</p>
+
+<ul>
+
+<li>a estrutura de diretórios de um sistema operacional;</li>
+
+<li>a árvore genealógica de uma família;</li>
+
+<li>a organização de departamentos em uma empresa;</li>
+
+<li>o índice de um livro;</li>
+
+<li>a estrutura sintática de um programa.</li>
+
+</ul>
+
+<p>
+Esses problemas são naturalmente representados utilizando árvores.
+</p>
+
+<p>
+Além de modelar relações hierárquicas, árvores permitem realizar buscas muito mais eficientes do que listas em diversas situações.
+</p>
+
+<p>
+Mais adiante estudaremos árvores binárias, árvores de busca, árvores balanceadas e estruturas especializadas para processamento de strings.
+</p>
+
+<hr />
+
+<h2>Motivação para algoritmos de ordenação</h2>
+
+<p>
+A ordenação é um dos problemas mais estudados em Ciência da Computação.
+</p>
+
+<p>
+Diversas operações tornam-se mais simples quando os dados estão organizados.
+</p>
+
+<p>
+Por exemplo, uma lista de alunos ordenada pelo número de matrícula facilita buscas, consultas e geração de relatórios.
+</p>
+
+<p>
+Da mesma forma, uma lista de produtos ordenada por código permite localizar informações mais rapidamente do que uma coleção completamente desorganizada.
+</p>
+
+<p>
+Ao longo da disciplina estudaremos diferentes algoritmos de ordenação e veremos que, embora todos produzam exatamente o mesmo resultado final, seu desempenho pode variar significativamente dependendo da estratégia utilizada.
+</p>
+
+<hr />
+
+<h2>Memória principal e memória secundária</h2>
+
+<p>
+Grande parte da disciplina será dedicada ao estudo de estruturas de dados armazenadas na memória principal (RAM). Entretanto, muitos sistemas trabalham com volumes de dados muito maiores do que a memória disponível.
+</p>
+
+<p>
+Nesses casos torna-se necessário armazenar informações em dispositivos de memória secundária, como discos rígidos e unidades SSD.
+</p>
+
+<p>
+Embora o princípio geral seja o mesmo, existem diferenças importantes entre esses dois ambientes.
+</p>
+
+<h3>Memória principal</h3>
+
+<ul>
+
+<li>Acesso muito rápido.</li>
+
+<li>Capacidade relativamente limitada.</li>
+
+<li>Os dados são perdidos quando o computador é desligado.</li>
+
+<li>Utilizada por vetores, listas, árvores, heaps e tabelas hash.</li>
+
+</ul>
+
+<h3>Memória secundária</h3>
+
+<ul>
+
+<li>Acesso significativamente mais lento.</li>
+
+<li>Grande capacidade de armazenamento.</li>
+
+<li>Os dados permanecem armazenados mesmo após desligar o computador.</li>
+
+<li>Exige estruturas especialmente projetadas para reduzir acessos ao disco.</li>
+
+</ul>
+
+<p>
+Essa diferença explica por que algumas estruturas estudadas no final da disciplina, como Árvores B e Árvores B+, são bastante diferentes das árvores binárias vistas anteriormente.
+</p>
+
+<hr />
+
+<h2>Visão geral da disciplina</h2>
+
+<p>
+Agora que discutimos os conceitos fundamentais, podemos apresentar uma visão geral do que será estudado ao longo do semestre.
+</p>
+
+<p>
+Embora as estruturas de dados pareçam assuntos independentes, elas foram desenvolvidas para resolver diferentes classes de problemas. Cada estrutura procura tornar determinadas operações mais eficientes, normalmente sacrificando outras. Por esse motivo, uma das principais habilidades desenvolvidas nesta disciplina será aprender a escolher a estrutura mais adequada para cada situação.
+</p>
+
+<p>
+De maneira simplificada, o conteúdo da disciplina pode ser organizado conforme a Figura abaixo.
+</p>
+
+<pre style="line-height: 1.1; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0; text-align: center;">
+             Problema
+                 ↓
+     Como representar os dados?
+                 ↓
+    ----------------------------
+    |            |             |
+  Vetores      Listas       Árvores
+    |            |             |
+    ----------------------------
+                 ↓
+       Como realizar operações?
+                 ↓
+ Busca  Inserção  Remoção  Ordenação
+</pre>
+
+<p>
+Inicialmente estudaremos algoritmos de ordenação, pois eles permitem compreender que diferentes estratégias podem produzir resultados idênticos com desempenhos bastante distintos.
+</p>
+
+<p>
+Em seguida estudaremos listas lineares, tanto utilizando memória contígua (vetores) quanto memória dinâmica (listas encadeadas). Esses conteúdos servirão de base para estruturas como pilhas, filas e deques.
+</p>
+
+<p>
+Na sequência veremos estruturas hierárquicas, como árvores binárias, árvores de busca e árvores balanceadas, utilizadas quando operações de busca e organização precisam ser realizadas de maneira eficiente.
+</p>
+
+<p>
+Posteriormente estudaremos estruturas especializadas, como árvores Trie para processamento de strings, tabelas hash para buscas rápidas e Árvores B/B+, amplamente utilizadas em bancos de dados e sistemas de arquivos.
+</p>
+
+<p>
+Por fim, veremos técnicas clássicas de compressão de dados, mostrando como estruturas de dados também podem ser utilizadas para reduzir o espaço necessário para armazenamento de informações.
+</p>
+
+<hr />
+
+<h2>Conteúdo programático</h2>
+
+<table border="1" cellpadding="5">
+
+<tr>
+
+<th>Conteúdo</th>
+
+<th>Objetivo</th>
+
+</tr>
+
+<tr>
+
+<td>Algoritmos de Ordenação</td>
+
+<td>Comparar diferentes estratégias para organizar dados.</td>
+
+</tr>
+
+<tr>
+
+<td>Tipos Abstratos de Dados</td>
+
+<td>Separar interface e implementação.</td>
+
+</tr>
+
+<tr>
+
+<td>Vetores</td>
+
+<td>Representação utilizando memória contígua.</td>
+
+</tr>
+
+<tr>
+
+<td>Listas Encadeadas</td>
+
+<td>Inserções e remoções eficientes utilizando memória dinâmica.</td>
+
+</tr>
+
+<tr>
+
+<td>Pilhas, Filas e Deques</td>
+
+<td>Resolução de problemas baseados em restrições de acesso.</td>
+
+</tr>
+
+<tr>
+
+<td>Heaps</td>
+
+<td>Implementação de filas de prioridade.</td>
+
+</tr>
+
+<tr>
+
+<td>Árvores Binárias</td>
+
+<td>Representação hierárquica e buscas eficientes.</td>
+
+</tr>
+
+<tr>
+
+<td>Árvores Balanceadas</td>
+
+<td>Garantir desempenho consistente para operações de busca.</td>
+
+</tr>
+
+<tr>
+
+<td>Estruturas para Strings</td>
+
+<td>Busca eficiente utilizando Tries, Patricia e TST.</td>
+
+</tr>
+
+<tr>
+
+<td>Tabelas Hash</td>
+
+<td>Busca rápida baseada em funções de espalhamento.</td>
+
+</tr>
+
+<tr>
+
+<td>Árvores B e B+</td>
+
+<td>Indexação de dados armazenados em disco.</td>
+
+</tr>
+
+<tr>
+
+<td>Compressão de Dados</td>
+
+<td>Representação eficiente da informação.</td>
+
+</tr>
+
+</table>
+
+<hr />
+
+<h2>Como estudar esta disciplina</h2>
+
+<p>
+Estruturas de Dados é uma disciplina essencialmente prática. Apenas ler os algoritmos normalmente não é suficiente para compreender seu funcionamento.
+</p>
+
+<p>
+Para obter um bom aproveitamento recomenda-se:
+</p>
+
+<ul>
+
+<li>implementar todas as estruturas estudadas utilizando linguagem C;</li>
+
+<li>executar os algoritmos com diferentes conjuntos de dados;</li>
+
+<li>testar casos extremos, como estruturas vazias ou contendo apenas um elemento;</li>
+
+<li>desenhar as estruturas no papel antes de implementá-las;</li>
+
+<li>comparar diferentes soluções para um mesmo problema.</li>
+
+</ul>
+
+<p>
+Ao longo do semestre será dada grande ênfase não apenas à implementação correta, mas também à capacidade de analisar vantagens, limitações e aplicações de cada estrutura.
+</p>
+
+<hr />
+
+<h2>Resumo da aula</h2>
+
+<p>
+Nesta primeira aula apresentamos os conceitos fundamentais que servirão de base para todo o restante da disciplina.
+</p>
+
+<p>
+Em particular, vimos que:
+</p>
+
+<ul>
+
+<li>tipos de dados e estruturas de dados são conceitos diferentes;</li>
+
+<li>estruturas de dados organizam informações e oferecem suporte eficiente para operações sobre esses dados;</li>
+
+<li>todo problema deve ser abstraído antes de ser implementado;</li>
+
+<li>o desenvolvimento de software passa por um modelo lógico e posteriormente por um modelo físico;</li>
+
+<li>Tipos Abstratos de Dados permitem separar interface e implementação;</li>
+
+<li>existem estruturas específicas para memória principal e para armazenamento em disco;</li>
+
+<li>cada estrutura possui aplicações, vantagens e limitações próprias.</li>
+
+</ul>
+
+<p>
+Durante o restante da disciplina aprofundaremos cada um desses tópicos, estudando suas implementações em linguagem C e analisando seu desempenho em diferentes situações.
+</p>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique, com suas próprias palavras, a diferença entre um tipo de dado e uma estrutura de dados.
+</li>
+
+<li>
+Considere um sistema para gerenciamento de uma biblioteca. Quais entidades fazem parte do modelo lógico? Como elas se relacionam?
+</li>
+
+<li>
+Dê três exemplos de aplicações que poderiam utilizar listas encadeadas.
+</li>
+
+<li>
+Dê três exemplos de aplicações que naturalmente utilizam árvores.
+</li>
+
+<li>
+Por que um vetor nem sempre é a melhor solução para armazenar grandes conjuntos de dados?
+</li>
+
+<li>
+Pesquise o conceito de Tipo Abstrato de Dados e explique por que a separação entre interface e implementação é importante.
+</li>
+
+<li>
+Qual é a diferença entre memória principal e memória secundária? Por que algumas estruturas são projetadas especificamente para acesso em disco?
+</li>
+
+<li>
+Escolha um software utilizado no seu dia a dia (por exemplo, um navegador, um editor de texto ou um aplicativo de mensagens) e identifique quais estruturas de dados você acredita que sejam utilizadas internamente. Justifique suas respostas.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Um <b>tipo de dado</b> define como um valor é representado na memória e quais operações básicas podem ser realizadas sobre ele. Exemplos incluem <i>int</i>, <i>float</i>, <i>char</i> e também tipos criados pelo programador, como <i>struct</i>.
+</p>
+
+<p>
+Uma <b>estrutura de dados</b>, por outro lado, organiza diversos dados de maneira a permitir operações eficientes como busca, inserção, remoção e percurso. Enquanto um vetor ou uma estrutura (<i>struct</i>) apenas armazenam informações, estruturas como listas, árvores e tabelas hash também definem como esses dados serão organizados e manipulados.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+No sistema de biblioteca podemos identificar entidades como:
+</p>
+
+<ul>
+
+<li>Livro;</li>
+
+<li>Autor;</li>
+
+<li>Usuário;</li>
+
+<li>Empréstimo.</li>
+
+</ul>
+
+<p>
+Alguns relacionamentos possíveis são:
+</p>
+
+<ul>
+
+<li>Um livro pode possuir um ou mais autores.</li>
+
+<li>Um usuário pode realizar diversos empréstimos.</li>
+
+<li>Cada empréstimo relaciona exatamente um usuário a um livro.</li>
+
+</ul>
+
+<p>
+Esse conjunto de entidades e relacionamentos constitui um modelo lógico do problema, independentemente da linguagem de programação utilizada.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Exemplos de aplicações que podem utilizar listas encadeadas incluem:
+</p>
+
+<ul>
+
+<li>Histórico de navegação de um navegador.</li>
+
+<li>Lista de reprodução de músicas.</li>
+
+<li>Lista de tarefas de um aplicativo.</li>
+
+<li>Escalonamento de processos.</li>
+
+<li>Implementação de pilhas e filas.</li>
+
+</ul>
+
+<p>
+Esses problemas realizam inserções e remoções frequentes, situação em que listas costumam ser mais adequadas que vetores.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+Estruturas em árvore aparecem naturalmente em diversos problemas, por exemplo:
+</p>
+
+<ul>
+
+<li>Estrutura de diretórios de um sistema operacional.</li>
+
+<li>Árvore genealógica.</li>
+
+<li>Organização de departamentos em uma empresa.</li>
+
+<li>DOM de uma página HTML.</li>
+
+<li>Índices de bancos de dados.</li>
+
+</ul>
+
+<p>
+Todos esses exemplos possuem uma organização hierárquica, característica típica das árvores.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+Vetores possuem tamanho fixo e armazenam elementos em posições contíguas da memória. Embora permitam acesso muito rápido por índice, inserções e remoções em posições intermediárias normalmente exigem deslocar diversos elementos.
+</p>
+
+<p>
+Quando essas operações são frequentes, outras estruturas, como listas encadeadas, podem ser mais adequadas.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<p>
+Um Tipo Abstrato de Dados descreve o comportamento esperado de uma estrutura, definindo apenas as operações disponíveis e sua semântica, sem especificar como elas serão implementadas.
+</p>
+
+<p>
+Separar interface e implementação torna o software mais modular, facilita manutenção e permite substituir uma implementação por outra sem alterar o código que utiliza aquela estrutura.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<p>
+A memória principal (RAM) é rápida, porém limitada e volátil. Os dados armazenados nela são perdidos quando o computador é desligado.
+</p>
+
+<p>
+A memória secundária (HD ou SSD) possui capacidade muito maior e mantém os dados permanentemente, porém apresenta tempos de acesso significativamente maiores.
+</p>
+
+<p>
+Por essa razão, estruturas como Árvores B e B+ foram desenvolvidas especificamente para minimizar acessos ao disco.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 8</b></summary>
+
+<p>
+A resposta depende do software escolhido. Um possível exemplo é um aplicativo de mensagens:
+</p>
+
+<ul>
+
+<li>Lista para armazenar conversas.</li>
+
+<li>Fila para envio de mensagens.</li>
+
+<li>Tabela hash para localizar usuários rapidamente.</li>
+
+<li>Árvores para indexação e pesquisa.</li>
+
+<li>Heap para gerenciamento de prioridades.</li>
+
+</ul>
+
+<p>
+Existem diversas respostas corretas, desde que sejam devidamente justificadas.
+</p>
+
+</details>
+            
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

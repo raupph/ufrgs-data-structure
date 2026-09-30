@@ -1,0 +1,869 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 4 - Listas Simplesmente Encadeadas</h1>
+</div>
+
+<p>
+Nesta aula estudamos a segunda forma de implementar o TAD Lista: o <b>encadeamento</b>. Veremos como abandonar o vetor de capacidade fixa da Aula 2c e passar a montar a lista "nó a nó", usando alocação dinâmica e ponteiros.
+</p>
+
+<hr />
+
+<h2>1. Revisão</h2>
+
+<p>
+Relembrando o que já vimos sobre listas:
+</p>
+
+<ul>
+<li>Uma lista é <b>linear</b>, <b>sequencial</b>, e possui uma <b>relação de ordem</b> entre seus elementos;</li>
+<li>É uma sequência de zero ou mais nodos do mesmo tipo (<code>int</code>, <code>float</code>, <code>struct X</code>, etc.).</li>
+</ul>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+( A ) ---&gt; ( B ) ---&gt; ( C )
+</pre>
+
+<p>
+Também vimos que existem duas formas de implementar essa especificação:
+</p>
+
+<ul>
+<li><b>Contiguidade física</b> (Aula 2c): a adjacência lógica entre elementos equivale à adjacência física na memória — implementada com um vetor de capacidade máxima, e uma <i>struct</i> <code>ListaContEst</code> guardando o vetor mais um contador <code>tamanho</code>;</li>
+<li><b>Encadeamento</b> (esta aula): cada elemento aponta explicitamente para o próximo.</li>
+</ul>
+
+<hr />
+
+<h2>2. Listas (simplesmente) encadeadas</h2>
+
+<p>
+Em uma lista simplesmente encadeada, cada elemento (nodo) contém:
+</p>
+
+<ul>
+<li>Os <b>dados</b> propriamente ditos;</li>
+<li>Um <b>ponteiro para o próximo elemento</b> da lista.</li>
+</ul>
+
+<p>
+O ponteiro <code>NULL</code> marca o final da lista, e a lista guarda um ponteiro para o seu primeiro nodo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+lista.ini
+  |
+  v
++-------+-------+     +-------+-------+     +-------+-------+
+| Dados | Ptr.  | --&gt; | Dados | Ptr.  | --&gt; | Dados | Ptr.  | --&gt; NULL
+|       | prox. |     |       | prox. |     |       | prox. |
++-------+-------+     +-------+-------+     +-------+-------+
+</pre>
+
+<p>
+Algumas características importantes dessa implementação:
+</p>
+
+<ul>
+<li>O número de elementos aumenta e diminui <b>dinamicamente</b> (alocação dinâmica) — o único limite é a capacidade da memória disponível;</li>
+<li>Os elementos <b>não</b> estão em posições contíguas da memória — diferente do que vimos na Aula 2c;</li>
+<li>Isso permite um melhor aproveitamento do espaço livre na memória;</li>
+<li>Usar <code>lista[elemento]</code>, como fazíamos com o vetor, <b>não funciona</b> — não existe mais acesso direto por índice;</li>
+<li><b>Cuidado:</b> se perdermos a referência a um ponteiro da lista, não é mais possível recuperá-lo — o espaço alocado para aquele nó fica inacessível (um vazamento de memória).</li>
+</ul>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Atenção.</b> A lista deve ser percorrida com um ponteiro <b>auxiliar</b> — não queremos alterar o ponteiro que marca o início da lista ao percorrê-la, sob risco de "desencadear" (perder o acesso a) parte da lista.
+</td>
+</tr>
+</table>
+
+<p>
+Exemplo: partindo de uma lista vazia, após <code>inserirInicio(10)</code>, <code>inserirInicio(8)</code> e <code>inserirInicio(19)</code>, a lista fica assim:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+lista.ini
+  |
+  v
++----+-------+     +---+-------+     +----+-------+
+| 19 | Ptr.  | --&gt; | 8 | Ptr.  | --&gt; | 10 | Ptr.  | --&gt; NULL
+|    | prox. |     |   | prox. |     |    | prox. |
++----+-------+     +---+-------+     +----+-------+
+</pre>
+
+<p>
+Note que cada novo elemento inserido no início "empurra" a lista anterior para trás — os elementos aparecem na ordem inversa à da inserção.
+</p>
+
+<hr />
+
+<h2>3. TAD Lista Simplesmente Encadeada (LSE)</h2>
+
+<h3>Dados</h3>
+
+<p>
+Assim como na Aula 2c, definimos primeiro o dado a ser armazenado em cada nodo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> cod;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">float</span> preco;
+} Produto;
+</pre>
+
+<p>
+Agora o <b>nodo</b> da lista, que guarda um <code>Produto</code> e um ponteiro para o próximo nodo. Como o nodo referencia a si mesmo (através de <code>prox</code>), é preciso declarar o tipo em duas etapas:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> str_Nodo Nodo;
+
+<span style="color: #0000ff; font-weight: bold;">struct</span> str_Nodo {
+    Nodo *prox;
+    Produto dado;
+};
+</pre>
+
+<p>
+E, por fim, o tipo da <b>lista propriamente dita</b> — assim como fizemos com <code>ListaContEst</code> na Aula 2c, encapsulamos o ponteiro para o primeiro nodo (<code>ini</code>) dentro de uma <i>struct</i>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    Nodo *ini;
+} ListaEnc;
+</pre>
+
+<p>
+Note o paralelo com a Aula 2c: lá, <code>ListaContEst</code> guardava um vetor mais um contador de controle (<code>tamanho</code>); aqui, <code>ListaEnc</code> guarda apenas um ponteiro para o primeiro nodo (<code>ini</code>) — os dados em si não ficam "dentro" da <i>struct</i> da lista, e sim espalhados entre os nodos alocados dinamicamente.
+</p>
+
+<h3>Operações</h3>
+
+<p>
+Como agora sempre trabalhamos com um ponteiro para a <i>struct</i> da lista (<code>ListaEnc *lista</code>), as funções podem alterar <code>lista-&gt;ini</code> diretamente através dele — sem precisar retornar a lista, como seria necessário se ela fosse apenas um <code>Nodo *</code> solto (mais sobre isso ao final da aula). O tamanho da lista não é guardado na <i>struct</i>: existe uma função <code>tamanho</code> própria para calculá-lo quando necessário. Assim como na Aula 2c, as funções que apenas <b>leem</b> a lista (<code>imprimir</code>, <code>buscar</code> e <code>tamanho</code>) recebem <code>const ListaEnc *lista</code>, deixando explícito que não alteram a lista recebida.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span>    inicializar(ListaEnc *lista);
+<span style="color: #0000ff; font-weight: bold;">void</span>    imprimir(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista);
+Produto buscar(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista, <span style="color: #0000ff; font-weight: bold;">int</span> cod);
+<span style="color: #0000ff; font-weight: bold;">int</span>     inserirInicio(ListaEnc *lista, Produto prod);
+<span style="color: #0000ff; font-weight: bold;">int</span>     inserirFim(ListaEnc *lista, Produto prod);
+<span style="color: #0000ff; font-weight: bold;">int</span>     removerPorCod(ListaEnc *lista, <span style="color: #0000ff; font-weight: bold;">int</span> cod);
+<span style="color: #0000ff; font-weight: bold;">void</span>    destruir(ListaEnc *lista);
+<span style="color: #0000ff; font-weight: bold;">int</span>     tamanho(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista);
+</pre>
+
+<hr />
+
+<h2>4. Implementação em C</h2>
+
+<h3><code>inicializar</code></h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializar(ListaEnc *lista) {
+    lista-&gt;ini = NULL;
+}
+</pre>
+
+<h3><code>tamanho</code></h3>
+
+<p>
+Como a <i>struct</i> não guarda mais um contador, calculamos o tamanho percorrendo a lista e contando os nodos:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista) {
+    Nodo *aux = lista-&gt;ini;
+    <span style="color: #0000ff; font-weight: bold;">int</span> contador = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        contador++;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> contador;
+}
+</pre>
+
+<h3><code>imprimir</code></h3>
+
+<p>
+Para percorrer a lista, usamos um ponteiro <b>auxiliar</b> (<code>aux</code>), avançando-o até chegar a <code>NULL</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimir(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista) {
+    Nodo *aux;
+    aux = lista-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        printf(<span style="color: #a31515;">"Codigo: %d\n"</span>, aux-&gt;dado.cod);
+        printf(<span style="color: #a31515;">"Nome: %s\n"</span>, aux-&gt;dado.nome);
+        printf(<span style="color: #a31515;">"Preco: %f\n"</span>, aux-&gt;dado.preco);
+        aux = aux-&gt;prox;
+    }
+}
+</pre>
+
+<h3><code>buscar</code></h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Produto buscar(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista, <span style="color: #0000ff; font-weight: bold;">int</span> cod) {
+    Nodo *aux;
+    Produto prod = {0, <span style="color: #a31515;">""</span>, 0.0f};
+    aux = lista-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (aux-&gt;dado.cod == cod)
+            <span style="color: #0000ff; font-weight: bold;">return</span> aux-&gt;dado;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> prod; <span style="color: #008000; font-style: italic;">// não encontrado: produto "vazio"</span>
+}
+</pre>
+
+<h3><code>inserirInicio</code></h3>
+
+<p>
+Inserir no início não exige percorrer a lista: basta criar um novo nodo e "encaixá-lo" antes do primeiro nodo atual. Como recebemos um ponteiro para a <i>struct</i> da lista, podemos atualizar <code>lista-&gt;ini</code> diretamente:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inserirInicio(ListaEnc *lista, Produto prod) {
+    Nodo *novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// falha na alocação</span>
+
+    novo-&gt;dado = prod;
+    novo-&gt;prox = lista-&gt;ini; <span style="color: #008000; font-style: italic;">// o novo nodo aponta para o antigo início</span>
+    lista-&gt;ini = novo;        <span style="color: #008000; font-style: italic;">// o novo nodo passa a ser o início</span>
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+Na <code>main</code>, basta passar o endereço da lista — não é preciso reatribuir nenhum retorno, pois a própria <i>struct</i> apontada por <code>lista</code> já foi alterada:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+inserirInicio(&amp;lista, p1);
+</pre>
+
+<h3><code>inserirFim</code></h3>
+
+<p>
+Inserir no final exige percorrer a lista inteira até encontrar o último nodo (aquele cujo <code>prox</code> é <code>NULL</code>):
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inserirFim(ListaEnc *lista, Produto prod) {
+    Nodo *novo;
+    Nodo *aux;
+
+    novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo-&gt;dado = prod;
+    novo-&gt;prox = NULL;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista-&gt;ini == NULL) { <span style="color: #008000; font-style: italic;">// lista vazia: o novo nodo é o único (e o início)</span>
+        lista-&gt;ini = novo;
+    } <span style="color: #0000ff; font-weight: bold;">else</span> {
+        aux = lista-&gt;ini;
+        <span style="color: #0000ff; font-weight: bold;">while</span> (aux-&gt;prox != NULL) <span style="color: #008000; font-style: italic;">// percorre até o último nodo</span>
+            aux = aux-&gt;prox;
+        aux-&gt;prox = novo;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<h3><code>removerPorCod</code></h3>
+
+<p>
+Remover exige guardar, além do nodo procurado (<code>aux</code>), o nodo <b>anterior</b> a ele (<code>ant</code>) — é através dele que "religamos" a lista após retirar o nodo removido:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> removerPorCod(ListaEnc *lista, <span style="color: #0000ff; font-weight: bold;">int</span> cod) {
+    Nodo *ant;
+    Nodo *aux;
+
+    ant = NULL;
+    aux = lista-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL &amp;&amp; aux-&gt;dado.cod != cod) {
+        ant = aux;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (aux == NULL) <span style="color: #008000; font-style: italic;">// não encontrado</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (ant == NULL) <span style="color: #008000; font-style: italic;">// removendo o primeiro nodo</span>
+        lista-&gt;ini = aux-&gt;prox;
+    <span style="color: #0000ff; font-weight: bold;">else</span>             <span style="color: #008000; font-style: italic;">// removendo do meio ou do final</span>
+        ant-&gt;prox = aux-&gt;prox;
+
+    free(aux);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<h3><code>destruir</code></h3>
+
+<p>
+Diferente da Aula 2c, aqui existe memória de fato alocada para <b>cada nodo</b>: é preciso percorrer a lista inteira, liberando um nodo de cada vez:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> destruir(ListaEnc *lista) {
+    Nodo *ant;
+    Nodo *aux;
+    aux = lista-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        ant = aux;
+        aux = aux-&gt;prox;
+        free(ant);
+    }
+
+    lista-&gt;ini = NULL;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Cuidado.</b> É preciso guardar <code>aux-&gt;prox</code> em <code>ant</code> <b>antes</b> de chamar <code>free(ant)</code> no nodo atual. Se liberássemos o nodo antes de avançar o ponteiro, perderíamos o acesso ao restante da lista.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>5. Exemplo de uso</h2>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    ListaEnc lista;
+    inicializar(&amp;lista);
+
+    Produto p1 = {1, <span style="color: #a31515;">"Produto A"</span>, 10.0f};
+    Produto p2 = {2, <span style="color: #a31515;">"Produto B"</span>, 20.0f};
+
+    inserirInicio(&amp;lista, p1); <span style="color: #008000; font-style: italic;">// lista: [A]</span>
+    inserirFim(&amp;lista, p2);    <span style="color: #008000; font-style: italic;">// lista: [A, B]</span>
+
+    imprimir(&amp;lista);
+    printf(<span style="color: #a31515;">"Tamanho: %d\n"</span>, tamanho(&amp;lista)); <span style="color: #008000; font-style: italic;">// imprime 2</span>
+
+    buscar(&amp;lista, 1);
+
+    removerPorCod(&amp;lista, 1);  <span style="color: #008000; font-style: italic;">// lista: [B]</span>
+    destruir(&amp;lista);          <span style="color: #008000; font-style: italic;">// lista: vazia, memória liberada</span>
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<hr />
+
+<h2>6. Contiguidade física versus encadeamento</h2>
+
+<p>
+Com as duas implementações já vistas (Aula 2c e esta aula), podemos comparar diretamente suas vantagens e desvantagens:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Aspecto</th>
+<th>Contiguidade física (<code>ListaContEst</code>)</th>
+<th>Encadeamento (<code>ListaEnc</code>)</th>
+</tr>
+<tr>
+<td>Tamanho máximo</td>
+<td>Precisa ser conhecido antecipadamente (capacidade do vetor).</td>
+<td>Cresce e diminui dinamicamente, limitado apenas pela memória disponível.</td>
+</tr>
+<tr>
+<td>Acesso ao n-ésimo elemento</td>
+<td>Rápido (<code>O(1)</code>, acesso direto por índice).</td>
+<td>Mais demorado (<code>O(n)</code>, é preciso percorrer nodo a nodo).</td>
+</tr>
+<tr>
+<td>Inserção/remoção no meio</td>
+<td>Ineficiente — exige deslocar elementos para abrir espaço.</td>
+<td>Mais eficiente — basta ajustar os ponteiros dos nodos vizinhos.</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>7. Complexidade das operações (LSE)</h2>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Operação</th>
+<th>Complexidade</th>
+<th>Motivo</th>
+</tr>
+<tr>
+<td><code>inicializar</code></td>
+<td><code>O(1)</code></td>
+<td>Apenas atribui <code>NULL</code> a <code>lista-&gt;ini</code>.</td>
+</tr>
+<tr>
+<td><code>inserirInicio</code></td>
+<td><code>O(1)</code></td>
+<td>Cria um nodo e o encaixa antes do início, sem percorrer a lista.</td>
+</tr>
+<tr>
+<td><code>inserirFim</code>, <code>buscar</code>, <code>removerPorCod</code>, <code>tamanho</code></td>
+<td><code>O(n)</code></td>
+<td>No pior caso, é preciso percorrer a lista inteira (até o último nodo, até não encontrar o código procurado, ou para contar todos os nodos).</td>
+</tr>
+<tr>
+<td><code>destruir</code></td>
+<td><code>O(n)</code></td>
+<td>Precisa liberar cada um dos <code>n</code> nodos, um de cada vez.</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Lista encadeada:</b> cada nodo guarda um dado e um ponteiro para o próximo; <code>NULL</code> marca o fim da lista.</li>
+<li><b><code>ListaEnc</code>:</b> <i>struct</i> que representa a lista, guardando apenas o ponteiro para o primeiro nodo (<code>ini</code>) — o mesmo estilo de <code>ListaContEst</code> visto na Aula 2c, porém mais simples.</li>
+<li><b><code>tamanho</code> é uma função, não um campo:</b> como a lista não guarda um contador, calcular o tamanho exige percorrer todos os nodos, custando <code>O(n)</code>.</li>
+<li><b>Crescimento dinâmico:</b> cada nodo é alocado individualmente com <code>malloc()</code>, sem capacidade máxima predefinida.</li>
+<li><b>Sem acesso direto por índice</b> — para chegar ao n-ésimo elemento, é preciso percorrer a lista nodo a nodo, usando um ponteiro auxiliar.</li>
+<li><b>Inserir no início é <code>O(1)</code></b>, mas inserir no fim, consultar e remover são <code>O(n)</code> no pior caso.</li>
+<li><b>Cuidado com os ponteiros:</b> perder a referência a um nodo (sem antes salvar seu <code>prox</code>) impede recuperá-lo e causa vazamento de memória.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Observação: outras formas de representar a lista</h2>
+
+<p>
+Nem todo material sobre listas encadeadas usa uma <i>struct</i> como <code>ListaEnc</code>. É comum encontrar textos e exemplos em que a <b>lista é, ela mesma, apenas o ponteiro para o primeiro nodo</b> — ou seja, uma variável do tipo <code>Nodo *</code> diretamente, sem nenhum "envelope" ao redor.
+</p>
+
+<p>
+Nesse caso, como não existe uma <i>struct</i> intermediária para guardar <code>lista-&gt;ini</code>, as funções que alteram o início da lista (como <code>inserirInicio</code> e <code>removerPorCod</code>) precisam de outra forma de "avisar" o chamador sobre o novo início. Existem duas soluções comuns:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Abordagem</th>
+<th>Ideia</th>
+</tr>
+<tr>
+<td><b>Retornar o novo início</b></td>
+<td>A função recebe <code>Nodo *lista</code> e <b>retorna</b> <code>Nodo *</code> (o início atualizado). O chamador precisa sempre reatribuir: <code>lista = inserirInicio(lista, prod);</code>.</td>
+</tr>
+<tr>
+<td><b>Ponteiro para ponteiro</b></td>
+<td>A função recebe <code>Nodo **lista</code> — o <b>endereço</b> da variável do chamador — e altera <code>*lista</code> diretamente, sem precisar de retorno (a não ser um código de erro).</td>
+</tr>
+</table>
+
+<p>
+Por exemplo, a versão de <code>inserirInicio</code> com retorno ficaria assim:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Nodo* inserirInicio(Nodo *lista, Produto prod) {
+    Nodo *novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> lista; <span style="color: #008000; font-style: italic;">// falha na alocação: mantém a lista como estava</span>
+
+    novo-&gt;dado = prod;
+    novo-&gt;prox = lista;
+    <span style="color: #0000ff; font-weight: bold;">return</span> novo; <span style="color: #008000; font-style: italic;">// o novo nodo passa a ser o início</span>
+}
+
+<span style="color: #008000; font-style: italic;">// Na main:</span>
+Nodo *lista = NULL;
+lista = inserirInicio(lista, p1);
+</pre>
+
+<p>
+E a versão com ponteiro para ponteiro, evitando o retorno:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inserirInicio(Nodo **lista, Produto prod) {
+    Nodo *novo = malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> -1;
+
+    novo-&gt;dado = prod;
+    novo-&gt;prox = *lista;
+    *lista = novo;
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+
+<span style="color: #008000; font-style: italic;">// Na main:</span>
+Nodo *lista = NULL;
+inserirInicio(&amp;lista, p1);
+</pre>
+
+<p>
+Note que a abordagem usada nesta aula (<code>ListaEnc *lista</code>, com <code>lista-&gt;ini</code> dentro de uma <i>struct</i>) já resolve naturalmente esse problema: como sempre passamos o <b>endereço da struct</b> da lista, as funções podem alterar <code>lista-&gt;ini</code> livremente, do mesmo jeito que o "ponteiro para ponteiro" faria — sem precisar escolher entre retornar a lista ou usar <code>Nodo **</code>. Por isso seguiremos com <code>ListaEnc</code> pelo restante da disciplina, mas é importante reconhecer as outras formas, caso você as encontre em outros materiais.
+</p>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Por que, em uma lista simplesmente encadeada, a expressão <code>lista.ini[2]</code> não funciona, ao contrário do que acontecia com <code>l-&gt;dados[pos]</code> na implementação por contiguidade física da Aula 2c?
+</li>
+
+<li>
+Explique por que, ao percorrer uma lista encadeada, usamos um ponteiro <b>auxiliar</b> (como <code>aux</code>) em vez de andar diretamente com <code>lista-&gt;ini</code>.
+</li>
+
+<li>
+Explique por que, nesta implementação com <code>ListaEnc *lista</code>, as funções não precisam mais retornar <code>Nodo *</code> nem usar <code>Nodo **</code> para atualizar o início da lista — qual campo da <i>struct</i> cumpre esse papel?
+</li>
+
+<li>
+Na função <code>destruir</code>, por que é necessário guardar <code>aux-&gt;prox</code> em <code>ant</code> antes de chamar <code>free(ant)</code>? O que aconteceria se a ordem das instruções dentro do laço fosse trocada?
+</li>
+
+<li>
+Compare a complexidade de <code>inserirInicio</code> com a de <code>inserirFim</code>. Por que elas são diferentes, se ambas realizam basicamente "uma inserção"?
+</li>
+
+<li>
+Por que a função <code>tamanho</code> desta aula é <code>O(n)</code>, e não <code>O(1)</code> como era na Aula 2c (onde <code>ListaContEst</code> guardava um campo <code>tamanho</code> que permitia obter o tamanho diretamente)? O que a <i>struct</i> <code>ListaEnc</code> precisaria guardar para tornar essa função <code>O(1)</code>, e qual seria o "preço" de fazer isso?
+</li>
+
+<li>
+Considerando a tabela da seção 6, em qual cenário a lista por contiguidade física (Aula 2c) seria preferível a uma lista encadeada? E em qual cenário o encadeamento seria preferível?
+</li>
+
+<li>
+Implemente uma função <code>int soma(const ListaEnc *lista)</code> que retorne a soma dos preços (arredondados para inteiro, apenas para simplificar) de todos os produtos da lista.
+</li>
+
+<li>
+Implemente uma função <code>float precoMedio(const ListaEnc *lista)</code> que retorne o preço médio dos produtos da lista, reaproveitando as funções <code>soma</code> (exercício anterior) e <code>tamanho</code> já implementadas nesta aula. Cuidado com o caso da lista vazia.
+</li>
+
+<li>
+Implemente uma função <code>int contarAcimaDe(const ListaEnc *lista, float valor)</code> que retorne quantos produtos da lista têm preço estritamente maior que <code>valor</code>.
+</li>
+
+<li>
+Escreva um pequeno <code>main()</code> que crie uma <code>ListaEnc</code>, insira (com <code>inserirFim</code>) três produtos com preços 10.0, 25.0 e 40.0, e então imprima: o preço médio (<code>precoMedio</code>) e quantos produtos custam mais que 20.0 (<code>contarAcimaDe</code>).
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque, na lista encadeada, os elementos não estão em posições contíguas da memória — cada nodo é um bloco alocado separadamente, em um endereço qualquer do heap. Não existe um vetor por trás de <code>lista.ini</code>, então não há como calcular diretamente "o endereço do elemento 2" apenas somando um deslocamento fixo, como fazíamos com <code>l-&gt;dados[pos]</code> na Aula 2c. A única forma de chegar ao elemento 2 é percorrer a lista a partir de <code>lista.ini</code>, nodo a nodo.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque <code>lista-&gt;ini</code> marca o <b>início</b> da lista inteira. Se avançássemos esse ponteiro diretamente durante o percurso, perderíamos a referência ao primeiro nodo assim que a função terminasse — "desencadeando" a lista e impossibilitando qualquer acesso posterior a ela. O ponteiro auxiliar pode avançar livremente, pois é apenas uma cópia temporária usada só para percorrer a lista, sem alterar <code>lista-&gt;ini</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Porque as funções recebem <code>ListaEnc *lista</code>, ou seja, o <b>endereço</b> da <i>struct</i> da lista (e não uma cópia dela). Isso significa que qualquer alteração feita em <code>lista-&gt;ini</code> dentro da função já é vista pelo chamador imediatamente, sem precisar de retorno — o próprio campo <code>ini</code> da <i>struct</i> cumpre o papel que, em outras representações, seria feito por um valor de retorno (<code>Nodo *</code>) ou por um parâmetro <code>Nodo **</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+Porque, após <code>free(ant)</code>, o bloco de memória apontado por <code>ant</code> deixa de ser válido — qualquer leitura de <code>ant-&gt;prox</code> feita depois disso seria acesso a memória já liberada, um comportamento indefinido. Por isso é preciso primeiro copiar o endereço do próximo nodo (<code>aux = aux-&gt;prox</code>) e só então liberar o nodo anterior.
+</p>
+
+<p>
+Se a ordem fosse trocada (liberando <code>ant</code> antes de ler <code>aux-&gt;prox</code>), o programa tentaria acessar um ponteiro dentro de um bloco já liberado, o que pode causar comportamento imprevisível ou uma falha de segmentação (<i>segmentation fault</i>).
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+<code>inserirInicio</code> é <code>O(1)</code> porque o novo nodo é sempre encaixado logo antes do início atual, sem nenhuma necessidade de percorrer a lista. Já <code>inserirFim</code> é <code>O(n)</code> porque, como <code>lista-&gt;ini</code> só aponta para o <b>início</b> da lista (e não também para o seu final), é preciso percorrer todos os <code>n</code> nodos existentes até encontrar aquele cujo <code>prox</code> é <code>NULL</code>, para então encaixar o novo nodo ali.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<p>
+Ela é <code>O(n)</code> porque <code>ListaEnc</code> guarda apenas o ponteiro <code>ini</code>, sem nenhum contador — a única forma de saber quantos nodos existem é percorrer a lista inteira, contando um a um.
+</p>
+
+<p>
+Para tornar essa função <code>O(1)</code>, bastaria acrescentar um campo <code>int tamanho;</code> à <i>struct</i> <code>ListaEnc</code> (como chegamos a considerar antes de simplificar a implementação). O "preço" dessa mudança é ter que lembrar de incrementar esse campo em toda inserção (<code>inserirInicio</code>, <code>inserirFim</code>) e decrementá-lo em toda remoção bem-sucedida (<code>removerPorCod</code>), além de zerá-lo em <code>inicializar</code> e <code>destruir</code> — ou seja, trocamos uma função mais cara por mais pontos do código que precisam se manter consistentes entre si.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<p>
+A lista por contiguidade física é preferível quando o tamanho máximo é conhecido (ou pode ser bem estimado) antecipadamente, e quando o acesso frequente por índice (por exemplo, "me dê o elemento na posição 10") é mais importante do que inserções/remoções no meio da lista.
+</p>
+
+<p>
+A lista encadeada é preferível quando o tamanho da lista varia muito e de forma imprevisível durante a execução, e quando inserções e remoções (especialmente fora do final) são frequentes — já que, no encadeamento, essas operações não exigem deslocar elementos, apenas ajustar alguns ponteiros.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 8</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> soma(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista) {
+    Nodo *aux = lista-&gt;ini;
+    <span style="color: #0000ff; font-weight: bold;">int</span> total = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        total += (<span style="color: #0000ff; font-weight: bold;">int</span>) aux-&gt;dado.preco;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> total;
+}
+</pre>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 9</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">float</span> precoMedio(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (tamanho(lista) == 0) {
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// evita divisão por zero</span>
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> (<span style="color: #0000ff; font-weight: bold;">float</span>) soma(lista) / tamanho(lista);
+}
+</pre>
+
+<p>
+Assim como no exercício análogo da Aula 2c, o caso da lista vazia precisa de tratamento especial, para não dividir por zero. Note também que a função reaproveita <code>soma</code> e <code>tamanho</code> em vez de percorrer a lista novamente "na mão".
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 10</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> contarAcimaDe(<span style="color: #0000ff; font-weight: bold;">const</span> ListaEnc *lista, <span style="color: #0000ff; font-weight: bold;">float</span> valor) {
+    Nodo *aux = lista-&gt;ini;
+    <span style="color: #0000ff; font-weight: bold;">int</span> contador = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (aux-&gt;dado.preco &gt; valor) {
+            contador++;
+        }
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> contador;
+}
+</pre>
+
+<p>
+Assim como <code>soma</code> e <code>tamanho</code>, essa função é <code>O(n)</code>: não há como saber quantos produtos custam mais que <code>valor</code> sem examinar cada um deles.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 11</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    ListaEnc lista;
+    inicializar(&amp;lista);
+
+    Produto p1 = {1, <span style="color: #a31515;">"Produto A"</span>, 10.0f};
+    Produto p2 = {2, <span style="color: #a31515;">"Produto B"</span>, 25.0f};
+    Produto p3 = {3, <span style="color: #a31515;">"Produto C"</span>, 40.0f};
+
+    inserirFim(&amp;lista, p1);
+    inserirFim(&amp;lista, p2);
+    inserirFim(&amp;lista, p3);
+
+    printf(<span style="color: #a31515;">"Preco medio: %.2f\n"</span>, precoMedio(&amp;lista));         <span style="color: #008000; font-style: italic;">// 25.00</span>
+    printf(<span style="color: #a31515;">"Acima de 20: %d\n"</span>, contarAcimaDe(&amp;lista, 20.0f)); <span style="color: #008000; font-style: italic;">// 2</span>
+
+    destruir(&amp;lista);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+O preço médio é <code>(10 + 25 + 40) / 3 = 25.00</code>; e dois produtos (25.0 e 40.0) têm preço acima de 20.0.
+</p>
+
+</details>
+
+<hr />
+
+<h2>Código para Download</h2>
+
+<p>
+O TAD <code>ListaEnc</code> completo, exatamente como visto nesta aula, dividido em interface (<code>listaEnc.h</code>) e implementação (<code>listaEnc.c</code>), junto com um <code>main.c</code> de exemplo:
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<a href="listaEnc.zip">listaEnc.zip</a> — <code>listaEnc.h</code>, <code>listaEnc.c</code> e <code>main.c</code>.
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

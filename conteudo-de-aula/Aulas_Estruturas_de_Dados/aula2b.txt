@@ -1,0 +1,538 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 2b - Tipos Abstratos de Dados (TAD)</h1>
+</div>
+
+<p>
+Nesta aula apresentamos o conceito de <b>Tipo Abstrato de Dados (TAD)</b>, um dos pilares fundamentais da disciplina de Estruturas de Dados. Um TAD permite separar a especificação do comportamento de uma estrutura de sua implementação concreta, promovendo modularidade, reusabilidade e clareza no projeto de programas.
+</p>
+
+<p>
+Veremos como definir um TAD, como especificá-lo através de suas operações, e como implementá-lo em linguagem C utilizando <i>structs</i> e funções. Este conceito servirá de base para todas as estruturas de dados estudadas ao longo da disciplina (pilhas, filas, listas, árvores, entre outras).
+</p>
+
+<hr />
+
+<h2>O que é um Tipo Abstrato de Dados?</h2>
+
+<p>
+Nos programas mais simples, os dados são manipulados diretamente por meio de variáveis e tipos primitivos da linguagem. À medida que os problemas crescem em complexidade, torna-se necessário organizar os dados de maneira mais estruturada e controlada.
+</p>
+
+<p>
+Um <b>Tipo Abstrato de Dados (TAD)</b> é um modelo que descreve um conjunto de dados, acompanhado das operações definidas sobre esses dados. O TAD especifica <i>o que</i> as operações fazem, mas não <i>como</i> elas são implementadas internamente.
+</p>
+
+<p>
+Essa separação entre especificação e implementação traz diversas vantagens:
+</p>
+
+<ul>
+<li><b>Abstração:</b> quem usa o TAD não precisa conhecer os detalhes internos da implementação.</li>
+<li><b>Modularidade:</b> a implementação pode ser alterada sem afetar o código que usa o TAD, desde que a interface permaneça a mesma.</li>
+<li><b>Reusabilidade:</b> o TAD pode ser utilizado em diferentes programas e contextos.</li>
+<li><b>Encapsulamento:</b> os dados internos ficam protegidos contra acessos e modificações indevidas.</li>
+</ul>
+
+<hr />
+
+<h2>Papéis em torno de um TAD</h2>
+
+<p>
+A ideia de abstração fica mais clara quando pensamos nos diferentes "papéis" envolvidos ao redor de um programa que utiliza um TAD:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Papel</th>
+<th>Descrição</th>
+</tr>
+<tr>
+<td><b>Usuário</b></td>
+<td>Utiliza o programa final (o executável), através de sua interface (linha de comando, telas, etc.). Não tem contato nenhum com código-fonte.</td>
+</tr>
+<tr>
+<td><b>Cliente (do TAD)</b></td>
+<td>É um desenvolvedor, mas que apenas <b>utiliza</b> o TAD em seu próprio programa — inclui o arquivo <code>.h</code> e chama as funções da interface, sem conhecer (nem precisar conhecer) como elas são implementadas.</td>
+</tr>
+<tr>
+<td><b>Programador (do TAD)</b></td>
+<td>É quem efetivamente <b>implementa</b> o TAD — escreve o arquivo <code>.c</code>, decide a estrutura de dados interna e garante que as operações se comportem de acordo com a especificação.</td>
+</tr>
+</table>
+
+<p>
+No exemplo do TAD <b>Ponto</b> desta aula, quem implementa <code>ponto.c</code> é o <b>programador</b> (ou implementador) do TAD. Quem escreve <code>main.c</code>, incluindo <code>ponto.h</code> e chamando funções como <code>pontoDistancia</code> e <code>pontoMover</code>, é o <b>cliente</b> (ou usuário da biblioteca), que utiliza o TAD sem conhecer sua implementação interna. Já quem apenas executa o programa compilado, sem ter acesso ao código-fonte, é o <b>usuário final</b>. Uma mesma pessoa pode, naturalmente, desempenhar mais de um desses papéis, mas distingui-los é importante porque cada um interage com o programa em um nível de abstração diferente.
+</p>
+
+<hr />
+
+<h2>Especificação de um TAD</h2>
+
+<p>
+A especificação de um TAD é composta por três partes principais:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Componente</th>
+<th>Descrição</th>
+</tr>
+<tr>
+<td><b>Nome</b></td>
+<td>Identificador do TAD.</td>
+</tr>
+<tr>
+<td><b>Dados</b></td>
+<td>Descrição do conjunto de informações que o TAD armazena.</td>
+</tr>
+<tr>
+<td><b>Operações</b></td>
+<td>Conjunto de operações permitidas sobre os dados, com suas entradas, saídas e efeitos.</td>
+</tr>
+</table>
+
+<p>
+As operações de um TAD costumam ser classificadas em quatro categorias:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Categoria</th>
+<th>Descrição</th>
+<th>Exemplos</th>
+</tr>
+<tr>
+<td><b>Construtoras</b></td>
+<td>Criam ou inicializam o TAD.</td>
+<td>criar, inicializar</td>
+</tr>
+<tr>
+<td><b>Modificadoras</b></td>
+<td>Alteram o estado interno do TAD.</td>
+<td>inserir, remover, atualizar</td>
+</tr>
+<tr>
+<td><b>Consultoras</b></td>
+<td>Consultam o estado sem modificá-lo.</td>
+<td>buscar, tamanho, está vazio</td>
+</tr>
+<tr>
+<td><b>Destrutoras</b></td>
+<td>Liberam os recursos utilizados pelo TAD.</td>
+<td>destruir, liberar</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exemplo: TAD Ponto</h2>
+
+<p>
+Para ilustrar os conceitos, consideremos o TAD <b>Ponto</b>, que representa um ponto no plano cartesiano com coordenadas reais. Diferente do que se costuma ver em linguagens orientadas a objetos, <b>não</b> vamos criar funções do tipo <code>criar</code>, <code>getX</code> ou <code>setX</code> — em C, como os campos da <i>struct</i> já são diretamente acessíveis (não existe <code>private</code>), basta montar e ler um <code>Ponto</code> diretamente pelos seus campos. O TAD se resume às operações que de fato fazem algo com os dados:
+</p>
+
+<h3>Especificação</h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+TAD Ponto
+
+Dados:
+  Um par de números reais (x, y) representando coordenadas cartesianas.
+
+Operações:
+  distancia(p1, p2) -&gt; real    : retorna a distância euclidiana entre p1 e p2.
+  mover(p, dx, dy)              : desloca o ponto p de dx em x e dy em y.
+  imprimir(p)                   : exibe as coordenadas do ponto p.
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Por que <code>pontoDistancia</code>, e não simplesmente <code>distancia</code>?</b> Diferente de linguagens como C++ ou Java, a linguagem C <b>não permite sobrecarga de funções</b> (<i>overloading</i>): não é possível ter duas funções com o mesmo nome, mesmo que recebam parâmetros de tipos diferentes. O código abaixo, por exemplo, <b>não compila</b> em C:
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">double</span> distancia(Ponto a, Ponto b);
+<span style="color: #0000ff; font-weight: bold;">double</span> distancia(Cidade a, Cidade b);           <span style="color: #008000; font-style: italic;">// erro: já existe "distancia"</span>
+<span style="color: #0000ff; font-weight: bold;">double</span> distancia(<span style="color: #0000ff; font-weight: bold;">char</span> *s1, <span style="color: #0000ff; font-weight: bold;">char</span> *s2); <span style="color: #008000; font-style: italic;">// erro: já existe "distancia" (distância de edição entre strings)</span>
+</pre>
+Por isso, é convenção em C <b>prefixar</b> o nome da função com o nome do TAD ao qual ela pertence (<code>ponto</code>, <code>cidade</code>, ...), simulando manualmente o "namespace" que a linguagem não oferece. Adotamos aqui a notação <i>camelCase</i> para esses nomes compostos (ex: <code>pontoDistancia</code>, <code>cidadeDistancia</code>), em vez de separar as palavras por <code>_</code>. Essa convenção aparece o tempo todo na própria biblioteca padrão de C: <code>strcpy</code> e <code>strcmp</code> (prefixo <code>str</code>, operações sobre <i>strings</i>), <code>fopen</code> e <code>fclose</code> (prefixo <code>f</code>, operações sobre arquivos) — em vez de, digamos, <code>copy</code> e <code>compare</code> genéricos, que colidiriam com qualquer outra função de mesmo nome.
+</td>
+</tr>
+</table>
+
+<h3>Implementação em C</h3>
+
+<p>
+Em linguagem C, implementamos o TAD utilizando uma <code>struct</code> para os dados e funções para as operações. O arquivo de cabeçalho (<code>ponto.h</code>) expõe apenas a <b>interface</b> do TAD:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">/* ponto.h */</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">double</span> x;
+    <span style="color: #0000ff; font-weight: bold;">double</span> y;
+} Ponto;
+
+<span style="color: #0000ff; font-weight: bold;">double</span> pontoDistancia(Ponto p1, Ponto p2);
+<span style="color: #0000ff; font-weight: bold;">void</span>   pontoMover(Ponto *p, <span style="color: #0000ff; font-weight: bold;">double</span> dx, <span style="color: #0000ff; font-weight: bold;">double</span> dy);
+<span style="color: #0000ff; font-weight: bold;">void</span>   pontoImprimir(Ponto p);
+</pre>
+
+<p>
+O arquivo de implementação (<code>ponto.c</code>) contém os detalhes internos, que ficam ocultos de quem utiliza o TAD:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">/* ponto.c */</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;math.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">"ponto.h"</span>
+
+<span style="color: #0000ff; font-weight: bold;">double</span> pontoDistancia(Ponto p1, Ponto p2) {
+    <span style="color: #0000ff; font-weight: bold;">double</span> dx = p1.x - p2.x;
+    <span style="color: #0000ff; font-weight: bold;">double</span> dy = p1.y - p2.y;
+    <span style="color: #0000ff; font-weight: bold;">return</span> sqrt(dx*dx + dy*dy);
+}
+
+<span style="color: #0000ff; font-weight: bold;">void</span> pontoMover(Ponto *p, <span style="color: #0000ff; font-weight: bold;">double</span> dx, <span style="color: #0000ff; font-weight: bold;">double</span> dy) {
+    p-&gt;x += dx;
+    p-&gt;y += dy;
+}
+
+<span style="color: #0000ff; font-weight: bold;">void</span> pontoImprimir(Ponto p) {
+    printf(<span style="color: #a31515;">"(%.2f, %.2f)\n"</span>, p.x, p.y);
+}
+</pre>
+
+<p>
+O programa principal (<code>main.c</code>) usa o TAD sem conhecer seus detalhes internos. Como não existe uma função <code>pontoCriar</code>, um <code>Ponto</code> é montado diretamente, preenchendo seus campos:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">"ponto.h"</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Ponto a = {0.0, 0.0};
+    Ponto b = {3.0, 4.0};
+
+    printf(<span style="color: #a31515;">"Ponto a: "</span>); pontoImprimir(a);
+    printf(<span style="color: #a31515;">"Ponto b: "</span>); pontoImprimir(b);
+    printf(<span style="color: #a31515;">"Distancia: %.2f\n"</span>, pontoDistancia(a, b));
+
+    pontoMover(&amp;a, 1.0, 1.0);
+    printf(<span style="color: #a31515;">"Ponto a apos mover: "</span>); pontoImprimir(a);
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Como o programa agora está dividido em mais de um arquivo-fonte (<code>main.c</code> e <code>ponto.c</code>), é preciso informar <b>ambos</b> ao compilador, para que ele gere um único executável a partir dos dois:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+gcc -Wall main.c ponto.c -lm -o programa
+</pre>
+
+<p>
+A opção <code>-Wall</code> habilita os avisos (<i>warnings</i>) do compilador, ajudando a identificar erros comuns antes mesmo de executar o programa. Já a opção <code>-lm</code> liga a biblioteca matemática (<i>math library</i>), necessária aqui porque <code>ponto.c</code> utiliza a função <code>sqrt()</code>.
+</p>
+
+<hr />
+
+<h2>Separação entre interface e implementação</h2>
+
+<p>
+Uma das práticas mais importantes ao implementar um TAD em C é a separação entre <b>interface</b> e <b>implementação</b>, feita através de arquivos <code>.h</code> e <code>.c</code>.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Arquivo</th>
+<th>Conteúdo</th>
+<th>Visibilidade</th>
+</tr>
+<tr>
+<td><code>tad.h</code></td>
+<td>Declaração do tipo e protótipos das funções.</td>
+<td>Público — incluído por quem usa o TAD.</td>
+</tr>
+<tr>
+<td><code>tad.c</code></td>
+<td>Definição das funções (implementação).</td>
+<td>Interno — não precisa ser conhecido por quem usa o TAD.</td>
+</tr>
+</table>
+
+<p>
+Quem utiliza o TAD inclui apenas o arquivo <code>.h</code> e não precisa conhecer nem modificar o arquivo <code>.c</code>. Isso garante o encapsulamento dos dados e a independência entre os módulos do programa.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Observação.</b> Em C não existem mecanismos de controle de acesso como <code>private</code> ou <code>public</code>, presentes em linguagens orientadas a objetos. A separação entre interface e implementação em C é uma <b>convenção de projeto</b>: os campos da <code>struct</code> são tecnicamente acessíveis, mas por boas práticas devem ser manipulados <i>somente</i> através das funções do TAD.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>TAD versus Estrutura de Dados</h2>
+
+<p>
+É importante distinguir dois conceitos frequentemente confundidos:
+</p>
+
+<p>
+Um <b>TAD</b> é a especificação abstrata dos dados e das operações (o <i>o quê</i>), enquanto uma <b>estrutura de dados</b> é a forma concreta escolhida para organizar esses dados na memória (o <i>como</i>). Um mesmo TAD pode ter <b>mais de uma</b> estrutura de dados como implementação, desde que todas respeitem a mesma interface.
+</p>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Principais Conceitos.</b>
+<ul>
+<li><b>TAD:</b> modelo que descreve dados e operações, sem especificar a implementação.</li>
+<li><b>Interface (<code>.h</code>):</b> o que o TAD oferece — tipos e protótipos de funções.</li>
+<li><b>Implementação (<code>.c</code>):</b> como o TAD funciona internamente — detalhe oculto de quem o utiliza.</li>
+<li><b>Encapsulamento:</b> os dados só devem ser manipulados através das funções do TAD, nunca diretamente.</li>
+<li><b>Um mesmo TAD pode ter diversas estruturas de dados</b> como implementação, cada uma com vantagens e desvantagens próprias.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique, com suas próprias palavras, por que um TAD especifica <i>o que</i> uma operação faz, mas não <i>como</i> ela é implementada.
+</li>
+
+<li>
+No TAD Ponto visto em aula, identifique quais operações são construtoras, modificadoras, consultoras ou destrutoras. Note que nem toda categoria precisa estar presente — e explique por que este TAD não possui uma operação construtora.
+</li>
+
+<li>
+Explique a diferença entre os papéis de <b>cliente</b> e <b>programador</b> de um TAD. Por que essa distinção é importante mesmo quando as duas tarefas são feitas pela mesma pessoa?
+</li>
+
+<li>
+Por que, em C, a separação entre interface e implementação de um TAD é considerada apenas uma "convenção de projeto", e não uma restrição imposta pela linguagem?
+</li>
+
+<li>
+Dê um exemplo (diferente do "turma de alunos" visto em aula) de um TAD que poderia ser implementado por mais de uma estrutura de dados diferente, mantendo a mesma interface.
+</li>
+
+<li>
+Implemente um novo arquivo de cabeçalho <code>contador.h</code> e sua implementação <code>contador.c</code> para um TAD <b>Contador</b>, com as operações <code>contadorCriar()</code> (retorna um contador zerado), <code>contadorIncrementar(Contador *c)</code> (soma 1 ao contador) e <code>contadorValor(Contador c)</code> (retorna o valor atual). Escreva também um pequeno <code>main.c</code> que utilize esse TAD para contar de 0 a 5.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque o objetivo do TAD é permitir que quem o utiliza (o cliente) programe contra uma <b>interface estável</b>, sem se preocupar com os detalhes internos. Se o TAD descrevesse também a implementação, qualquer mudança na forma de organizar os dados internamente (por exemplo, trocar a estrutura de dados usada) obrigaria a reescrever também o código de quem o utiliza — o que anularia a vantagem da abstração.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<ul>
+<li><b>Construtora:</b> não existe nenhuma neste TAD.</li>
+<li><b>Modificadora:</b> <code>pontoMover</code> (altera o estado interno do ponto).</li>
+<li><b>Consultoras:</b> <code>pontoDistancia</code>, <code>pontoImprimir</code> (nenhuma delas altera o ponto).</li>
+<li><b>Destrutora:</b> não existe nenhuma nesse TAD — como <code>Ponto</code> não aloca memória dinamicamente, não há recursos para liberar.</li>
+</ul>
+
+<p>
+Este TAD não precisa de uma operação construtora porque, em C, os campos de uma <i>struct</i> são sempre diretamente acessíveis — basta escrever <code>Ponto a = {0.0, 0.0};</code> para montar um <code>Ponto</code>, sem necessidade de chamar nenhuma função. Uma construtora só costuma ser necessária quando a inicialização exige alguma lógica além de simplesmente copiar os valores recebidos para os campos (por exemplo, alocar memória, ou calcular um valor derivado).
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+O <b>cliente</b> utiliza o TAD através de sua interface (o arquivo <code>.h</code>), chamando suas funções sem conhecer os detalhes internos. O <b>programador</b> é quem escreve essa implementação (o arquivo <code>.c</code>), decidindo a estrutura de dados interna e garantindo que o comportamento da especificação seja respeitado.
+</p>
+
+<p>
+Mesmo quando a mesma pessoa exerce os dois papéis, é importante separá-los mentalmente porque cada um deve respeitar limites diferentes: enquanto estiver "no papel" de cliente, a pessoa não deve depender de detalhes internos da implementação (por exemplo, acessar diretamente um campo da <i>struct</i>), pois esses detalhes podem mudar no futuro sem aviso — e um bom TAD deve poder trocar de implementação sem quebrar o código de quem o utiliza.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+Porque C não possui palavras-chave como <code>private</code> ou <code>public</code> que impeçam, em tempo de compilação, o acesso direto aos campos de uma <i>struct</i>. Nada impede tecnicamente que o código cliente escreva <code>p.x = 10;</code> diretamente, mesmo que <code>x</code> devesse ser "privado" ao TAD — a separação existe apenas porque o programador que escreve o código cliente <b>opta</b> por respeitá-la, seguindo a interface do <code>.h</code> em vez de acessar os campos diretamente.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+Um exemplo é o TAD <b>Agenda de Contatos</b>, com operações como <code>adicionarContato</code>, <code>buscarContato</code> e <code>removerContato</code>. Ele poderia ser implementado, por exemplo, com um vetor de contatos (mais simples, busca sequencial) ou com uma tabela hash (mais complexa, busca mais rápida) — ambas as implementações atendem à mesma especificação, mudando apenas o desempenho de cada operação.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">/* contador.h */</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> valor;
+} Contador;
+
+Contador contadorCriar();
+<span style="color: #0000ff; font-weight: bold;">void</span>     contadorIncrementar(Contador *c);
+<span style="color: #0000ff; font-weight: bold;">int</span>      contadorValor(Contador c);
+</pre>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">/* contador.c */</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">"contador.h"</span>
+
+Contador contadorCriar() {
+    Contador c;
+    c.valor = 0;
+    <span style="color: #0000ff; font-weight: bold;">return</span> c;
+}
+
+<span style="color: #0000ff; font-weight: bold;">void</span> contadorIncrementar(Contador *c) {
+    c-&gt;valor += 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> contadorValor(Contador c) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> c.valor;
+}
+</pre>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">/* main.c */</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">"contador.h"</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    Contador c = contadorCriar();
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (contadorValor(c) &lt; 5) {
+        printf(<span style="color: #a31515;">"%d\n"</span>, contadorValor(c));
+        contadorIncrementar(&amp;c);
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Compilação: <code>gcc -Wall main.c contador.c -o programa</code>. Note que o <code>main.c</code> nunca acessa <code>c.valor</code> diretamente — apenas através das funções <code>contadorValor</code> e <code>contadorIncrementar</code>, exatamente como esperado de um cliente do TAD.
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

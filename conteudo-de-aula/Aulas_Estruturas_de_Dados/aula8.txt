@@ -1,0 +1,530 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 8 - Ordenação: Introdução, Insertion e Shell Sort</h1>
+</div>
+
+<p>
+Nesta aula iniciamos o estudo dos <b>algoritmos de ordenação</b>, um dos temas mais clássicos de Estruturas de Dados. Começamos com uma revisão geral do assunto e um panorama de todos os algoritmos que veremos ao longo da disciplina, e então estudamos os dois primeiros em detalhe: <b>Insertion Sort</b> e <b>Shell Sort</b>.
+</p>
+
+<hr />
+
+<h2>1. O que é ordenação?</h2>
+
+<p>
+<b>Ordenar</b> é rearranjar os elementos de uma coleção (um vetor, uma lista) segundo uma <b>relação de ordem</b> (crescente ou decrescente), com base em uma <b>chave</b> — o campo usado para comparar dois elementos (por exemplo, o <code>cod</code> ou o <code>preco</code> de um <code>Produto</code>).
+</p>
+
+<p>
+Alguns critérios usados para comparar algoritmos de ordenação entre si:
+</p>
+
+<ul>
+<li><b>Complexidade:</b> quantas comparações/trocas o algoritmo realiza, em função do tamanho <code>n</code> da entrada — o critério mais importante para decidir qual algoritmo usar em cada situação.</li>
+<li><b>In-place:</b> um algoritmo é <i>in-place</i> quando ordena usando apenas <code>O(1)</code> de memória extra (rearranjando os elementos no próprio vetor), em vez de construir uma cópia auxiliar.</li>
+<li><b>Estabilidade:</b> um algoritmo é <b>estável</b> quando preserva a ordem relativa de elementos com chaves <b>iguais</b>. Isso importa, por exemplo, ao ordenar uma lista de alunos por nota: se dois alunos empatam, um algoritmo estável mantém a ordem em que eles apareciam antes (por exemplo, alfabética, se a lista já estivesse assim).</li>
+<li><b>Baseado em comparação, ou não:</b> a maioria dos algoritmos decide a ordem comparando pares de elementos (<code>a &lt; b</code>); alguns poucos (Counting Sort, Radix Sort) ordenam sem comparar diretamente os elementos entre si, explorando a natureza dos valores das chaves.</li>
+</ul>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Limite teórico.</b> Prova-se que <b>nenhum</b> algoritmo de ordenação baseado em comparação pode, no pior caso, ser mais rápido que <code>O(n log n)</code> — é o melhor que se pode alcançar comparando elementos dois a dois. Algoritmos como Counting Sort e Radix Sort conseguem <code>O(n)</code> justamente porque <b>não</b> se baseiam em comparação.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>2. Panorama: principais algoritmos de ordenação</h2>
+
+<p>
+A tabela abaixo resume <b>todos</b> os algoritmos de ordenação que vocês já viram (em Algoritmos e Programação) ou que ainda serão vistos ao longo desta disciplina, com a complexidade temporal de cada um nos três cenários possíveis:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th width="12%">Algoritmo</th>
+<th width="38%">Resumo</th>
+<th width="12%">Melhor caso</th>
+<th width="12%">Caso médio</th>
+<th width="12%">Pior caso</th>
+<th width="14%">Onde é visto</th>
+</tr>
+<tr>
+<td><b>Bubble Sort</b></td>
+<td>Compara pares de elementos adjacentes e os troca de posição quando estão fora de ordem, "borbulhando" o maior elemento até o final a cada passagem.</td>
+<td><code>O(n)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td>Algoritmos e Programação</td>
+</tr>
+<tr>
+<td><b>Selection Sort</b></td>
+<td>A cada passagem, procura o menor elemento restante e o troca de posição com o primeiro elemento ainda não ordenado.</td>
+<td><code>O(n&sup2;)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td>Algoritmos e Programação</td>
+</tr>
+<tr>
+<td><b>Insertion Sort</b></td>
+<td>Percorre os elementos um a um, inserindo cada um na posição correta em relação aos elementos já ordenados à sua esquerda.</td>
+<td><code>O(n)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td><b>Aula 8 (esta aula)</b></td>
+</tr>
+<tr>
+<td><b>Shell Sort</b></td>
+<td>Generaliza o Insertion Sort comparando elementos distantes entre si (a um <i>gap</i>), reduzindo o <i>gap</i> progressivamente até ordenar com <i>gap</i> 1.</td>
+<td><code>O(n log n)</code></td>
+<td>~<code>O(n&sup1;&middot;&sup3;)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td><b>Aula 8 (esta aula)</b></td>
+</tr>
+<tr>
+<td><b>Heap Sort</b></td>
+<td>Constrói um heap (fila de prioridade) com os elementos, e repetidamente remove o maior, reconstruindo o vetor ordenado.</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code></td>
+<td>Aula 17</td>
+</tr>
+<tr>
+<td><b>Merge Sort</b></td>
+<td>Divide o vetor ao meio recursivamente até sobrarem elementos únicos, e então intercala (<i>merge</i>) as metades já ordenadas.</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code></td>
+<td>Aulas 21 e 22</td>
+</tr>
+<tr>
+<td><b>Quick Sort</b></td>
+<td>Escolhe um elemento como pivô, particiona o vetor em "menores" e "maiores" que ele, e ordena cada partição recursivamente.</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n&sup2;)</code></td>
+<td>Aulas 21 e 22</td>
+</tr>
+<tr>
+<td><b>Counting Sort</b></td>
+<td>Conta quantas vezes cada valor de chave aparece, e usa essa contagem para calcular diretamente a posição final de cada elemento. Não compara elementos entre si.</td>
+<td><code>O(n + k)</code></td>
+<td><code>O(n + k)</code></td>
+<td><code>O(n + k)</code></td>
+<td>Aula 26</td>
+</tr>
+<tr>
+<td><b>Radix Sort</b></td>
+<td>Ordena repetidamente por dígito/caractere (do menos para o mais significativo), usando o Counting Sort como base de cada passagem.</td>
+<td><code>O(d(n + k))</code></td>
+<td><code>O(d(n + k))</code></td>
+<td><code>O(d(n + k))</code></td>
+<td>Aula 26</td>
+</tr>
+</table>
+
+<p>
+Onde <code>n</code> é o número de elementos, <code>k</code> é a faixa de valores possíveis das chaves (usada por Counting e Radix Sort), e <code>d</code> é o número de dígitos/caracteres de cada chave (usado por Radix Sort).
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Por que tantos algoritmos, se todos "só" ordenam?</b> Cada um faz um conjunto diferente de concessões entre complexidade, uso de memória extra, estabilidade e comportamento em casos especiais (vetor quase ordenado, poucos valores distintos, chaves inteiras pequenas, etc.). Não existe um único "melhor" algoritmo de ordenação — existe o mais adequado para cada situação, e é exatamente esse julgamento que construiremos ao longo das próximas aulas.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>3. Insertion Sort</h2>
+
+<p>
+A ideia do Insertion Sort é a mesma usada para organizar cartas de baralho na mão: pega-se uma carta por vez e insere-se na posição correta entre as cartas já organizadas à esquerda. A "parte já ordenada" do vetor começa com um único elemento (<code>vetor[0]</code>, trivialmente ordenado) e cresce uma posição a cada passo, até cobrir o vetor inteiro.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> insertionSort(<span style="color: #0000ff; font-weight: bold;">int</span> vetor[], <span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i, j, chave;
+
+    <span style="color: #008000; font-style: italic;">// vetor[0..0] já está "ordenado" (um único elemento sempre está);</span>
+    <span style="color: #008000; font-style: italic;">// por isso começamos em i = 1, tentando inserir vetor[1] em relação a ele.</span>
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 1; i &lt; n; i++) {
+        chave = vetor[i]; <span style="color: #008000; font-style: italic;">// guarda o elemento antes de sobrescrever sua posição</span>
+        j = i - 1;         <span style="color: #008000; font-style: italic;">// j percorre a parte já ordenada, da direita para a esquerda</span>
+
+        <span style="color: #008000; font-style: italic;">// enquanto houver alguém à esquerda maior que "chave", abre espaço</span>
+        <span style="color: #008000; font-style: italic;">// deslocando esse alguém uma posição para a direita</span>
+        <span style="color: #0000ff; font-weight: bold;">while</span> (j &gt;= 0 &amp;&amp; vetor[j] &gt; chave) {
+            vetor[j + 1] = vetor[j]; <span style="color: #008000; font-style: italic;">// desloca vetor[j] para a direita</span>
+            j--;                      <span style="color: #008000; font-style: italic;">// continua olhando mais à esquerda</span>
+        }
+
+        <span style="color: #008000; font-style: italic;">// o laço parou porque achou alguém <= chave (ou chegou ao início do vetor);</span>
+        <span style="color: #008000; font-style: italic;">// "chave" pertence logo depois dessa posição</span>
+        vetor[j + 1] = chave;
+    }
+}
+</pre>
+
+<p>
+Note que o laço interno (<code>while</code>) só percorre a parte <b>já ordenada</b> do vetor (<code>vetor[0..i-1]</code>) — nunca a parte ainda não visitada. É por isso que dizemos que, "a cada passo, mais uma posição do vetor passa a fazer parte da região ordenada".
+</p>
+
+<h3>Acompanhando a execução, passo a passo</h3>
+
+<p>
+Vamos ordenar o vetor <code>[50, 20, 40, 10]</code> (<code>n = 4</code>), acompanhando o valor de <code>i</code>, <code>chave</code>, e como o <code>while</code> desloca elementos. Usamos valores como <code>50</code>, <code>20</code>, ... (em vez de <code>5</code>, <code>2</code>, ...) para não confundi-los com os <b>índices</b> (<code>i</code>, <code>j</code>) usados para percorrer o vetor:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Vetor inicial:  [50, 20, 40, 10]
+                 ^ordenado(sozinho)
+
+i=1, chave=20:
+  j=0: vetor[0]=50 > 20  -> desloca: [50, 50, 40, 10], j=-1
+  laço para (j &lt; 0)      -> vetor[j+1] = vetor[0] = chave
+  vetor:          [20, 50, 40, 10]
+                   ^------^ ordenado
+
+i=2, chave=40:
+  j=1: vetor[1]=50 > 40  -> desloca: [20, 50, 50, 10], j=0
+  j=0: vetor[0]=20 > 40? não -> laço para
+  vetor[j+1] = vetor[1] = chave
+  vetor:          [20, 40, 50, 10]
+                   ^----------^ ordenado
+
+i=3, chave=10:
+  j=2: vetor[2]=50 > 10  -> desloca: [20, 40, 50, 50], j=1
+  j=1: vetor[1]=40 > 10  -> desloca: [20, 40, 40, 50], j=0
+  j=0: vetor[0]=20 > 10  -> desloca: [20, 20, 40, 50], j=-1
+  laço para (j &lt; 0)      -> vetor[j+1] = vetor[0] = chave
+  vetor:          [10, 20, 40, 50]
+                   ^--------------^ ordenado (vetor inteiro)
+</pre>
+
+<p>
+Repare como <code>chave = 10</code> (o menor valor do vetor) precisou ser deslocada por <b>todas</b> as três posições já ordenadas — esse é justamente o cenário que deixa o Insertion Sort lento: um elemento pequeno "preso" muito à direita.
+</p>
+
+<h3>Análise de complexidade</h3>
+
+<p>
+O laço externo (<code>for</code>) sempre executa <code>n - 1</code> vezes, independente da entrada — o que varia é <b>quantas vezes o laço interno (<code>while</code>) desloca elementos</b> a cada iteração:
+</p>
+
+<ul>
+<li><b>Melhor caso — vetor já ordenado:</b> para cada <code>i</code>, a condição <code>vetor[j] &gt; chave</code> já é falsa na primeira verificação (o elemento à esquerda nunca é maior), então o <code>while</code> não desloca nada. Só sobra o custo do <code>for</code>, então o algoritmo é <code>O(n)</code>.</li>
+<li><b>Pior caso — vetor em ordem decrescente:</b> para cada <code>i</code>, a <code>chave</code> é sempre a menor já vista, então o <code>while</code> desloca <b>todos</b> os <code>i</code> elementos já ordenados antes de encontrar seu lugar (no início). O total de deslocamentos é <code>1 + 2 + ... + (n-1)</code>, uma soma de progressão aritmética que resulta em <code>O(n&sup2;)</code>.</li>
+<li><b>Caso médio:</b> em uma entrada aleatória, espera-se que, em média, cada elemento precise ser deslocado por <b>metade</b> da parte já ordenada — ainda uma fração de <code>n</code>, então a complexidade média continua sendo <code>O(n&sup2;)</code> (a constante multiplicativa é menor, mas a ordem de grandeza não muda).</li>
+</ul>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>In-place e estável.</b> O Insertion Sort é <b>in-place</b> (usa apenas as variáveis <code>i</code>, <code>j</code> e <code>chave</code>, nenhum vetor auxiliar) e <b>estável</b>: a condição do <code>while</code> é <code>vetor[j] &gt; chave</code> (estritamente maior) — um elemento <b>igual</b> à chave nunca é deslocado, então dois elementos iguais nunca trocam de ordem relativa entre si.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>4. Shell Sort</h2>
+
+<p>
+O Shell Sort ataca a principal fraqueza do Insertion Sort: quando um elemento pequeno está muito à direita no vetor, ele precisa ser deslocado uma posição de cada vez até chegar ao início, o que é lento. A solução é comparar elementos distantes entre si primeiro, usando um <b><i>gap</i></b> (intervalo) que vai diminuindo a cada passagem, até terminar com um <i>gap</i> de <code>1</code> — nesse ponto, o vetor já está "quase ordenado", e essa última passagem (um Insertion Sort comum) é bem mais rápida do que seria sobre o vetor original.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> shellSort(<span style="color: #0000ff; font-weight: bold;">int</span> vetor[], <span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> gap, i, j, chave;
+
+    <span style="color: #008000; font-style: italic;">// a cada passagem, o gap diminui pela metade: n/2, n/4, ..., até chegar em 1</span>
+    <span style="color: #0000ff; font-weight: bold;">for</span> (gap = n / 2; gap &gt; 0; gap /= 2) {
+
+        <span style="color: #008000; font-style: italic;">// este "for" é o mesmo Insertion Sort de antes, só que comparando</span>
+        <span style="color: #008000; font-style: italic;">// elementos a "gap" posições de distância, em vez de posições vizinhas</span>
+        <span style="color: #0000ff; font-weight: bold;">for</span> (i = gap; i &lt; n; i++) {
+            chave = vetor[i];
+            j = i - gap; <span style="color: #008000; font-style: italic;">// j "pula" de gap em gap para trás, não de 1 em 1</span>
+
+            <span style="color: #0000ff; font-weight: bold;">while</span> (j &gt;= 0 &amp;&amp; vetor[j] &gt; chave) {
+                vetor[j + gap] = vetor[j]; <span style="color: #008000; font-style: italic;">// desloca a um "gap" de distância</span>
+                j -= gap;
+            }
+
+            vetor[j + gap] = chave;
+        }
+    }
+}
+</pre>
+
+<p>
+Compare com o Insertion Sort: a única diferença real é trocar <code>1</code> por <code>gap</code> em três lugares (<code>i = gap</code> em vez de <code>i = 1</code>; <code>j = i - gap</code> em vez de <code>j = i - 1</code>; <code>j -= gap</code> em vez de <code>j--</code>). Quando <code>gap</code> chega a <code>1</code>, o código se torna <b>idêntico</b> ao Insertion Sort — a última passagem do Shell Sort é sempre um Insertion Sort comum, só que sobre um vetor já quase ordenado pelas passagens anteriores.
+</p>
+
+<h3>Acompanhando a execução, passo a passo</h3>
+
+<p>
+Vamos ordenar <code>[50, 20, 40, 10, 60, 30]</code> (<code>n = 6</code>), com <code>gap</code> começando em <code>3</code> (<code>n/2</code>). Novamente, usamos valores terminados em <code>0</code> só para não confundi-los com os índices:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Vetor inicial:        [50, 20, 40, 10, 60, 30]
+                         0   1   2   3   4   5   (índices)
+
+--- gap = 3 ---
+Compara/ordena os "subvetores" formados a cada 3 posições:
+  índices {0,3}: [50,10] -> fora de ordem -> vira [10,50]
+  índices {1,4}: [20,60] -> já em ordem   -> continua [20,60]
+  índices {2,5}: [40,30] -> fora de ordem -> vira [30,40]
+Vetor apos gap=3:      [10, 20, 30, 50, 60, 40]
+
+--- gap = 1 (Insertion Sort comum) ---
+i=1, chave=20: 10 &gt; 20? não          -> [10, 20, 30, 50, 60, 40]
+i=2, chave=30: 20 &gt; 30? não          -> [10, 20, 30, 50, 60, 40]
+i=3, chave=50: 30 &gt; 50? não          -> [10, 20, 30, 50, 60, 40]
+i=4, chave=60: 50 &gt; 60? não          -> [10, 20, 30, 50, 60, 40]
+i=5, chave=40: 60&gt;40 desloca, 50&gt;40 desloca, 30&gt;40? não
+                                     -> [10, 20, 30, 40, 50, 60]
+
+Vetor final:           [10, 20, 30, 40, 50, 60]
+</pre>
+
+<p>
+Note como, depois da passagem com <code>gap = 3</code>, o vetor já estava bem mais próximo do ordenado — a passagem final com <code>gap = 1</code> precisou deslocar elementos só uma vez (para o <code>40</code>), em vez de repetidamente a cada posição, como aconteceria num Insertion Sort "do zero" sobre o vetor original.
+</p>
+
+<h3>Análise de complexidade</h3>
+
+<p>
+A análise exata do Shell Sort é mais delicada que a do Insertion Sort, porque depende da <b>sequência de <i>gaps</i></b> escolhida — mas a ideia central é sempre a mesma: quanto mais "pré-ordenado" o vetor fica nas passagens com <i>gap</i> grande, mais barata fica a passagem final com <code>gap = 1</code>.
+</p>
+
+<ul>
+<li><b>Melhor caso:</b> vetor já ordenado — cada passagem, para qualquer <code>gap</code>, não desloca nada (assim como no Insertion Sort), resultando em <code>O(n log n)</code> (uma passagem por valor de <code>gap</code>, e há <code>O(log n)</code> valores de <code>gap</code> até chegar em <code>1</code>).</li>
+<li><b>Pior caso:</b> com a sequência de <i>gaps</i> <code>n/2, n/4, ..., 1</code> usada aqui, o pior caso continua sendo <code>O(n&sup2;)</code> — mas, na prática, isso raramente se aproxima do comportamento real observado, que é bem mais rápido.</li>
+<li><b>Caso médio (na prática):</b> para essa mesma sequência de <i>gaps</i>, o comportamento observado empiricamente fica próximo de <code>O(n&sup1;&middot;&sup3;)</code> — sequências de <i>gaps</i> diferentes (existem várias propostas na literatura) podem alcançar limites teóricos ainda melhores, mas o importante aqui é entender <b>por quê</b> o Shell Sort tende a ser mais rápido que o Insertion Sort puro na prática, não decorar uma fórmula exata.</li>
+</ul>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>In-place, mas não estável.</b> O Shell Sort é <b>in-place</b> (mesmas variáveis auxiliares do Insertion Sort). Mas <b>não é estável</b>: como elementos são comparados a um <code>gap</code> de distância (não necessariamente vizinhos), é possível que um elemento "salte" por cima de outro igual a ele durante uma passagem com <code>gap &gt; 1</code>, invertendo sua ordem relativa original — algo que nunca acontece no Insertion Sort puro, onde só há comparação com o vizinho imediato.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Ordenação:</b> rearranjar elementos segundo uma relação de ordem, com base em uma chave de comparação.</li>
+<li><b>Critérios de comparação entre algoritmos:</b> complexidade, uso de memória extra (<i>in-place</i>), estabilidade, e se o algoritmo é ou não baseado em comparação.</li>
+<li><b>Limite teórico:</b> nenhum algoritmo baseado em comparação é mais rápido que <code>O(n log n)</code> no pior caso.</li>
+<li><b>Insertion Sort:</b> insere cada elemento na posição correta entre os já ordenados; <code>O(n)</code> no melhor caso, <code>O(n&sup2;)</code> no pior; in-place e estável.</li>
+<li><b>Shell Sort:</b> generaliza o Insertion Sort com <i>gaps</i> decrescentes; mais rápido na prática que o Insertion Sort puro, mas in-place e <b>não</b> estável.</li>
+<li>Os demais algoritmos (Heap, Merge, Quick, Counting, Radix Sort) serão vistos em detalhe nas próximas aulas que envolvem ordenação.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique a diferença entre um algoritmo de ordenação <b>estável</b> e um <b>instável</b>. Dê um exemplo prático de quando essa diferença importa.
+</li>
+
+<li>
+O que significa um algoritmo de ordenação ser <b><i>in-place</i></b>? O Insertion Sort apresentado nesta aula é <i>in-place</i>? Justifique observando o código.
+</li>
+
+<li>
+Por que nenhum algoritmo de ordenação baseado em comparação consegue ser mais rápido que <code>O(n log n)</code> no pior caso, enquanto Counting Sort consegue <code>O(n + k)</code>?
+</li>
+
+<li>
+Simule manualmente o Insertion Sort sobre o vetor <code>[8, 3, 7, 4, 2]</code>, mostrando o estado do vetor após cada iteração do laço externo (variável <code>i</code>).
+</li>
+
+<li>
+Explique por que o Insertion Sort é <code>O(n)</code> no melhor caso, mas <code>O(n&sup2;)</code> no pior caso. Que tipo de entrada gera cada um desses casos?
+</li>
+
+<li>
+No Shell Sort, por que a última passagem (com <code>gap == 1</code>) tende a ser muito mais rápida do que executar um Insertion Sort comum diretamente sobre o vetor original?
+</li>
+
+<li>
+O Shell Sort apresentado nesta aula é estável? Dê um exemplo com dois elementos de chaves iguais em que a ordem relativa entre eles se inverte durante a execução.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Um algoritmo <b>estável</b> preserva a ordem relativa entre elementos que possuem chaves <b>iguais</b>; um algoritmo <b>instável</b> não dá essa garantia, podendo trocar a ordem entre eles. Isso importa, por exemplo, ao ordenar uma lista de alunos por nota, quando dois alunos empatam: se a lista já estava em ordem alfabética antes de ordenar por nota, um algoritmo estável preserva essa ordem alfabética entre os empatados, enquanto um instável pode embaralhá-la.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Um algoritmo é <i>in-place</i> quando ordena usando apenas uma quantidade constante (<code>O(1)</code>) de memória extra, rearranjando os elementos dentro do próprio vetor recebido. O Insertion Sort apresentado é <i>in-place</i>: ele recebe <code>vetor</code> e o modifica diretamente, usando apenas as variáveis auxiliares <code>i</code>, <code>j</code> e <code>chave</code> — nenhum vetor ou <i>struct</i> adicional de tamanho proporcional a <code>n</code> é alocado.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Algoritmos baseados em comparação só têm acesso à relação <code>a &lt; b</code> entre pares de elementos, e prova-se que, no pior caso, são necessárias pelo menos <code>O(n log n)</code> comparações para garantir que qualquer ordenação possível seja distinguida das demais. O Counting Sort não compara elementos entre si: ele usa diretamente o <b>valor</b> de cada chave como índice para contar ocorrências, o que só é possível porque as chaves são inteiras e estão dentro de uma faixa <code>k</code> conhecida — uma informação extra que os algoritmos baseados em comparação não podem assumir.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Vetor inicial:      [8, 3, 7, 4, 2]
+Apos i=1 (chave=3):  [3, 8, 7, 4, 2]
+Apos i=2 (chave=7):  [3, 7, 8, 4, 2]
+Apos i=3 (chave=4):  [3, 4, 7, 8, 2]
+Apos i=4 (chave=2):  [2, 3, 4, 7, 8]
+</pre>
+
+<p>
+A cada iteração de <code>i</code>, o elemento <code>vetor[i]</code> é deslocado para a esquerda até encontrar sua posição correta entre os elementos já ordenados (<code>vetor[0..i-1]</code>).
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+No <b>melhor caso</b> (vetor já ordenado), a condição <code>vetor[j] &gt; chave</code> do laço interno é sempre falsa na primeira verificação, então cada elemento é comparado apenas uma vez com seu vizinho à esquerda, custando <code>O(n)</code> no total. No <b>pior caso</b> (vetor em ordem estritamente decrescente), cada elemento precisa ser comparado e deslocado através de <b>todos</b> os elementos já ordenados antes dele, o que soma <code>1 + 2 + ... + (n-1)</code> comparações, ou seja, <code>O(n&sup2;)</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<p>
+Porque, depois das passagens com <i>gaps</i> maiores, cada elemento já foi aproximado da sua posição final "de longe" — um elemento muito pequeno que estava muito à direita não precisa mais ser deslocado posição por posição até o início, pois passagens anteriores já o moveram várias posições de cada vez. Assim, quando chega a passagem final com <code>gap == 1</code>, o vetor já está "quase ordenado", e o Insertion Sort sobre um vetor quase ordenado se aproxima do seu melhor caso, <code>O(n)</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<p>
+Não, o Shell Sort não é estável. Considere o vetor <code>[3a, 1, 3b]</code> (onde <code>3a</code> e <code>3b</code> têm a mesma chave <code>3</code>, mas <code>3a</code> aparece primeiro) e <code>gap = 2</code>: nessa passagem, <code>3a</code> (posição 0) é comparado com <code>3b</code> (posição 2). Como <code>vetor[0] &gt; chave</code> é falso (<code>3 &gt; 3</code> é falso), nada acontece nessa comparação especificamente — mas em vetores maiores, com mais elementos iguais espalhados a diferentes <i>gaps</i>, é possível construir casos em que um elemento igual "salta" por cima de outro em uma passagem de <i>gap</i> maior, e os dois terminam em ordem relativa diferente da original, o que nunca aconteceria no Insertion Sort puro (<code>gap = 1</code> desde o início).
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

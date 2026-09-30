@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 9c - Deques</h1>
+</div>
+
+<p>
+Para fechar esta unidade, vemos o TAD <b>Deque</b> (<i>double-ended queue</i>, fila de duas pontas): uma generalização de pilhas e filas, que permite inserir <b>e</b> remover em <b>ambas</b> as extremidades.
+</p>
+
+<hr />
+
+<h2>1. O TAD Deque</h2>
+
+<p>
+Um <b>deque</b> não impõe a restrição LIFO da pilha nem a restrição FIFO da fila — ele simplesmente permite operar nas duas pontas, deixando a cargo de quem usa o deque decidir que disciplina (LIFO, FIFO, ou uma mistura) faz sentido para o problema:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+insere/remove aqui                    insere/remove aqui
+        |                                     |
+        v                                     v
+     +-------+     +-------+     +-------+
+     |   A   | --&gt; |   B   | --&gt; |   C   |
+     +-------+     +-------+     +-------+
+</pre>
+
+<h3>Operações</h3>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Operação</th>
+<th>Descrição</th>
+</tr>
+<tr>
+<td><b>insereInicio</b></td>
+<td>Insere um elemento na frente do deque.</td>
+</tr>
+<tr>
+<td><b>insereFim</b></td>
+<td>Insere um elemento no final do deque.</td>
+</tr>
+<tr>
+<td><b>removeInicio</b></td>
+<td>Remove e retorna o elemento da frente.</td>
+</tr>
+<tr>
+<td><b>removeFim</b></td>
+<td>Remove e retorna o elemento do final.</td>
+</tr>
+<tr>
+<td><b>estaVazio</b></td>
+<td>Indica se o deque não possui elementos.</td>
+</tr>
+</table>
+
+<p>
+Repare que uma pilha nada mais é do que um deque em que só usamos <code>insereInicio</code>/<code>removeInicio</code> (ou só <code>insereFim</code>/<code>removeFim</code>); e uma fila é um deque em que usamos <code>insereFim</code> para inserir e <code>removeInicio</code> para remover. O deque é, portanto, <b>mais geral</b> que as duas estruturas anteriores.
+</p>
+
+<hr />
+
+<h2>2. Implementação: reaproveitando a lista duplamente encadeada</h2>
+
+<p>
+Para que <b>todas</b> as quatro operações de inserção/remoção sejam <code>O(1)</code>, precisamos de acesso direto às duas pontas <b>e</b> capacidade de andar nos dois sentidos — exatamente o que a <code>ListaDupla</code> da Aula 6a já oferece. Não é por acaso: um deque é, na prática, uma lista duplamente encadeada usada através de uma interface mais restrita.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">// Reaproveitando NodoD e ListaDupla da Aula 6a</span>
+<span style="color: #0000ff; font-weight: bold;">typedef</span> ListaDupla Deque;
+
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializa(Deque *d)                          { inicializa(d); }
+<span style="color: #0000ff; font-weight: bold;">int</span>  estaVazio(Deque *d)                            { <span style="color: #0000ff; font-weight: bold;">return</span> d-&gt;ini == NULL; }
+<span style="color: #0000ff; font-weight: bold;">int</span>  insereInicioDeque(Deque *d, Produto prod)      { <span style="color: #0000ff; font-weight: bold;">return</span> insereInicio(d, prod); }
+<span style="color: #0000ff; font-weight: bold;">int</span>  insereFimDeque(Deque *d, Produto prod)         { <span style="color: #0000ff; font-weight: bold;">return</span> insereFim(d, prod); }
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Removendo pelas pontas.</b> As Aulas 4/6a implementaram remoção por <b>código</b> (<code>removePorCod</code>), não pelas pontas. Para um deque de verdade, seriam necessárias duas novas funções — <code>removeInicio</code> e <code>removeFim</code> — que removem especificamente o primeiro ou o último nodo, sem buscar por código. A lógica é parecida com <code>removePorCod</code>, mas mais simples: já sabemos exatamente qual nodo remover (<code>d-&gt;ini</code> ou <code>d-&gt;fim</code>), sem precisar percorrer a lista.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>3. Aplicações</h2>
+
+<ul>
+<li><b>Histórico de navegação</b> com "voltar" e "avançar" nos dois sentidos (como já mencionado na Aula 6a) pode ser modelado como um deque;</li>
+<li><b>Algoritmos de janela deslizante</b> (por exemplo, encontrar o máximo em cada sub-intervalo de tamanho fixo de um vetor) costumam usar um deque para inserir/remover elementos em ambas as pontas conforme a janela se move;</li>
+<li><b>Escalonadores com <i>work stealing</i>:</b> cada processo/thread mantém uma fila de tarefas em formato de deque — insere e remove suas próprias tarefas de uma ponta, enquanto outros processos ociosos podem "roubar" tarefas da ponta oposta.</li>
+</ul>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Deque:</b> permite inserir e remover em <b>ambas</b> as extremidades — generaliza pilha e fila.</li>
+<li><b>Pilha</b> = deque usado só em uma ponta (LIFO). <b>Fila</b> = deque usado com inserção em uma ponta e remoção na outra (FIFO).</li>
+<li><b>Implementação natural:</b> a lista duplamente encadeada (Aula 6a) já oferece tudo que um deque precisa, em <code>O(1)</code> nas duas pontas.</li>
+<li><b>Aplicações:</b> histórico de navegação bidirecional, algoritmos de janela deslizante, escalonadores com <i>work stealing</i>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique por que uma pilha e uma fila podem ser vistas como "casos particulares" de um deque.
+</li>
+
+<li>
+Por que a lista duplamente encadeada da Aula 6a é uma base natural para implementar um deque, e não a lista simplesmente encadeada da Aula 4?
+</li>
+
+<li>
+Se você tivesse que implementar um deque usando um vetor (em vez de lista encadeada), que problema da fila por vetor (Aula 9b) você esperaria enfrentar novamente, e como o resolveria?
+</li>
+
+<li>
+Implemente uma função <code>int removeInicio(Deque *d, Produto *prodRemovido)</code> que remova o primeiro elemento de um deque (baseado em <code>ListaDupla</code>), devolvendo o produto removido via <code>prodRemovido</code>.
+</li>
+
+<li>
+<b>Implemente o deque por vetor circular.</b> Defina a <i>struct</i> <code>DequeVet</code>, com um vetor de capacidade fixa (<code>CAPACIDADE</code>), um índice <code>frente</code> e uma quantidade <code>qtd</code> de elementos (no mesmo estilo da <code>FilaVet</code> da Aula 9b), e implemente <code>inicializa</code>, <code>estaVazio</code>, <code>insereFim</code> e <code>removeInicio</code>. Depois, implemente também <code>insereInicio</code> e <code>removeFim</code> — as duas novas operações que um deque tem e uma fila não tem. Dica: para "andar para trás" a partir de <code>frente</code> sem obter um índice negativo, use <code>(frente - 1 + CAPACIDADE) % CAPACIDADE</code>.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque ambas podem ser expressas usando apenas um subconjunto das operações de um deque: uma pilha usa <code>insereInicio</code>/<code>removeInicio</code> (ou, de forma equivalente, só <code>insereFim</code>/<code>removeFim</code>) — sempre a mesma ponta. Uma fila usa <code>insereFim</code> para inserir e <code>removeInicio</code> para remover — pontas diferentes para cada operação. O deque não impõe nenhuma dessas restrições, permitindo os dois comportamentos (e combinações deles) através da mesma estrutura.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque um deque exige acesso <code>O(1)</code> às <b>duas</b> pontas para inserção <b>e</b> remoção. A lista simplesmente encadeada só oferece isso para o início (Aula 4); remover do final exigiria percorrer a lista inteira para encontrar o penúltimo nodo, tornando essa operação <code>O(n)</code>. A lista duplamente encadeada já resolve isso, guardando <code>ini</code> e <code>fim</code>, e permitindo andar nos dois sentidos com <code>ant</code>/<code>prox</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+O mesmo problema da fila ingênua por vetor (Aula 9b): sem tratamento especial, os índices das duas pontas só andariam em uma direção, desperdiçando espaço já liberado. A solução seria a mesma: tratar o vetor como circular, usando aritmética modular (<code>% CAPACIDADE</code>) para calcular as posições das duas pontas, de forma parecida com a fila circular vista na Aula 9b.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> removeInicio(Deque *d, Produto *prodRemovido) {
+    NodoD *removido;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (d-&gt;ini == NULL) <span style="color: #008000; font-style: italic;">// deque vazio</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    removido = d-&gt;ini;
+    *prodRemovido = removido-&gt;dado;
+
+    d-&gt;ini = removido-&gt;prox;
+    <span style="color: #0000ff; font-weight: bold;">if</span> (d-&gt;ini != NULL)
+        d-&gt;ini-&gt;ant = NULL;
+    <span style="color: #0000ff; font-weight: bold;">else</span>
+        d-&gt;fim = NULL; <span style="color: #008000; font-style: italic;">// deque ficou vazio</span>
+
+    free(removido);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+A lógica é uma versão simplificada de <code>removePorCod</code> (Aula 6a): como já sabemos que o nodo a remover é exatamente <code>d-&gt;ini</code>, não é preciso percorrer a lista para localizá-lo — só tratar a atualização de <code>d-&gt;ini</code> (e, se necessário, <code>d-&gt;fim</code>, no caso de o deque ficar vazio).
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#define</span> CAPACIDADE 5
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    Produto dados[CAPACIDADE];
+    <span style="color: #0000ff; font-weight: bold;">int</span> frente;
+    <span style="color: #0000ff; font-weight: bold;">int</span> qtd;
+} DequeVet;
+
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializa(DequeVet *d) {
+    d-&gt;frente = 0;
+    d-&gt;qtd = 0;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> estaVazio(DequeVet *d) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> d-&gt;qtd == 0;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> insereFim(DequeVet *d, Produto valor) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> posicaoFinal;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (d-&gt;qtd == CAPACIDADE)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    posicaoFinal = (d-&gt;frente + d-&gt;qtd) % CAPACIDADE;
+    d-&gt;dados[posicaoFinal] = valor;
+    d-&gt;qtd++;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> removeInicio(DequeVet *d, Produto *valorRemovido) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (estaVazio(d))
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    *valorRemovido = d-&gt;dados[d-&gt;frente];
+    d-&gt;frente = (d-&gt;frente + 1) % CAPACIDADE;
+    d-&gt;qtd--;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #008000; font-style: italic;">// As duas operações "novas" em relação à FilaVet da Aula 9b:</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> insereInicio(DequeVet *d, Produto valor) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (d-&gt;qtd == CAPACIDADE)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    d-&gt;frente = (d-&gt;frente - 1 + CAPACIDADE) % CAPACIDADE; <span style="color: #008000; font-style: italic;">// "anda para trás"</span>
+    d-&gt;dados[d-&gt;frente] = valor;
+    d-&gt;qtd++;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> removeFim(DequeVet *d, Produto *valorRemovido) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> posicaoFinal;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (estaVazio(d))
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    posicaoFinal = (d-&gt;frente + d-&gt;qtd - 1) % CAPACIDADE;
+    *valorRemovido = d-&gt;dados[posicaoFinal];
+    d-&gt;qtd--;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+<code>insereFim</code> e <code>removeInicio</code> são idênticas às da <code>FilaVet</code> (Aula 9b). As novidades são <code>insereInicio</code>, que precisa "andar para trás" a partir de <code>frente</code> — daí o truque <code>(frente - 1 + CAPACIDADE) % CAPACIDADE</code>, que evita obter um índice negativo do operador módulo em C — e <code>removeFim</code>, que calcula diretamente a posição do último elemento a partir de <code>frente</code> e <code>qtd</code>, sem precisar de um índice <code>fim</code> separado.
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

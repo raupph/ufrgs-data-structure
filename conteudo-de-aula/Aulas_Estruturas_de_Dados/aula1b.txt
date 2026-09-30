@@ -1,0 +1,830 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 1b - Alocação Dinâmica de Memória e Ponteiros</h1>
+</div>
+
+<p>
+Até agora, todas as variáveis e vetores utilizados possuíam <b>tamanho fixo</b>, definido em tempo de compilação. Essa abordagem, embora simples, é limitada: muitas vezes não sabemos, antes da execução do programa, quantos elementos serão realmente necessários.
+</p>
+
+<p>
+Nesta aula estudaremos a <b>alocação dinâmica de memória</b>, que permite reservar e liberar espaço na memória durante a execução do programa, de acordo com a necessidade real dos dados. Esse conceito é essencial para o restante da disciplina, pois praticamente todas as estruturas de dados dinâmicas (listas encadeadas, pilhas, filas, árvores, grafos) dependem dele. Veremos também um conjunto de recursos complementares da linguagem C — <b>ponteiro para ponteiro</b>, <b>argumentos de linha de comando</b>, <code>const</code>, <code>bool</code> e <code>assert</code> — que serão úteis ao longo de toda a disciplina.
+</p>
+
+<table border="3" cellpadding="12" width="100%" style="border-color:#a31515;">
+<tr bgcolor="#FFECEC">
+<td>
+<b style="color:#a31515; font-size:1.15em;">Atenção — muito importante.</b>
+<p>
+A partir <b>daqui</b>, esta disciplina assume que todos já sabem programar bem em <b>C</b> — sintaxe básica, funções, vetores, <i>structs</i>, ponteiros, passagem de parâmetros, arquivos, laços, condicionais, recursão — e que já dominam os fundamentos de <b>algoritmos</b>, tudo isso visto no <b>primeiro semestre do curso</b>. Infelizmente <b>não temos tempo hábil para revisar esses conceitos;</b> seguiremos a partir deles.
+</p>
+<p>
+Se você sentiu qualquer dificuldade com o conteúdo desta aula, ou tem dúvidas sobre C básico, <b>é essencial revisar o conteúdo e tirar todas as dúvidas antes de continuar</b>. Todo o material de apoio está disponível em:
+</p>
+<ul>
+<li>Material Extra — <a href="../material_extra/revisao-linguagem-c-parte-1/index.html">Revisão de Linguagem C (Parte 1)</a></li>
+<li>Material Extra — <a href="../material_extra/revisao-linguagem-c-parte-2/index.html">Revisão de Linguagem C (Parte 2)</a></li>
+<li>Algoritmos e Programação — <a href="https://www.inf.ufrgs.br/~dgbalreira/algprog/index.html">Conteúdo completo, com exercícios e respostas</a></li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Memória estática versus memória dinâmica</h2>
+
+<p>
+De forma simplificada, um programa em execução utiliza duas regiões principais de memória para armazenar dados: a <b>pilha</b> (<i>stack</i>) e o <b>heap</b>.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Região</th>
+<th>Características</th>
+</tr>
+<tr>
+<td><b>Pilha (<i>stack</i>)</b></td>
+<td>Armazena variáveis locais e parâmetros de funções. O tamanho precisa ser conhecido em tempo de compilação. O espaço é reservado e liberado automaticamente conforme as funções são chamadas e retornam.</td>
+</tr>
+<tr>
+<td><b>Heap</b></td>
+<td>Região de memória controlada manualmente pelo programador. O espaço é reservado (alocado) e liberado explicitamente através de funções específicas, podendo ter seu tamanho definido em tempo de <b>execução</b>.</td>
+</tr>
+</table>
+
+<p>
+Todas as variáveis e vetores vistos até agora (como <code>int idade;</code> ou <code>int vetor[10];</code>) são alocados na <b>pilha</b>. A partir de agora, aprenderemos a alocar memória diretamente no <b>heap</b>, através de <b>ponteiros</b>.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Vantagens e desvantagens de cada região.</b>
+<ul>
+<li><b>Pilha:</b> alocação e liberação <b>muito mais rápidas</b> (o compilador só ajusta um ponteiro de topo), e o programador não precisa se preocupar em liberar nada. Em troca, o tamanho precisa ser conhecido em tempo de compilação, o espaço disponível é limitado (recursões muito profundas ou vetores muito grandes causam <i>stack overflow</i>), e os dados <b>não sobrevivem</b> ao retorno da função onde foram criados.</li>
+<li><b>Heap:</b> tamanho definido em tempo de <b>execução</b>, e os dados <b>sobrevivem</b> ao retorno da função — essencial para estruturas que crescem ou que precisam ser compartilhadas entre funções, como veremos ao longo da disciplina. Em troca, a alocação e a liberação são mais lentas, e a responsabilidade de liberar cada bloco alocado é inteiramente do programador — esquecer um <code>free()</code> causa vazamento de memória, e usar um ponteiro depois de liberá-lo causa comportamento indefinido.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Alocação dinâmica: a função <code>malloc()</code></h2>
+
+<p>
+A função <code>malloc()</code> (<i>memory allocation</i>), definida na biblioteca <code>&lt;stdlib.h&gt;</code>, reserva um bloco de memória no heap com o tamanho (em bytes) especificado, e retorna um <b>ponteiro</b> para o início desse bloco.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+tipo *ponteiro = (tipo *) malloc(quantidade * sizeof(tipo));
+</pre>
+
+<p>
+O operador <code>sizeof</code> é utilizado para calcular corretamente o número de bytes necessários para armazenar um valor do tipo desejado. Considere o exemplo abaixo, que aloca dinamicamente um vetor de <code>n</code> inteiros:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> n = 5;
+    <span style="color: #0000ff; font-weight: bold;">int</span> *vetor;
+
+    vetor = (<span style="color: #0000ff; font-weight: bold;">int</span> *) malloc(n * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(<span style="color: #0000ff; font-weight: bold;">int</span>));
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (vetor == NULL) {
+        printf(<span style="color: #a31515;">"Erro: memória insuficiente.\n"</span>);
+        <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; n; i++) {
+        vetor[i] = i * 10;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; n; i++) {
+        printf(<span style="color: #a31515;">"%d "</span>, vetor[i]);
+    }
+    printf(<span style="color: #a31515;">"\n"</span>);
+
+    free(vetor);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Observe que, uma vez alocado, o vetor dinâmico <code>vetor</code> pode ser acessado exatamente como um vetor comum, utilizando colchetes (<code>vetor[i]</code>), pois um vetor nada mais é do que um ponteiro para o início de uma sequência de posições de memória contíguas.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Observação.</b> A conversão <code>(int *)</code> antes de <code>malloc()</code> é chamada de <i>cast</i> e converte o ponteiro genérico retornado por <code>malloc()</code> (do tipo <code>void *</code>) para o tipo desejado. Em C, esse <i>cast</i> não é estritamente obrigatório, mas é uma boa prática mantê-lo, deixando explícito o tipo de dado armazenado.
+</td>
+</tr>
+</table>
+
+<p>
+Nem sempre há memória disponível suficiente para atender a uma solicitação. Quando isso ocorre, <code>malloc()</code> retorna <code>NULL</code> em vez de um endereço válido — por isso o exemplo acima já verifica <code>if (vetor == NULL)</code> logo após a alocação.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Diretriz de Projeto.</b>
+<ul>
+<li><b>Sempre verifique o retorno de uma alocação:</b> Antes de utilizar um ponteiro retornado por <code>malloc()</code>, verifique se ele é diferente de <code>NULL</code>. Utilizar um ponteiro <code>NULL</code> como se apontasse para memória válida causa <i>Segmentation Fault</i>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>A função <code>free()</code></h2>
+
+<p>
+Toda memória alocada dinamicamente com <code>malloc()</code> deve ser <b>explicitamente liberada</b> pelo programador quando não for mais necessária, através da função <code>free()</code>. Diferentemente das variáveis da pilha, a memória do heap <b>não é liberada automaticamente</b> quando a função termina.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+free(ponteiro);
+</pre>
+
+<p>
+Caso a memória alocada nunca seja liberada, o programa passa a consumir memória desnecessariamente enquanto estiver em execução, um problema conhecido como <b><i>vazamento de memória</i></b> (<i>memory leak</i>). Em programas que executam por muito tempo, ou que alocam memória repetidamente, esse problema pode esgotar toda a memória disponível no sistema.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Cuidados importantes com <code>free()</code>.</b>
+<ul>
+<li><b>Ponteiro solto (<i>dangling pointer</i>):</b> Após chamar <code>free(ponteiro)</code>, a memória apontada por <code>ponteiro</code> deixa de ser válida, mas a variável <code>ponteiro</code> continua armazenando o mesmo endereço. Utilizar esse endereço após o <code>free()</code> resulta em comportamento indefinido. É uma boa prática atribuir <code>ponteiro = NULL;</code> logo após liberar a memória.</li>
+<li><b><i>Double free</i>:</b> Chamar <code>free()</code> duas vezes sobre o mesmo ponteiro é um erro grave, que também resulta em comportamento indefinido. Atribuir <code>NULL</code> após o primeiro <code>free()</code> também ajuda a evitar esse problema, pois <code>free(NULL)</code> não faz nada.</li>
+<li><b>Toda alocação precisa de uma liberação correspondente:</b> Para cada chamada de <code>malloc()</code>, deve existir, mais adiante, uma chamada correspondente de <code>free()</code>.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exemplo: vetores dinâmicos de <i>structs</i></h2>
+
+<p>
+A alocação dinâmica é especialmente útil quando combinada com <i>structs</i>, permitindo criar vetores de registros cujo tamanho só é conhecido durante a execução do programa.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">float</span> media;
+} Aluno;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> n;
+    printf(<span style="color: #a31515;">"Quantos alunos? "</span>);
+    scanf(<span style="color: #a31515;">"%d"</span>, &amp;n);
+
+    Aluno *turma = (Aluno *) malloc(n * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(Aluno));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (turma == NULL) {
+        <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    }
+
+    <span style="color: #008000; font-style: italic;">// Acesso idêntico ao de um vetor comum de structs</span>
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; n; i++) {
+        turma[i].media = 0.0;
+    }
+
+    free(turma);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Note que <code>turma</code> é um ponteiro para <code>Aluno</code>, mas pode ser utilizado com a mesma notação de vetor (<code>turma[i]</code>) e com o operador ponto (<code>turma[i].media</code>), já que <code>turma[i]</code> acessa diretamente o registro, e não um ponteiro para ele.
+</p>
+
+<hr />
+
+<h2>Ponteiro para ponteiro</h2>
+
+<p>
+Um <b>ponteiro para ponteiro</b> é uma variável que armazena o endereço de outro ponteiro. Ele é declarado utilizando dois asteriscos (<code>**</code>) e é útil, por exemplo, quando uma função precisa alterar, por referência, o próprio ponteiro passado pela função chamadora (e não apenas o valor para o qual ele aponta).
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #008000; font-style: italic;">// Aloca um vetor de n inteiros e devolve o ponteiro através de 'vetor'</span>
+<span style="color: #0000ff; font-weight: bold;">void</span> alocarVetor(<span style="color: #0000ff; font-weight: bold;">int</span> **vetor, <span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    *vetor = (<span style="color: #0000ff; font-weight: bold;">int</span> *) malloc(n * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(<span style="color: #0000ff; font-weight: bold;">int</span>));
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> *p = NULL;
+
+    alocarVetor(&amp;p, 5); <span style="color: #008000; font-style: italic;">// Passamos o endereço do ponteiro p</span>
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (p != NULL) {
+        p[0] = 42;
+        printf(<span style="color: #a31515;">"%d\n"</span>, p[0]);
+        free(p);
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Sem o segundo nível de indireção (<code>int **vetor</code>), a função <code>alocarVetor</code> receberia apenas uma <b>cópia</b> do ponteiro <code>p</code>, e a alocação feita dentro dela seria perdida ao final da função, exatamente pelo mesmo motivo pelo qual a passagem por valor não altera variáveis simples.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Lendo a declaração de dentro para fora.</b> Em <code>int **vetor</code>, leia da direita para a esquerda a partir do nome: <code>vetor</code> é um ponteiro (<code>*</code>) para um ponteiro (<code>*</code>) para <code>int</code>. Dentro da função, <code>*vetor</code> nos dá de volta o ponteiro original (o que era <code>p</code> em <code>main</code>), permitindo alterá-lo de verdade. Esse mesmo mecanismo será usado mais adiante na disciplina sempre que uma função precisar "criar" ou "substituir" um ponteiro do chamador — por exemplo, ao inicializar a raiz de uma árvore.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Argumentos de linha de comando (<code>argc</code> e <code>argv</code>)</h2>
+
+<p>
+Até agora, sempre lemos dados através de <code>scanf()</code>, com o programa já em execução. Também é possível passar informações para um programa <b>no momento em que ele é iniciado</b>, através de argumentos de linha de comando. Para isso, a função <code>main()</code> pode receber dois parâmetros:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> main(<span style="color: #0000ff; font-weight: bold;">int</span> argc, <span style="color: #0000ff; font-weight: bold;">char</span> *argv[]) {
+    <span style="color: #008000; font-style: italic;">// ...</span>
+}
+</pre>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Parâmetro</th>
+<th>Significado</th>
+</tr>
+<tr>
+<td><code>argc</code></td>
+<td><i>argument count</i>: quantidade de argumentos recebidos, incluindo o nome do próprio programa.</td>
+</tr>
+<tr>
+<td><code>argv</code></td>
+<td><i>argument vector</i>: vetor de <i>strings</i>, uma para cada argumento. <code>argv[0]</code> é sempre o nome do programa.</td>
+</tr>
+</table>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main(<span style="color: #0000ff; font-weight: bold;">int</span> argc, <span style="color: #0000ff; font-weight: bold;">char</span> *argv[]) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+
+    printf(<span style="color: #a31515;">"Numero de argumentos: %d\n"</span>, argc);
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; argc; i++) {
+        printf(<span style="color: #a31515;">"argv[%d] = %s\n"</span>, i, argv[i]);
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Compilando e executando esse programa com dois argumentos:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+gcc -Wall main.c -o programa
+./programa turma.txt 10
+</pre>
+
+<p>
+produz a saída:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Numero de argumentos: 3
+argv[0] = ./programa
+argv[1] = turma.txt
+argv[2] = 10
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Atenção ao tipo.</b> Todo elemento de <code>argv</code> é uma <i>string</i> (<code>char *</code>), mesmo que pareça um número. Para usar <code>argv[2]</code> como um valor numérico, é preciso convertê-lo explicitamente, por exemplo com <code>atoi(argv[2])</code> (de <code>&lt;stdlib.h&gt;</code>).
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Liberdades de estilo a partir de agora</h2>
+
+<p>
+A <b>programação estruturada</b> surgiu para combater o "código espaguete" — programas com fluxo tão emaranhado (cheio de saltos e desvios) que se tornavam quase impossíveis de entender ou corrigir. Algumas regras eram muito rígidas porque ajudavam programadores iniciantes a internalizar essa disciplina, evitando exatamente esse tipo de bagunça.
+</p>
+
+<p>
+Hoje, a maioria delas virou uma <b>recomendação de legibilidade</b>, não uma proibição absoluta: usamos <code>break</code>, múltiplos <code>return</code> e declarações locais quando tornam o código mais claro, mas continuamos evitando construções que dificultam entender o fluxo do programa (como <code>goto</code>, por exemplo).
+</p>
+
+<p>
+<b>Múltiplos pontos de retorno.</b> Uma função pode ter mais de um <code>return</code>, encerrando assim que o resultado é conhecido:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> ehPositivo(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (n &gt; 0) <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+<b><code>break</code> em laços.</b> Um <code>for</code> ou <code>while</code> pode ser interrompido antes de terminar, assim que a busca não precisar mais continuar:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; n; i++) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (vetor[i] == alvo) <span style="color: #0000ff; font-weight: bold;">break</span>;
+}
+</pre>
+
+<p>
+<b>Variáveis declaradas perto do uso.</b> Uma variável pode ser declarada no meio da função, próxima de onde é usada pela primeira vez, em vez de todas juntas no topo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+printf(<span style="color: #a31515;">"Processando...\n"</span>);
+<span style="color: #0000ff; font-weight: bold;">int</span> soma = 0; <span style="color: #008000; font-style: italic;">// declarada só aqui, quando passa a ser necessária</span>
+</pre>
+
+<p>
+Isso vale inclusive para a variável de controle do <code>for</code>, declarada diretamente dentro do próprio laço:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; n; i++) {
+    printf(<span style="color: #a31515;">"%d "</span>, vetor[i]);
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Com bom senso.</b> Essas liberdades existem para deixar o código mais direto, não mais confuso. Use-as quando simplificarem a leitura — evite, por exemplo, uma função cheia de <code>return</code>s espalhados de forma desorganizada.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>O qualificador <code>const</code></h2>
+
+<p>
+Quando uma função recebe um ponteiro apenas para <b>ler</b> os dados apontados, sem nunca modificá-los, é uma boa prática declarar o parâmetro com o qualificador <code>const</code>. Isso comunica a intenção da função (tanto para quem a lê quanto para o compilador) e faz com que o próprio compilador acuse um erro caso o corpo da função tente, por engano, alterar esse dado.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimirAluno(<span style="color: #0000ff; font-weight: bold;">const</span> Aluno *aluno) {
+    printf(<span style="color: #a31515;">"%s: %.2f\n"</span>, aluno-&gt;nome, aluno-&gt;media);
+
+    aluno-&gt;media = 10.0; <span style="color: #008000; font-style: italic;">// erro de compilação: não é permitido alterar *aluno</span>
+}
+</pre>
+
+<p>
+Repare que <code>imprimirAluno</code> recebe um <b>ponteiro</b> (evitando a cópia de toda a <i>struct</i>), mas o <code>const</code> garante, em tempo de compilação, que essa função apenas lê o aluno apontado, sem risco de alterá-lo por engano — o melhor dos dois mundos: o desempenho de passar por ponteiro, com a segurança de passar por valor.
+</p>
+
+<p>
+É por isso que funções como <code>strlen</code> e <code>strcmp</code>, da biblioteca padrão, recebem seus parâmetros como <code>const char *</code>: elas prometem apenas ler a <i>string</i> recebida, nunca modificá-la.
+</p>
+
+<hr />
+
+<h2>O tipo <code>bool</code> em C</h2>
+
+<p>
+Historicamente, C não possuía um tipo booleano nativo — condições eram sempre representadas por <code>int</code> (<code>0</code> para falso, qualquer valor diferente de <code>0</code> para verdadeiro). Desde o padrão C99, porém, o cabeçalho <code>&lt;stdbool.h&gt;</code> disponibiliza o tipo <code>bool</code> e as constantes <code>true</code>/<code>false</code>, deixando o código mais legível:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdbool.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">bool</span> ehPar(<span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> n % 2 == 0;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">bool</span> vetorVazio = <span style="color: #0000ff; font-weight: bold;">true</span>;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (ehPar(4)) {
+        printf(<span style="color: #a31515;">"4 e par\n"</span>);
+    }
+
+    printf(<span style="color: #a31515;">"vetorVazio = %d\n"</span>, vetorVazio); <span style="color: #008000; font-style: italic;">// imprime 1</span>
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Por baixo dos panos.</b> <code>bool</code> continua sendo, na prática, um inteiro pequeno (<code>true</code> vale <code>1</code>, <code>false</code> vale <code>0</code>), e por isso <code>printf</code> com <code>%d</code> funciona normalmente sobre uma variável <code>bool</code>. A vantagem de usar <code>bool</code> em vez de <code>int</code> é puramente de <b>legibilidade</b>: deixa explícito, para quem lê o código, que aquela variável ou retorno representa um valor lógico (verdadeiro/falso), e não uma quantidade qualquer.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2><code>assert</code>: verificando erros do programador</h2>
+
+<p>
+A macro <code>assert</code>, definida em <code>&lt;assert.h&gt;</code>, verifica se uma condição é verdadeira e, caso não seja, <b>encerra o programa imediatamente</b> com uma mensagem de erro indicando o arquivo e a linha da falha.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;assert.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">float</span> calcularMedia(<span style="color: #0000ff; font-weight: bold;">float</span> notas[], <span style="color: #0000ff; font-weight: bold;">int</span> n) {
+    assert(n &gt; 0); <span style="color: #008000; font-style: italic;">// nunca deveria ser chamada com n &lt;= 0</span>
+
+    <span style="color: #0000ff; font-weight: bold;">float</span> soma = 0;
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; n; i++) {
+        soma += notas[i];
+    }
+    <span style="color: #0000ff; font-weight: bold;">return</span> soma / n;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b><code>assert</code> verifica erros do programador.</b> Um <code>assert</code> que falha significa que <b>o próprio código</b> chamou a função de um jeito que nunca deveria acontecer, se todo o programa estiver correto — um bug interno, uma premissa (invariante) que foi quebrada em algum outro ponto do código. Por isso, é comum <b>desativar</b> os <code>assert</code>s na versão final do programa (compilando com a macro <code>NDEBUG</code> definida), já que eles servem para ajudar a <i>encontrar</i> bugs durante o desenvolvimento, não para lidar com situações esperadas em produção.
+</td>
+</tr>
+</table>
+
+<p>
+Isso é bem diferente de um <code>if</code> comum, que continua sendo a ferramenta certa para tratar entradas inválidas vindas do <b>usuário</b> do programa — uma situação perfeitamente esperada, que o programa deve saber lidar sem simplesmente encerrar de forma abrupta:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> n;
+printf(<span style="color: #a31515;">"Quantas notas? "</span>);
+scanf(<span style="color: #a31515;">"%d"</span>, &amp;n);
+
+<span style="color: #0000ff; font-weight: bold;">if</span> (n &lt;= 0) { <span style="color: #008000; font-style: italic;">// erro do usuário: entrada inválida, situação esperada</span>
+    printf(<span style="color: #a31515;">"Erro: a quantidade de notas deve ser positiva.\n"</span>);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Resumindo a diferença:</b>
+<ul>
+<li><code>assert</code> <b>verifica erros do programador</b> — condições que, se o código estiver certo, nunca deveriam ser falsas. Ao falhar, o programa é encerrado, pois há um bug a ser corrigido no código-fonte.</li>
+<li><code>if</code> <b>trata erros do usuário</b> — situações inválidas, porém esperadas, que vêm de fora do controle do programador (entrada digitada errada, arquivo inexistente, etc.), e que o programa deve tratar de forma controlada, sem encerrar abruptamente.</li>
+</ul>
+Mais adiante, em outras linguagens de programação, vocês verão o mecanismo de <b><i>exceções</i></b>, que cumpre esse mesmo papel de tratar erros do usuário/do ambiente de forma mais estruturada do que um simples <code>if</code> — mas o princípio por trás da distinção é o mesmo: erro do programador (<code>assert</code>) versus erro do usuário/ambiente (<code>if</code>, ou exceções).
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Resumo: alocação estática versus dinâmica</h2>
+
+<table border="1" cellpadding="5">
+<tr bgcolor="#EEEEEE">
+<th>Aspecto</th>
+<th>Alocação estática</th>
+<th>Alocação dinâmica</th>
+</tr>
+<tr>
+<td><b>Onde é alocada</b></td>
+<td>Pilha (<i>stack</i>)</td>
+<td>Heap</td>
+</tr>
+<tr>
+<td><b>Quando o tamanho é definido</b></td>
+<td>Em tempo de compilação</td>
+<td>Em tempo de execução</td>
+</tr>
+<tr>
+<td><b>Quem libera a memória</b></td>
+<td>Automático (ao final da função)</td>
+<td>Manual, através de <code>free()</code></td>
+</tr>
+<tr>
+<td><b>Principais riscos</b></td>
+<td><i>Stack overflow</i> em recursões muito profundas</td>
+<td>Vazamento de memória, ponteiros soltos, <i>double free</i></td>
+</tr>
+</table>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Resumo: Boas Práticas com Alocação Dinâmica.</b>
+<ul>
+<li><b>Sempre verifique se a alocação retornou <code>NULL</code>:</b> antes de utilizar o ponteiro alocado.</li>
+<li><b>Sempre libere o que foi alocado:</b> para cada <code>malloc()</code>, deve existir um <code>free()</code> correspondente.</li>
+<li><b>Nunca utilize um ponteiro após liberá-lo:</b> atribua <code>NULL</code> ao ponteiro logo após o <code>free()</code>.</li>
+<li><b>Use <code>const</code></b> em parâmetros ponteiro que só devem ser lidos, nunca alterados.</li>
+<li><b><code>assert</code> é para erros do programador; <code>if</code> é para erros do usuário.</b></li>
+</ul>
+</td>
+</tr>
+</table>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Quer ir além?</b> Tópicos mais avançados de C (matrizes dinâmicas, ponteiros genéricos <code>void *</code>, ponteiros para função, <code>Makefile</code>) estão disponíveis no <b>Material Extra — C Avançado</b>, opcional. Mais adiante, na <b>Aula 15b</b>, veremos uma introdução obrigatória a C++ para quem já sabe C.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique a diferença entre alocação estática e alocação dinâmica, indicando em qual região de memória cada uma ocorre e quando o tamanho de cada uma é definido.
+</li>
+
+<li>
+Por que é necessário verificar se o retorno de <code>malloc()</code> é <code>NULL</code> antes de utilizar o ponteiro alocado? O que acontece se essa verificação for esquecida e a alocação falhar?
+</li>
+
+<li>
+O que é um <i>dangling pointer</i>? Por que atribuir <code>NULL</code> a um ponteiro logo após chamar <code>free()</code> sobre ele é uma boa prática?
+</li>
+
+<li>
+Escreva uma função <code>void alocarInteiro(int **p, int valor)</code> que aloque dinamicamente um único <code>int</code>, atribua <code>valor</code> a ele, e devolva o ponteiro alocado através do parâmetro <code>p</code>. Escreva também um <code>main()</code> que a utilize corretamente (incluindo a liberação da memória).
+</li>
+
+<li>
+O que representam <code>argc</code> e <code>argv</code> na função <code>main(int argc, char *argv[])</code>? Se um programa for executado com <code>./programa a b c</code>, qual é o valor de <code>argc</code>, e o que contém <code>argv[0]</code>?
+</li>
+
+<li>
+Considere a função <code>void imprimirAluno(const Aluno *aluno)</code>. O que o qualificador <code>const</code> impede que essa função faça? O que aconteceria se, dentro dela, tentássemos executar <code>aluno-&gt;media = 10.0;</code>?
+</li>
+
+<li>
+Qual é a diferença entre <code>const Aluno *aluno</code> e <code>Aluno * const aluno</code>?
+</li>
+
+<li>
+Explique, com um exemplo próprio (diferente dos vistos em aula), uma situação em que faria sentido usar <code>assert</code>, e outra em que faria sentido usar <code>if</code>. Justifique por que cada uma se encaixa no papel de "erro do programador" ou "erro do usuário".
+</li>
+
+<li>
+Reescreva a função abaixo utilizando o tipo <code>bool</code> (de <code>&lt;stdbool.h&gt;</code>) como tipo de retorno, no lugar de <code>int</code>:
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> estaCheia(<span style="color: #0000ff; font-weight: bold;">int</span> ocupados, <span style="color: #0000ff; font-weight: bold;">int</span> capacidade) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> ocupados == capacidade;
+}
+</pre>
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+A alocação <b>estática</b> ocorre na <b>pilha</b> (<i>stack</i>), e seu tamanho precisa ser conhecido em <b>tempo de compilação</b> (por exemplo, <code>int vetor[10];</code>). A alocação <b>dinâmica</b> ocorre no <b>heap</b>, através de <code>malloc()</code>, e seu tamanho pode ser definido em <b>tempo de execução</b>, de acordo com valores lidos ou calculados enquanto o programa já está rodando.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque nem sempre há memória disponível para atender à solicitação — nesse caso, <code>malloc()</code> retorna <code>NULL</code> em vez de um endereço válido. Se essa verificação for esquecida e o programa tentar usar esse ponteiro <code>NULL</code> como se apontasse para memória válida (por exemplo, <code>vetor[0] = 10;</code>), o resultado é um comportamento indefinido, tipicamente uma falha de segmentação (<i>Segmentation Fault</i>), que encerra o programa abruptamente.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Um <i>dangling pointer</i> é um ponteiro que continua armazenando um endereço de memória que já foi liberado (com <code>free()</code>), mas que a variável ainda "aponta" para lá, como se fosse válido. Atribuir <code>NULL</code> logo após o <code>free()</code> evita que esse ponteiro solto seja usado por engano mais adiante no código — qualquer tentativa de desreferenciar um ponteiro <code>NULL</code> falha de forma óbvia e imediata, em vez de causar um comportamento indefinido e potencialmente silencioso.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">void</span> alocarInteiro(<span style="color: #0000ff; font-weight: bold;">int</span> **p, <span style="color: #0000ff; font-weight: bold;">int</span> valor) {
+    *p = (<span style="color: #0000ff; font-weight: bold;">int</span> *) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(<span style="color: #0000ff; font-weight: bold;">int</span>));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (*p != NULL) {
+        **p = valor;
+    }
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> *x = NULL;
+
+    alocarInteiro(&amp;x, 7);
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (x != NULL) {
+        printf(<span style="color: #a31515;">"%d\n"</span>, *x);
+        free(x);
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+O parâmetro precisa ser <code>int **p</code> (e não <code>int *p</code>) porque a função precisa alterar o próprio ponteiro <code>x</code> de <code>main</code>, fazendo-o apontar para a memória recém-alocada — com apenas um nível de indireção, a função receberia só uma cópia do ponteiro, e a alocação seria perdida ao final da função.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+<code>argc</code> é a quantidade de argumentos recebidos pelo programa, incluindo o nome do próprio programa. <code>argv</code> é um vetor de <i>strings</i>, uma para cada argumento, sendo <code>argv[0]</code> sempre o nome (ou caminho) usado para executar o programa.
+</p>
+
+<p>
+Para <code>./programa a b c</code>, temos <code>argc == 4</code> (o nome do programa mais três argumentos), e <code>argv[0]</code> contém a <i>string</i> <code>"./programa"</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<p>
+O <code>const</code> impede que a função <b>modifique</b>, direta ou indiretamente, o <code>Aluno</code> apontado por <code>aluno</code> — ou seja, ela pode ler os campos (<code>aluno-&gt;nome</code>, <code>aluno-&gt;media</code>), mas não pode escrever neles.
+</p>
+
+<p>
+Se tentássemos executar <code>aluno-&gt;media = 10.0;</code> dentro dessa função, o compilador acusaria um <b>erro de compilação</b>, pois isso violaria a promessa feita pelo <code>const</code> na assinatura da função.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<p>
+<code>const Aluno *aluno</code> significa que o <code>Aluno</code> apontado <b>não pode ser alterado</b>, mas o próprio ponteiro <code>aluno</code> pode ser reatribuído para apontar para outro <code>Aluno</code>. Já <code>Aluno * const aluno</code> significa o oposto: o ponteiro <code>aluno</code> em si é constante (não pode ser feito apontar para outro endereço depois de inicializado), mas o <code>Aluno</code> para o qual ele aponta pode ser livremente modificado através dele.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 8</b></summary>
+
+<p>
+Exemplo de uso de <code>assert</code>: em uma função <code>float dividir(float a, float b)</code> que, pela regra de negócio do programa, nunca deveria ser chamada com <code>b == 0</code> (pois essa verificação já deveria ter sido feita antes, em outro ponto do código), poderíamos usar <code>assert(b != 0);</code> logo no início — se esse <code>assert</code> falhar, é sinal de um bug em outro lugar do programa, que permitiu uma chamada inválida.
+</p>
+
+<p>
+Exemplo de uso de <code>if</code>: ao ler, via <code>scanf</code>, a idade de uma pessoa digitada pelo próprio usuário do programa, é perfeitamente esperado que ele digite um valor inválido (negativo, ou um texto em vez de um número) — isso não é um bug do programa, e sim uma entrada externa que precisa ser validada com um <code>if</code>, exibindo uma mensagem de erro amigável em vez de encerrar o programa abruptamente.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 9</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdbool.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">bool</span> estaCheia(<span style="color: #0000ff; font-weight: bold;">int</span> ocupados, <span style="color: #0000ff; font-weight: bold;">int</span> capacidade) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> ocupados == capacidade;
+}
+</pre>
+
+<p>
+A mudança é só no tipo de retorno (<code>int</code> para <code>bool</code>) e na inclusão de <code>&lt;stdbool.h&gt;</code>; o corpo da função permanece idêntico, já que a expressão <code>ocupados == capacidade</code> já produzia um valor <code>0</code>/<code>1</code>, compatível com <code>bool</code>. A vantagem é deixar explícito, para quem lê a assinatura da função, que ela retorna um valor lógico (verdadeiro/falso), e não uma quantidade qualquer.
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

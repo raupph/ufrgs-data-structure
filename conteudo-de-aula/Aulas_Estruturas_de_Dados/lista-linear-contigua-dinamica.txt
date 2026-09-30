@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Material Extra - Lista Linear por Contiguidade Física (Dinâmica)</h1>
+</div>
+
+<p>
+Na Aula 2c vimos a implementação <b>estática</b> da lista linear por contiguidade física (<code>ListaContEst</code>), com um vetor de capacidade fixa (<code>Produto dados[CAPACIDADE];</code>) — essa é a versão padrão usada no restante da disciplina. Este material apresenta a versão <b>dinâmica</b> dessa mesma lista, chamada <code>ListaContDin</code>, em que o vetor é alocado em tempo de execução com <code>malloc()</code>. <b>Para os detalhes de cada operação (inserção, remoção, acesso, busca) e suas complexidades, veja a Aula 2c</b> — aqui focamos apenas no que muda entre as duas versões.
+</p>
+
+<hr />
+
+<h2>O que muda</h2>
+
+<p>
+A ideia central é simples: em vez de um vetor de tamanho fixo dentro da própria <i>struct</i>, o campo <code>dados</code> passa a ser um <b>ponteiro</b>, apontando para um bloco de memória alocado no heap. Isso permite que a capacidade da lista seja definida em tempo de execução (por exemplo, lida do usuário), em vez de fixada em tempo de compilação.
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th width="15%"></th>
+<th width="42%">Estática (Aula 2c)</th>
+<th width="43%">Dinâmica (este material)</th>
+</tr>
+<tr>
+<td><b>Campo <code>dados</code></b></td>
+<td><code>Produto dados[CAPACIDADE];</code></td>
+<td><code>Produto *dados;</code></td>
+</tr>
+<tr>
+<td><b>Onde mora</b></td>
+<td>Pilha (dentro da própria <i>struct</i>).</td>
+<td>Heap (apontado pela <i>struct</i>).</td>
+</tr>
+<tr>
+<td><b>Capacidade</b></td>
+<td>Fixa, constante <code>CAPACIDADE</code>.</td>
+<td>Definida em tempo de execução, guardada em um campo <code>capacidade</code>.</td>
+</tr>
+<tr>
+<td><b>Quem libera</b></td>
+<td>Ninguém — desaparece com a <i>struct</i>.</td>
+<td>O programador, com <code>free()</code>.</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>A estrutura</h2>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> cod;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">float</span> preco;
+} Produto;
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> tamanho;
+    <span style="color: #0000ff; font-weight: bold;">int</span> capacidade;
+    Produto *dados; <span style="color: #008000; font-style: italic;">// vetor alocado dinamicamente, em vez de tamanho fixo</span>
+} ListaContDin;
+</pre>
+
+<p>
+Note que, comparado à versão da Aula 2c, a única mudança na <i>struct</i> é trocar o vetor de tamanho fixo por um ponteiro, mais um novo campo <code>capacidade</code> para guardar o tamanho do bloco alocado (já que não existe mais uma constante <code>CAPACIDADE</code> fixa para consultar).
+</p>
+
+<hr />
+
+<h2>As funções permanecem praticamente iguais</h2>
+
+<p>
+Todas as operações (<code>inicializar</code>, <code>tamanho</code>, <code>inserir</code>, <code>acessar</code>, <code>buscar</code>, <code>remover</code>) têm exatamente a <b>mesma lógica</b> vista na Aula 2c — a única diferença de código é trocar toda ocorrência da constante <code>CAPACIDADE</code> pelo campo <code>l-&gt;capacidade</code>. Por exemplo, a verificação de lista cheia em <code>inserir</code> passa a ser:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;tamanho == l-&gt;capacidade) <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// lista cheia</span>
+</pre>
+
+<p>
+E o acesso a um elemento continua sendo <code>l-&gt;dados[pos]</code>, idêntico ao da versão estática — o compilador trata <code>l-&gt;dados[pos]</code> da mesma forma esteja <code>dados</code> declarado como vetor ou como ponteiro. Duas funções realmente mudam, pois são as únicas que lidam diretamente com a alocação: <code>inicializar</code> (que agora aloca o vetor) e <code>destruir</code> (que agora precisa liberá-lo).
+</p>
+
+<p>
+<b><code>inicializar</code></b> passa a receber a capacidade desejada como parâmetro, e aloca o vetor com <code>malloc()</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializar(ListaContDin *l, <span style="color: #0000ff; font-weight: bold;">int</span> capacidade) {
+    l-&gt;tamanho = 0;
+    l-&gt;capacidade = capacidade;
+    l-&gt;dados = (Produto *) malloc(capacidade * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(Produto));
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;dados == NULL) {
+        printf(<span style="color: #a31515;">"Erro: memoria insuficiente.\n"</span>);
+        exit(1);
+    }
+}
+</pre>
+
+<p>
+<b><code>destruir</code></b> precisa efetivamente liberar a memória alocada, e não apenas zerar o tamanho como na versão estática:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> destruir(ListaContDin *l) {
+    free(l-&gt;dados);
+    l-&gt;dados = NULL;
+    l-&gt;tamanho = 0;
+    l-&gt;capacidade = 0;
+}
+</pre>
+
+<hr />
+
+<h2>Exemplo de uso</h2>
+
+<p>
+O uso é praticamente idêntico ao da versão estática — a única diferença visível para quem usa a lista é que <code>inicializar</code> agora recebe a capacidade como argumento, e é obrigatório chamar <code>destruir</code> ao final para não vazar memória:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    ListaContDin l;
+    Produto p1 = {1, <span style="color: #a31515;">"Caneta"</span>, 2.50};
+    Produto p2 = {2, <span style="color: #a31515;">"Caderno"</span>, 15.90};
+    Produto p3 = {3, <span style="color: #a31515;">"Lapis"</span>, 1.20};
+
+    inicializar(&amp;l, 10); <span style="color: #008000; font-style: italic;">// aloca espaço para 10 produtos, em tempo de execução</span>
+
+    inserir(&amp;l, p1, 0); <span style="color: #008000; font-style: italic;">// lista: [Caneta]</span>
+    inserir(&amp;l, p2, 1); <span style="color: #008000; font-style: italic;">// lista: [Caneta, Caderno]</span>
+    inserir(&amp;l, p3, 1); <span style="color: #008000; font-style: italic;">// lista: [Caneta, Lapis, Caderno]</span>
+
+    printf(<span style="color: #a31515;">"Produto na posicao 1: %s\n"</span>, acessar(&amp;l, 1).nome);
+
+    destruir(&amp;l); <span style="color: #008000; font-style: italic;">// libera o vetor alocado — obrigatório na versão dinâmica</span>
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li>A lista dinâmica troca <code>Produto dados[CAPACIDADE];</code> por <code>Produto *dados;</code>, alocado com <code>malloc()</code>, e ganha um campo <code>capacidade</code>.</li>
+<li>Todas as operações mantêm a <b>mesma lógica</b> da Aula 2c — apenas trocando <code>CAPACIDADE</code> por <code>l-&gt;capacidade</code>.</li>
+<li>Apenas <code>inicializar</code> (que aloca) e <code>destruir</code> (que libera) realmente mudam de implementação.</li>
+<li>O acesso a um elemento (<code>l-&gt;dados[pos]</code>) é idêntico nas duas versões.</li>
+<li>Para detalhes de cada operação e suas complexidades, consulte a Aula 2c.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

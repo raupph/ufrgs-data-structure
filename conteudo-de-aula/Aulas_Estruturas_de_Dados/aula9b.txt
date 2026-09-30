@@ -1,0 +1,510 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 9b - Filas</h1>
+</div>
+
+<p>
+Nesta aula estudamos o TAD <b>Fila</b>, a segunda estrutura especializada desta unidade. Assim como a pilha (Aula 9a), a fila restringe onde inserções e remoções podem ocorrer — mas em vez de restringir tudo a uma única ponta, ela usa <b>duas</b> pontas diferentes: uma para inserir, outra para remover.
+</p>
+
+<hr />
+
+<h2>1. O TAD Fila</h2>
+
+<p>
+Uma <b>fila</b> (<i>queue</i>) é uma lista em que inserções ocorrem sempre em uma extremidade (o <b>final</b>, ou <i>rear</i>) e remoções sempre na outra (a <b>frente</b>, ou <i>front</i>). Isso faz com que o primeiro elemento inserido seja sempre o primeiro a ser removido — comportamento conhecido pela sigla <b>FIFO</b> (<i>First-In, First-Out</i>).
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+frente                                    final
+  |                                         |
+  v                                         v
++-------+     +-------+     +-------+     +-------+
+|   A   | --&gt; |   B   | --&gt; |   C   | --&gt; |   D   |
++-------+     +-------+     +-------+     +-------+
+ (sai daqui)                              (entra aqui)
+</pre>
+
+<p>
+A analogia mais comum é a de uma <b>fila de banco</b> ou de <b>fila de impressão</b>: quem chega primeiro é atendido primeiro; novas chegadas entram sempre no final da fila.
+</p>
+
+<h3>Operações</h3>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Operação</th>
+<th>Descrição</th>
+</tr>
+<tr>
+<td><b>enfileirar</b> (<i>enqueue</i>)</td>
+<td>Insere um novo elemento no final da fila.</td>
+</tr>
+<tr>
+<td><b>desenfileirar</b> (<i>dequeue</i>)</td>
+<td>Remove e retorna o elemento da frente da fila.</td>
+</tr>
+<tr>
+<td><b>frente</b> (<i>front</i>)</td>
+<td>Retorna o elemento da frente, sem removê-lo.</td>
+</tr>
+<tr>
+<td><b>estaVazia</b></td>
+<td>Indica se a fila não possui elementos.</td>
+</tr>
+<tr>
+<td><b>tamanho</b></td>
+<td>Retorna o número de elementos na fila.</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>2. Implementação por lista encadeada</h2>
+
+<p>
+Assim como fizemos com a pilha (Aula 9a), implementamos a fila principal desta disciplina sobre uma lista encadeada, sem limite de capacidade. Diferente da pilha, porém, a fila precisa de acesso rápido às <b>duas</b> pontas — a mesma ideia de <code>ListaDupla</code> (Aula 6a), mas com nodos <b>simplesmente</b> encadeados:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> cod;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">float</span> preco;
+} Produto;
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> str_Nodo Nodo;
+
+<span style="color: #0000ff; font-weight: bold;">struct</span> str_Nodo {
+    Nodo *prox;
+    Produto dado;
+};
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    Nodo *frente;
+    Nodo *final;
+} FilaEnc;
+</pre>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializa(FilaEnc *f) {
+    f-&gt;frente = NULL;
+    f-&gt;final = NULL;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> estaVazia(FilaEnc *f) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> f-&gt;frente == NULL;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> enfileira(FilaEnc *f, Produto valor) {
+    Nodo *novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo-&gt;dado = valor;
+    novo-&gt;prox = NULL;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (f-&gt;final != NULL)
+        f-&gt;final-&gt;prox = novo; <span style="color: #008000; font-style: italic;">// o antigo final passa a apontar para o novo nodo</span>
+    <span style="color: #0000ff; font-weight: bold;">else</span>
+        f-&gt;frente = novo;      <span style="color: #008000; font-style: italic;">// fila estava vazia: novo nodo também é a frente</span>
+
+    f-&gt;final = novo;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> desenfileira(FilaEnc *f, Produto *valorRemovido) {
+    Nodo *removido;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (estaVazia(f)) <span style="color: #008000; font-style: italic;">// underflow</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    removido = f-&gt;frente;
+    *valorRemovido = removido-&gt;dado;
+    f-&gt;frente = removido-&gt;prox;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (f-&gt;frente == NULL) <span style="color: #008000; font-style: italic;">// a fila ficou vazia</span>
+        f-&gt;final = NULL;
+
+    free(removido);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(FilaEnc *f) {
+    Nodo *aux = f-&gt;frente;
+    <span style="color: #0000ff; font-weight: bold;">int</span> contador = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        contador++;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> contador;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Atenção ao caso da fila ficar vazia.</b> Ao desenfileirar o último elemento, <code>f-&gt;frente</code> passa a ser <code>NULL</code> — mas se não zerarmos também <code>f-&gt;final</code>, ele continuaria "pendurado" apontando para um nodo já liberado (<i>dangling pointer</i>, como vimos no Material Extra — Conceitos de Linguagens de Programação), causando erro na próxima chamada de <code>enfileira</code>.
+</td>
+</tr>
+</table>
+
+<p>
+Com os dois ponteiros (<code>frente</code> e <code>final</code>) sempre disponíveis na <i>struct</i>, tanto <code>enfileira</code> quanto <code>desenfileira</code> são <code>O(1)</code>, e a fila cresce dinamicamente sem limite predefinido. Por isso adotamos esta implementação como principal para o TAD Fila.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>E a implementação por vetor?</b> Uma fila também pode ser implementada sobre um vetor de capacidade fixa, mas exige mais cuidado do que a pilha: se implementada de forma ingênua, <code>desenfileirar</code> se torna <code>O(n)</code> (por deslocar elementos) ou desperdiça espaço já liberado. A solução — uma <b>fila circular</b>, usando aritmética modular — é proposta como exercício ao final da aula.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>3. Aplicações</h2>
+
+<ul>
+<li><b>Fila de impressão:</b> documentos são impressos na ordem em que chegaram.</li>
+<li><b>Escalonamento de processos:</b> um sistema operacional pode atender processos na ordem de chegada (política <i>FCFS</i>, <i>First-Come, First-Served</i>).</li>
+<li><b>Atendimento e simulações:</b> filas de banco, call centers, simulações de tráfego.</li>
+<li><b>Buffers de dados:</b> comunicação entre um produtor e um consumidor que trabalham em velocidades diferentes (ex: leitura de rede, áudio/vídeo em <i>streaming</i>).</li>
+<li><b>Percurso em largura (BFS) em árvores e grafos:</b> um algoritmo que veremos mais adiante na disciplina, e que usa uma fila para visitar elementos "por camadas".</li>
+</ul>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Fila (FIFO):</b> inserções no <b>final</b>, remoções na <b>frente</b> — o primeiro elemento inserido é o primeiro removido.</li>
+<li><b>Operações:</b> <code>enfileira</code> (<i>enqueue</i>), <code>desenfileira</code> (<i>dequeue</i>), <code>frente</code> (<i>front</i>), <code>estaVazia</code>.</li>
+<li><b>Implementação principal: lista encadeada</b> (<code>FilaEnc</code>), guardando ponteiros para <code>frente</code> <b>e</b> <code>final</code> — todas as operações são <code>O(1)</code>, sem limite de capacidade. Cuidado especial ao esvaziar a fila (zerar <code>final</code> junto com <code>frente</code>).</li>
+<li><b>Também é possível implementar por vetor</b>, mas exige uma fila <b>circular</b> (aritmética modular) para evitar desperdício de espaço — veja o Exercício 8.</li>
+<li><b>Aplicações:</b> impressão, escalonamento por ordem de chegada, buffers, e (futuramente) percurso em largura (BFS).</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique, com suas próprias palavras, o que significa a sigla <b>FIFO</b> e como ela se relaciona com a operação <code>desenfileira</code>.
+</li>
+
+<li>
+Na implementação por lista encadeada, por que é necessário verificar se <code>f-&gt;frente == NULL</code> após um <code>desenfileira</code> bem-sucedido, e atualizar <code>f-&gt;final</code> nesse caso?
+</li>
+
+<li>
+Compare pilha (Aula 9a) e fila: as duas restringem onde inserções e remoções podem ocorrer, mas de formas diferentes. Explique essa diferença, e dê um exemplo de problema em que usar uma pilha no lugar de uma fila (ou vice-versa) produziria um resultado incorreto.
+</li>
+
+<li>
+Por que <code>enfileira</code> e <code>desenfileira</code> continuam sendo <code>O(1)</code> mesmo a fila guardando dois ponteiros (<code>frente</code> e <code>final</code>) em vez de um só, como na pilha?
+</li>
+
+<li>
+Implemente uma função <code>int filaParaVetor(FilaEnc *f, Produto vetor[])</code> que copie os elementos da fila (da frente para o final) para <code>vetor</code>, <b>sem remover</b> nenhum elemento da fila, e retorne quantos elementos foram copiados.
+</li>
+
+<li>
+Implemente uma função <code>void inverterFila(FilaEnc *f)</code> que inverta a ordem dos elementos de uma <code>FilaEnc</code>, utilizando uma <code>PilhaEnc</code> (Aula 9a) como estrutura auxiliar. Dica: desenfileire tudo empilhando, depois desempilhe enfileirando de volta.
+</li>
+
+<li>
+Implemente uma função <code>int filasIguais(FilaEnc *f1, FilaEnc *f2)</code> que retorne <code>1</code> se as duas filas possuem exatamente os mesmos elementos, na mesma ordem, ou <code>0</code> caso contrário — sem alterar (nem remover elementos de) nenhuma das duas filas.
+</li>
+
+<li>
+<b>Implemente a fila circular por vetor.</b> Defina a <i>struct</i> <code>FilaVet</code>, com um vetor de capacidade fixa (<code>CAPACIDADE</code>), um índice <code>frente</code> e uma quantidade <code>qtd</code> de elementos, e implemente <code>inicializa</code>, <code>estaVazia</code>, <code>enfileira</code> e <code>desenfileira</code>, usando o operador módulo (<code>%</code>) para calcular as posições. Explique por que a <i>struct</i> guarda <code>qtd</code> em vez de um índice <code>final</code>.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+FIFO significa <i>First-In, First-Out</i> — "o primeiro a entrar é o primeiro a sair". Isso se relaciona diretamente com <code>desenfileira</code>: essa operação sempre remove o elemento que está na fila há <b>mais tempo</b> (a frente), nunca o elemento inserido mais recentemente.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque, se a fila ficou vazia após a remoção, <code>f-&gt;final</code> ainda estaria apontando para o nodo que acabou de ser removido e liberado com <code>free()</code> — um <i>dangling pointer</i> (ver Material Extra — Conceitos de Linguagens de Programação). Se uma próxima chamada de <code>enfileira</code> tentasse usar <code>f-&gt;final-&gt;prox = novo</code> sem essa verificação, estaria escrevendo em um bloco de memória já liberado, um comportamento indefinido.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+A pilha restringe <b>tudo</b> a uma única extremidade (o topo): tanto inserção quanto remoção acontecem ali, gerando o comportamento LIFO. A fila usa <b>duas</b> extremidades diferentes — uma para inserir (final), outra para remover (frente) — gerando o comportamento FIFO.
+</p>
+
+<p>
+Um exemplo prático: em um sistema de atendimento (como uma fila de banco), usar uma <b>pilha</b> por engano faria com que o <b>último</b> cliente a chegar fosse sempre o primeiro a ser atendido, deixando os clientes mais antigos esperando indefinidamente enquanto novos clientes continuassem chegando — claramente incorreto para esse tipo de problema, que exige o comportamento FIFO de uma fila de verdade.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+Porque tanto <code>enfileira</code> quanto <code>desenfileira</code> continuam operando sobre um único ponteiro por vez, sem percorrer a lista: <code>enfileira</code> só lê e escreve em <code>f-&gt;final</code>, e <code>desenfileira</code> só lê e escreve em <code>f-&gt;frente</code>. Ter dois ponteiros na <i>struct</i>, em vez de um, não significa que uma operação precise mexer nos dois ao mesmo tempo em todos os casos (exceto quando a fila está vazia ou fica vazia) — cada ponteiro atende a uma ponta, de forma independente.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> filaParaVetor(FilaEnc *f, Produto vetor[]) {
+    Nodo *aux = f-&gt;frente;
+    <span style="color: #0000ff; font-weight: bold;">int</span> i = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        vetor[i] = aux-&gt;dado;
+        i++;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> i;
+}
+</pre>
+
+<p>
+Basta percorrer a lista com um ponteiro auxiliar, do mesmo jeito que já fazíamos em <code>imprime</code> (Aula 4) — sem alterar <code>f-&gt;frente</code> nem remover nenhum nodo, a fila permanece intacta após a chamada.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inverterFila(FilaEnc *f) {
+    PilhaEnc p;
+    Produto valor;
+
+    inicializa(&amp;p);
+
+    <span style="color: #008000; font-style: italic;">// esvazia a fila, empilhando cada elemento removido</span>
+    <span style="color: #0000ff; font-weight: bold;">while</span> (!estaVazia(f)) {
+        desenfileira(f, &amp;valor);
+        empilha(&amp;p, valor);
+    }
+
+    <span style="color: #008000; font-style: italic;">// desempilha de volta para a fila, já na ordem inversa</span>
+    <span style="color: #0000ff; font-weight: bold;">while</span> (!estaVazia(&amp;p)) {
+        desempilha(&amp;p, &amp;valor);
+        enfileira(f, valor);
+    }
+}
+</pre>
+
+<p>
+Como a pilha inverte a ordem (LIFO) e a fila preserva a ordem de entrada (FIFO), o truque é usar a pilha como uma etapa intermediária: tudo que sai da fila em uma ordem, entra na pilha e sai dela na ordem inversa — que é justamente o que queremos ao devolver os elementos para a fila.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> filasIguais(FilaEnc *f1, FilaEnc *f2) {
+    Nodo *aux1 = f1-&gt;frente;
+    Nodo *aux2 = f2-&gt;frente;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux1 != NULL &amp;&amp; aux2 != NULL) {
+        <span style="color: #008000; font-style: italic;">// structs não podem ser comparadas com "!=" em C; comparamos campo a campo</span>
+        <span style="color: #0000ff; font-weight: bold;">if</span> (aux1-&gt;dado.cod != aux2-&gt;dado.cod)
+            <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+        aux1 = aux1-&gt;prox;
+        aux2 = aux2-&gt;prox;
+    }
+
+    <span style="color: #008000; font-style: italic;">// iguais somente se as duas terminaram ao mesmo tempo (mesmo tamanho)</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> aux1 == NULL &amp;&amp; aux2 == NULL;
+}
+</pre>
+
+<p>
+Usamos dois ponteiros auxiliares, um para cada fila, avançando os dois em paralelo. Como <code>dado</code> é um <code>Produto</code> (uma <i>struct</i>), não podemos compará-lo diretamente com <code>!=</code> — por simplicidade, comparamos apenas o campo <code>cod</code>, assumindo que ele identifica o produto de forma única. Se em algum momento os códigos diferirem, as filas já não são iguais. Ao final, é preciso conferir se <b>ambos</b> os ponteiros chegaram a <code>NULL</code> ao mesmo tempo — se um deles ainda tiver elementos e o outro não, as filas têm tamanhos diferentes e não podem ser iguais.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 8</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#define</span> CAPACIDADE 5
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    Produto dados[CAPACIDADE];
+    <span style="color: #0000ff; font-weight: bold;">int</span> frente;
+    <span style="color: #0000ff; font-weight: bold;">int</span> qtd; <span style="color: #008000; font-style: italic;">// quantidade de elementos atualmente na fila</span>
+} FilaVet;
+
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializa(FilaVet *f) {
+    f-&gt;frente = 0;
+    f-&gt;qtd = 0;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> estaVazia(FilaVet *f) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> f-&gt;qtd == 0;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> enfileira(FilaVet *f, Produto valor) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> posicaoFinal;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (f-&gt;qtd == CAPACIDADE) <span style="color: #008000; font-style: italic;">// overflow</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    posicaoFinal = (f-&gt;frente + f-&gt;qtd) % CAPACIDADE; <span style="color: #008000; font-style: italic;">// "dá a volta" no vetor</span>
+    f-&gt;dados[posicaoFinal] = valor;
+    f-&gt;qtd++;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> desenfileira(FilaVet *f, Produto *valorRemovido) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (estaVazia(f)) <span style="color: #008000; font-style: italic;">// underflow</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    *valorRemovido = f-&gt;dados[f-&gt;frente];
+    f-&gt;frente = (f-&gt;frente + 1) % CAPACIDADE; <span style="color: #008000; font-style: italic;">// "dá a volta" também aqui</span>
+    f-&gt;qtd--;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+A <i>struct</i> guarda <code>qtd</code> em vez de um índice <code>final</code> porque, em uma fila circular, a condição <code>frente == final</code> seria <b>ambígua</b>: poderia significar tanto "fila vazia" quanto "fila cheia" (quando o índice deu a volta inteira no vetor e coincidiu de novo com <code>frente</code>). Guardar a quantidade de elementos diretamente resolve essa ambiguidade: fila vazia é <code>qtd == 0</code>, fila cheia é <code>qtd == CAPACIDADE</code>, independente da posição relativa dos índices.
+</p>
+
+</details>
+
+<hr />
+
+<h2>Código para Download</h2>
+
+<p>
+O TAD <code>FilaEnc</code> completo, exatamente como visto nesta aula, dividido em interface (<code>filaEnc.h</code>) e implementação (<code>filaEnc.c</code>), junto com um <code>main.c</code> de exemplo:
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<a href="filaEnc.zip">filaEnc.zip</a> — <code>filaEnc.h</code>, <code>filaEnc.c</code> e <code>main.c</code>.
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

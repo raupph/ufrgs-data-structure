@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Material Extra - Listas Recursivas</h1>
+</div>
+
+<p>
+Para fechar esta unidade sobre listas encadeadas, vamos olhar para elas sob uma perspectiva diferente: uma lista encadeada é, por natureza, uma estrutura <b>recursiva</b>. Veremos como isso permite reescrever as operações vistas na Aula 4 usando recursão em vez de laços.
+</p>
+
+<hr />
+
+<h2>1. Por que uma lista é recursiva?</h2>
+
+<p>
+Lembrando a Aula 4: uma lista simplesmente encadeada representada por <code>Nodo *lista</code> é sempre uma destas duas coisas:
+</p>
+
+<ul>
+<li>a lista <b>vazia</b> (<code>lista == NULL</code>); <b>ou</b></li>
+<li>um <b>nodo</b>, contendo um dado e um ponteiro <code>prox</code> que é, ele mesmo, o início de <b>outra lista</b> (menor).</li>
+</ul>
+
+<p>
+Essa definição é praticamente idêntica à ideia de recursão vista no laboratório de revisão de linguagem C (Material Extra, <code>contarAprovados</code>): um <b>caso base</b> (a lista vazia) e um <b>caso recursivo</b> (um nodo mais uma lista menor). Isso sugere que qualquer operação sobre listas pode ser escrita de forma recursiva, tratando o <code>prox</code> de um nodo como "o restante da lista".
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Nota.</b> Nesta aula, por simplicidade, voltamos a representar a lista diretamente como <code>Nodo *lista</code> (sem a <i>struct</i> <code>ListaEnc</code> da Aula 4) — a "Observação" ao final da Aula 4 mostra por que isso muda a forma como as funções alteram o início da lista (via retorno, aqui).
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>2. Operações recursivas sobre listas</h2>
+
+<h3><code>tamanho</code></h3>
+
+<p>
+Comparando com a versão iterativa da Aula 4:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">// Versão iterativa (Aula 4)</span>
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(Nodo *lista) {
+    Nodo *aux = lista;
+    <span style="color: #0000ff; font-weight: bold;">int</span> contador = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        contador++;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> contador;
+}
+</pre>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #008000; font-style: italic;">// Versão recursiva</span>
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(Nodo *lista) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista == NULL) <span style="color: #008000; font-style: italic;">// caso base: lista vazia tem tamanho 0</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1 + tamanho(lista-&gt;prox); <span style="color: #008000; font-style: italic;">// caso recursivo: 1 (este nodo) + o restante</span>
+}
+</pre>
+
+<h3><code>imprime</code></h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprime(Nodo *lista) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista == NULL) <span style="color: #008000; font-style: italic;">// caso base: nada a imprimir</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span>;
+
+    printf(<span style="color: #a31515;">"%d - %s - %.2f\n"</span>, lista-&gt;dado.cod, lista-&gt;dado.nome, lista-&gt;dado.preco);
+    imprime(lista-&gt;prox); <span style="color: #008000; font-style: italic;">// caso recursivo: imprime o restante da lista</span>
+}
+</pre>
+
+<h3><code>consulta</code></h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Produto consulta(Nodo *lista, <span style="color: #0000ff; font-weight: bold;">int</span> cod) {
+    Produto prod = {-1, <span style="color: #a31515;">""</span>, 0.0f};
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista == NULL) <span style="color: #008000; font-style: italic;">// caso base: não encontrado</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> prod;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista-&gt;dado.cod == cod) <span style="color: #008000; font-style: italic;">// caso base: encontrado neste nodo</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> lista-&gt;dado;
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> consulta(lista-&gt;prox, cod); <span style="color: #008000; font-style: italic;">// caso recursivo: procura no restante</span>
+}
+</pre>
+
+<h3><code>insereInicio</code></h3>
+
+<p>
+Inserir no início não é realmente "recursivo" (o novo nodo não depende do restante da lista para ser calculado), mas se encaixa perfeitamente na definição: a nova lista é um nodo cujo <code>prox</code> é a lista <b>inteira</b> anterior:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Nodo* insereInicio(Nodo *lista, Produto prod) {
+    Nodo *novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> lista;
+
+    novo-&gt;dado = prod;
+    novo-&gt;prox = lista; <span style="color: #008000; font-style: italic;">// o restante da lista, sem nenhuma alteração</span>
+    <span style="color: #0000ff; font-weight: bold;">return</span> novo;
+}
+</pre>
+
+<h3><code>destroi</code></h3>
+
+<p>
+Este é o caso mais interessante: para destruir a lista, primeiro destruímos o <b>restante</b> (recursivamente) e só depois liberamos o nodo atual — a ordem importa, pois precisamos do ponteiro <code>prox</code> ainda válido para poder chamar a recursão antes do <code>free()</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Nodo* destroi(Nodo *lista) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista == NULL) <span style="color: #008000; font-style: italic;">// caso base: nada a destruir</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> NULL;
+
+    destroi(lista-&gt;prox); <span style="color: #008000; font-style: italic;">// destrói o restante primeiro</span>
+    free(lista);
+    <span style="color: #0000ff; font-weight: bold;">return</span> NULL;
+}
+</pre>
+
+<hr />
+
+<h2>3. O custo escondido da recursão</h2>
+
+<p>
+As versões recursivas costumam ser mais curtas e, para quem já entende a definição recursiva de lista, mais diretas de ler. Mas elas têm um custo que não aparece na complexidade Big-O: relembrando o Material Extra — Conceitos de Linguagens de Programação, cada chamada recursiva empilha um novo <b>quadro de ativação</b> na pilha.
+</p>
+
+<p>
+Para uma lista com <code>n</code> elementos, uma função como <code>tamanho</code> ou <code>destroi</code> empilha <code>n</code> chamadas recursivas antes de começar a retornar. Se <code>n</code> for muito grande, isso pode esgotar o espaço da pilha, causando um <i>stack overflow</i> — exatamente o mesmo risco discutido no Material Extra — Conceitos de Linguagens de Programação para recursões profundas.
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Recursivo × iterativo.</b> Ambas as versões de <code>tamanho</code> são <code>O(n)</code> em número de operações. A versão recursiva, porém, também consome <code>O(n)</code> de espaço extra na pilha (um quadro por chamada), enquanto a versão iterativa (com <code>while</code>) usa apenas espaço constante, <code>O(1)</code>, independente do tamanho da lista.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Uma lista é recursiva por natureza:</b> ou é vazia (<code>NULL</code>), ou é um nodo mais uma lista menor (<code>prox</code>).</li>
+<li><b>Toda operação iterativa da Aula 4 tem uma versão recursiva equivalente</b>, trocando o laço por um caso base (lista vazia) e um caso recursivo (processa o nodo atual, chama a função para <code>lista-&gt;prox</code>).</li>
+<li><b><code>destroi</code> recursivo</b> precisa destruir o restante da lista <b>antes</b> de liberar o nodo atual, já que o <code>prox</code> deixa de ser acessível após o <code>free()</code>.</li>
+<li><b>Custo escondido:</b> versões recursivas usam <code>O(n)</code> de espaço na pilha de chamadas, além do tempo <code>O(n)</code>, o que pode causar <i>stack overflow</i> em listas muito grandes — a versão iterativa não tem esse problema.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Identifique o caso base e o caso recursivo da função <code>consulta</code> apresentada nesta aula.
+</li>
+
+<li>
+Por que, na função <code>destroi</code> recursiva, é necessário chamar <code>destroi(lista-&gt;prox)</code> <b>antes</b> de <code>free(lista)</code>, e não depois?
+</li>
+
+<li>
+Explique por que a versão recursiva de <code>tamanho</code> consome <code>O(n)</code> de espaço na pilha, enquanto a versão iterativa consome apenas <code>O(1)</code>, mesmo as duas tendo a mesma complexidade de tempo.
+</li>
+
+<li>
+Implemente uma versão recursiva de <code>int soma(Nodo *lista)</code>, que retorne a soma dos preços (arredondados para inteiro) de todos os produtos da lista.
+</li>
+
+<li>
+Implemente uma versão recursiva de <code>Nodo* insereFim(Nodo *lista, Produto prod)</code>. Dica: pense em qual é o caso base (lista vazia) e como a chamada recursiva deveria alterar apenas o <code>prox</code> do resultado retornado.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Existem dois casos base: <code>lista == NULL</code> (não encontrado, retorna um produto "vazio") e <code>lista-&gt;dado.cod == cod</code> (encontrado no nodo atual, retorna <code>lista-&gt;dado</code>). O caso recursivo é o <code>return consulta(lista-&gt;prox, cod);</code>, que delega a busca para o restante da lista quando o código não é o do nodo atual.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque, depois de chamar <code>free(lista)</code>, o ponteiro <code>lista-&gt;prox</code> não pode mais ser lido com segurança — o bloco de memória já foi liberado. Se a chamada recursiva viesse depois do <code>free()</code>, tentaríamos acessar <code>lista-&gt;prox</code> (dentro da chamada recursiva) em um nodo já liberado, o mesmo tipo de erro discutido na Aula 4 para a versão iterativa de <code>destroi</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Porque cada chamada recursiva de <code>tamanho</code> permanece "aberta" na pilha, esperando o resultado da chamada seguinte para poder calcular <code>1 + tamanho(lista-&gt;prox)</code> — para uma lista de <code>n</code> nodos, isso significa <code>n</code> quadros de ativação empilhados simultaneamente antes do primeiro retorno acontecer. Já a versão iterativa usa sempre as mesmas variáveis (<code>aux</code>, <code>contador</code>) dentro de uma única chamada de função, sem empilhar nada a mais conforme a lista cresce.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> soma(Nodo *lista) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista == NULL) <span style="color: #008000; font-style: italic;">// caso base: lista vazia soma 0</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> (<span style="color: #0000ff; font-weight: bold;">int</span>) lista-&gt;dado.preco + soma(lista-&gt;prox); <span style="color: #008000; font-style: italic;">// este nodo + o restante</span>
+}
+</pre>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Nodo* insereFim(Nodo *lista, Produto prod) {
+    <span style="color: #0000ff; font-weight: bold;">if</span> (lista == NULL) { <span style="color: #008000; font-style: italic;">// caso base: lista vazia, novo nodo é o único (e o fim)</span>
+        Nodo *novo = (Nodo*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Nodo));
+        <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+            <span style="color: #0000ff; font-weight: bold;">return</span> NULL;
+
+        novo-&gt;dado = prod;
+        novo-&gt;prox = NULL;
+        <span style="color: #0000ff; font-weight: bold;">return</span> novo;
+    }
+
+    <span style="color: #008000; font-style: italic;">// caso recursivo: mantém este nodo, insere no restante da lista</span>
+    lista-&gt;prox = insereFim(lista-&gt;prox, prod);
+    <span style="color: #0000ff; font-weight: bold;">return</span> lista;
+}
+</pre>
+
+<p>
+A cada chamada recursiva, o nodo atual permanece o mesmo — apenas seu <code>prox</code> é atualizado para o resultado de inserir no restante da lista, até que a recursão alcance a lista vazia (o verdadeiro final), onde o novo nodo é finalmente criado.
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Material Extra - Conceitos de Linguagens de Programação</h1>
+</div>
+
+<p>
+Antes de avançarmos para as estruturas de dados propriamente ditas (pilhas, filas, listas, árvores), vale a pena entender um pouco melhor como um programa se organiza na memória. Esses conceitos explicam <i>por que</i> algumas estruturas de dados são mais rápidas ou mais lentas que outras, o que será importante quando começarmos a falar de complexidade.
+</p>
+
+<hr />
+
+<h2>Memória: <i>stack</i> × heap</h2>
+
+<p>
+Em C, variáveis comuns (locais, vetores de tamanho fixo) ficam na <b>pilha</b> (<i>stack</i>), e memória alocada com <code>malloc()</code> fica no <b>heap</b>. As duas regiões diferem no gerenciamento e no tempo de vida dos dados:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Região</th>
+<th>Gerenciamento</th>
+<th>Tempo de vida do dado</th>
+</tr>
+<tr>
+<td><b>Pilha</b></td>
+<td>Automático — associado ao início/fim de cada função.</td>
+<td>Termina quando a função retorna.</td>
+</tr>
+<tr>
+<td><b>Heap</b></td>
+<td>Manual, através de <code>malloc()</code> e <code>free()</code>.</td>
+<td>Dura até que <code>free()</code> seja chamado explicitamente.</td>
+</tr>
+</table>
+
+<p>
+Essa diferença de tempo de vida é o motivo pelo qual estruturas de dados dinâmicas (listas, pilhas, filas, árvores) precisam viver no heap: uma variável da pilha deixa de existir assim que a função retorna, mas uma estrutura de dados normalmente precisa continuar existindo depois disso.
+</p>
+
+<h3>A pilha de chamadas de função</h3>
+
+<p>
+Cada vez que uma função é chamada, um novo bloco (chamado <i>quadro de ativação</i>, ou <i>stack frame</i>) é empilhado, contendo os parâmetros e variáveis locais daquela chamada. Quando a função retorna, esse bloco é desempilhado e suas variáveis deixam de existir. Já vimos isso na prática na função recursiva <code>contarAprovados</code> do laboratório de revisão de linguagem C (Material Extra): cada chamada recursiva empilha um novo quadro com o seu próprio <code>n</code>, até chegar ao caso base:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+contarAprovados(turma, 3)      <span style="color: #008000; font-style: italic;">// empilha quadro com n=3</span>
+  contarAprovados(turma, 2)    <span style="color: #008000; font-style: italic;">// empilha quadro com n=2</span>
+    contarAprovados(turma, 1)  <span style="color: #008000; font-style: italic;">// empilha quadro com n=1</span>
+      contarAprovados(turma, 0) <span style="color: #008000; font-style: italic;">// caso base, retorna e desempilha</span>
+</pre>
+
+<p>
+Uma recursão sem caso base (ou com profundidade excessiva) empilha quadros indefinidamente e esgota o espaço da pilha, causando um erro conhecido como <i>stack overflow</i>.
+</p>
+
+<h3>Variáveis globais</h3>
+
+<p>
+Nem toda variável vive na pilha ou no heap: variáveis <b>globais</b> (declaradas fora de qualquer função) ficam em uma região separada da memória, e existem durante <b>toda a execução</b> do programa — não são criadas nem destruídas a cada chamada de função:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> totalAlunosCadastrados = 0; <span style="color: #008000; font-style: italic;">// global: existe do início ao fim do programa</span>
+
+<span style="color: #0000ff; font-weight: bold;">void</span> lerAluno(Aluno *aluno) {
+    <span style="color: #008000; font-style: italic;">// ...</span>
+    totalAlunosCadastrados++; <span style="color: #008000; font-style: italic;">// acessível de qualquer função</span>
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Aviso.</b> Apesar de existirem, variáveis globais <b>não devem ser usadas</b> nos programas desta disciplina (nem, em geral, na prática). Como podem ser acessadas e alteradas por qualquer função, elas tornam o comportamento do programa mais difícil de entender e de depurar. Prefira sempre passar dados entre funções através de parâmetros e retornos.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Valor × ponteiro</h2>
+
+<p>
+Quando copiamos uma <i>struct</i> <b>por valor</b> (ex: <code>void imprimirAluno(Aluno aluno)</code>), copiamos todos os seus bytes. Quando copiamos um <b>ponteiro</b> (<code>Aluno *aluno</code>), copiamos apenas o endereço — poucos bytes, independente do tamanho da <i>struct</i> apontada.
+</p>
+
+<p>
+Essa diferença de custo é um dos motivos pelos quais estruturas de dados costumam ser manipuladas por ponteiro: uma lista encadeada, por exemplo, nada mais é do que <i>structs</i> contendo um dado e um ponteiro para o próximo nó.
+</p>
+
+<p>
+Vimos exatamente essa diferença no laboratório de revisão de linguagem C (Material Extra): <code>imprimirAluno(Aluno aluno)</code> recebe uma <b>cópia inteira</b> da <i>struct</i> (nome, matrícula e média), enquanto <code>atualizarMedia(Aluno *aluno, float media)</code> recebe apenas o <b>endereço</b> do aluno original — por isso consegue alterá-lo de verdade, e a um custo bem menor de cópia.
+</p>
+
+<hr />
+
+<h2>Localidade de memória</h2>
+
+<p>
+Um vetor (estático ou dinâmico) ocupa posições <b>contíguas</b> na memória, o que é muito eficiente para o processador. Já uma lista encadeada, formada por nós ligados por ponteiros, pode ter seus elementos espalhados em qualquer lugar do heap.
+</p>
+
+<p>
+Essa diferença de organização é uma das razões pelas quais o desempenho real de uma estrutura de dados pode variar mesmo quando duas operações têm a mesma complexidade teórica.
+</p>
+
+<p>
+É o caso do vetor <code>turma</code> usado no laboratório de revisão de linguagem C (Material Extra), na Aula 1b e na Aula 3. Tanto faz se ele é estático (<code>Aluno turma[MAX];</code>, na pilha) ou alocado dinamicamente (<code>Aluno *turma = malloc(n * sizeof(Aluno));</code>, no heap): em <b>ambos os casos</b>, o vetor inteiro é reservado de uma vez, então seus elementos ficam lado a lado na memória, em endereços consecutivos:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Aluno turma[3];              <span style="color: #008000; font-style: italic;">// vetor estático, na pilha</span>
+Aluno *turma = malloc(3 * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(Aluno)); <span style="color: #008000; font-style: italic;">// vetor dinâmico, no heap</span>
+
+Endereço      Conteúdo
+E1000         turma[0]   <span style="color: #008000; font-style: italic;">// sizeof(Aluno) = 60 bytes, por exemplo</span>
+E1060         turma[1]   <span style="color: #008000; font-style: italic;">// E1000 + 60</span>
+E1120         turma[2]   <span style="color: #008000; font-style: italic;">// E1060 + 60</span>
+</pre>
+
+<p>
+A única diferença entre as duas versões é <b>onde</b> esse bloco contíguo fica (pilha ou heap) e <b>quem</b> o libera (automático ou <code>free()</code>) — a forma de acessar <code>turma[i]</code> é idêntica nos dois casos, porque em ambos o compilador só precisa somar <code>i * sizeof(Aluno)</code> ao endereço inicial.
+</p>
+
+<p>
+Isso é bem diferente do que acontece quando <b>cada elemento é alocado separadamente</b>, um de cada vez, como faríamos ao montar uma lista encadeada — nesse caso, nada garante que os blocos fiquem próximos na memória:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Aluno *a0 = malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Aluno)); <span style="color: #008000; font-style: italic;">// primeira chamada a malloc()</span>
+Aluno *a1 = malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Aluno)); <span style="color: #008000; font-style: italic;">// segunda chamada a malloc()</span>
+Aluno *a2 = malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(Aluno)); <span style="color: #008000; font-style: italic;">// terceira chamada a malloc()</span>
+
+Endereço      Conteúdo
+E1000         *a0
+E19000        *a1        <span style="color: #008000; font-style: italic;">// bem longe de a0</span>
+E8500         *a2        <span style="color: #008000; font-style: italic;">// entre a0 e a1, sem relação fixa</span>
+</pre>
+
+<p>
+Para "andar" de <code>a0</code> até <code>a1</code> não basta somar um deslocamento fixo ao endereço, como no vetor — é preciso guardar explicitamente o endereço do próximo elemento (um ponteiro dentro da <i>struct</i>), que é exatamente a ideia por trás de uma lista encadeada.
+</p>
+
+<hr />
+
+<h2>Tipagem em C</h2>
+
+<p>
+C é uma linguagem de <b>tipagem estática</b>: o tipo de cada variável é fixado em tempo de compilação e nunca muda durante a execução.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> x = 10;
+x = <span style="color: #a31515;">"dez"</span>; <span style="color: #008000; font-style: italic;">// erro de compilação: "x" é (e sempre será) int</span>
+</pre>
+
+<p>
+Ainda assim, o programador pode forçar conversões entre tipos através de <i>casts</i>, mesmo entre ponteiros de tipos diferentes. É esse recurso que sustenta o uso de <code>void *</code>: um ponteiro genérico, sem tipo definido, que precisa ser convertido (<i>cast</i>) para o tipo correto antes de ser desreferenciado. Foi assim que implementamos <code>imprimirVetor</code> na Aula 3, recebendo qualquer vetor como <code>void *vetor</code> e fazendo o <i>cast</i> correto dentro da função <code>imprimirInt</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimirInt(<span style="color: #0000ff; font-weight: bold;">void</span> *elemento) {
+    printf(<span style="color: #a31515;">"%d "</span>, *((<span style="color: #0000ff; font-weight: bold;">int</span> *) elemento)); <span style="color: #008000; font-style: italic;">// cast de void * para int *</span>
+}
+</pre>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Pilha:</b> gerenciada automaticamente pelo compilador; cada chamada de função empilha um quadro de ativação, destruído quando a função retorna.</li>
+<li><b>Heap:</b> gerenciada manualmente com <code>malloc()</code>/<code>free()</code>; o dado sobrevive até ser liberado.</li>
+<li><b>Variáveis globais:</b> existem durante toda a execução do programa, mas não devem ser usadas, pois dificultam entender e depurar o código.</li>
+<li><b>Valor × ponteiro:</b> copiar por valor copia todos os bytes da <i>struct</i>; copiar um ponteiro copia apenas o endereço.</li>
+<li><b>Localidade de memória:</b> vetores são contíguos (acesso eficiente); estruturas ligadas por ponteiros podem estar espalhadas pelo heap.</li>
+<li><b>Tipagem em C:</b> estática (tipo fixo, checado na compilação), mas com <i>casts</i> permitidos — daí a necessidade de <code>void *</code> para código genérico.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique por que uma função nunca deve retornar um ponteiro para uma variável local (alocada na pilha) dessa mesma função.
+</li>
+
+<li>
+Considere uma função recursiva sem caso base (ou com um caso base que nunca é alcançado). O que acontece com a pilha de chamadas nesse cenário? Como se chama o erro resultante?
+</li>
+
+<li>
+Por que variáveis globais não devem ser usadas, mesmo sendo tecnicamente permitidas em C? Dê um cenário concreto em que uma variável global tornaria um bug mais difícil de encontrar.
+</li>
+
+<li>
+Explique, em termos de bytes copiados, por que <code>void atualizarMedia(Aluno *aluno, float media)</code> é mais barata de chamar do que seria uma versão hipotética <code>Aluno atualizarMedia(Aluno aluno, float media)</code> que recebesse e retornasse o aluno por valor.
+</li>
+
+<li>
+Por que um vetor de <i>structs</i> tem melhor localidade de memória do que uma coleção de <i>structs</i> alocadas uma a uma, individualmente, com várias chamadas separadas de <code>malloc()</code>?
+</li>
+
+<li>
+C é uma linguagem de tipagem estática. Isso significa que o compilador sempre impede erros relacionados a tipos? Justifique usando o conceito de <i>cast</i>.
+</li>
+
+<li>
+Escreva uma função em C, <code>void imprimirFloat(void *elemento)</code>, análoga a <code>imprimirInt</code>, capaz de ser usada com a função <code>imprimirVetor</code> vista na Aula 3 para imprimir um vetor de <code>float</code>.
+</li>
+
+<li>
+Escreva um pequeno trecho de código em C que declare um vetor de 4 posições de <code>double</code> na pilha, e imprima o endereço de cada posição (usando <code>&amp;vetor[i]</code> e <code>printf</code> com <code>%p</code>). O que se espera observar na diferença entre os endereços impressos?
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque uma variável local vive em um quadro de ativação da pilha, que é destruído automaticamente assim que a função retorna. Um ponteiro para essa variável continuaria "apontando" para aquele endereço, mas o conteúdo ali pode ser sobrescrito a qualquer momento pela próxima função chamada — resultando em um comportamento indefinido (um caso de <i>dangling pointer</i>, como vimos nas Aulas 1d e 3b).
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Cada chamada recursiva empilha um novo quadro de ativação, e como o caso base nunca é alcançado, esses quadros continuam se acumulando indefinidamente, sem nunca serem desempilhados. Isso esgota o espaço reservado para a pilha, causando um erro conhecido como <i>stack overflow</i>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Porque uma variável global pode ser lida e alterada por <b>qualquer função</b> do programa, sem que isso apareça na assinatura dessas funções (parâmetros e retorno). Isso torna difícil saber, só de olhar para uma função, quais dados ela realmente utiliza ou modifica.
+</p>
+
+<p>
+Um cenário concreto: imagine uma variável global <code>int totalAlunosCadastrados</code> sendo incrementada tanto em <code>lerAluno</code> quanto, por engano, em uma outra função <code>imprimirAluno</code> (que deveria apenas exibir dados, não alterar contadores). O valor final ficaria incorreto, e como a alteração pode ocorrer em qualquer lugar do código, encontrar o ponto exato do bug exigiria revisar o programa inteiro, em vez de apenas a função responsável.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+A versão com ponteiro (<code>Aluno *aluno</code>) copia apenas o <b>endereço</b> do aluno — tipicamente 8 bytes em uma máquina de 64 bits — independentemente do tamanho da <i>struct</i> <code>Aluno</code>.
+</p>
+
+<p>
+Já a versão hipotética por valor precisaria copiar a <i>struct</i> inteira (nome, matrícula, média) na entrada da função, e copiá-la novamente por completo no retorno — duas cópias de todos os bytes da <i>struct</i>, em vez de uma única cópia de um endereço pequeno e de tamanho fixo.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+Um vetor de <i>structs</i> (estático ou alocado com um único <code>malloc()</code>) reserva um bloco <b>contíguo</b> de memória de uma só vez, então todos os seus elementos ficam lado a lado, em endereços consecutivos.
+</p>
+
+<p>
+Já quando cada <i>struct</i> é alocada separadamente (um <code>malloc()</code> por elemento), cada chamada pode devolver um endereço em qualquer lugar do heap, sem relação fixa com as demais — os elementos ficam potencialmente espalhados pela memória, prejudicando a localidade de acesso do processador.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<p>
+Não. A tipagem estática garante apenas que o <b>tipo declarado</b> de cada variável seja fixo e conhecido em tempo de compilação — mas C permite <i>casts</i> explícitos entre tipos de ponteiros diferentes (como converter um <code>void *</code> para <code>int *</code>), mesmo quando o dado apontado não é realmente do tipo para o qual se está convertendo. O compilador não impede esse tipo de erro; ele só garante que, sem um <i>cast</i> explícito, o tipo declarado de uma variável não muda sozinho.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimirFloat(<span style="color: #0000ff; font-weight: bold;">void</span> *elemento) {
+    printf(<span style="color: #a31515;">"%.2f "</span>, *((<span style="color: #0000ff; font-weight: bold;">float</span> *) elemento)); <span style="color: #008000; font-style: italic;">// cast de void * para float *</span>
+}
+</pre>
+
+<p>
+Uso esperado: <code>imprimirVetor(vf, 5, sizeof(float), imprimirFloat);</code>
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 8</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">double</span> vetor[4];
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; 4; i++) {
+        printf(<span style="color: #a31515;">"Endereco de vetor[%d]: %p\n"</span>, i, (<span style="color: #0000ff; font-weight: bold;">void</span> *) &amp;vetor[i]);
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Espera-se que os endereços impressos cresçam em incrementos fixos, iguais a <code>sizeof(double)</code> (tipicamente 8 bytes) — por exemplo, <code>0x1000</code>, <code>0x1008</code>, <code>0x1010</code>, <code>0x1018</code> — confirmando que o vetor ocupa posições contíguas na memória, como discutido em "Localidade de memória".
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

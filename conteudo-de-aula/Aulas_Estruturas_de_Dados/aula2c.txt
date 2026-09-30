@@ -1,0 +1,755 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 2c - Listas por Contiguidade Física</h1>
+</div>
+
+<p>
+Nesta aula iniciamos o estudo das <b>Listas Lineares</b>, a primeira de diversas estruturas de dados que veremos ao longo da disciplina.
+</p>
+
+<hr />
+
+<h2>1. Listas Lineares</h2>
+
+<p>
+Uma lista linear é uma <b>sequência de nodos</b> com as seguintes características:
+</p>
+
+<ul>
+<li>Simples manipulação;</li>
+<li>Possui uma relação de ordem entre os nodos;</li>
+<li>É sequencial;</li>
+<li>A estrutura interna de cada nodo é abstraída (não importa, do ponto de vista da lista, o que cada nodo guarda);</li>
+<li>Todos os elementos são do mesmo tipo.</li>
+</ul>
+
+<p>
+Podemos visualizar uma lista como uma sequência de nodos ligados por uma relação de ordem, onde cada nodo guarda um conjunto de informações:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+(a) - (b) - (c) - (d) ... (z)
+
+           |
+           v
+
++--------+----+------+-------+-------+
+| Número | RG | Nome | Nasc. | Cargo |
++--------+----+------+-------+-------+
+</pre>
+
+<hr />
+
+<h2>2. Definição formal</h2>
+
+<p>
+Uma lista linear é uma <b>coleção n &gt;= 0 de nodos</b> <code>x[0], x[1], ..., x[n-1]</code>, cujas propriedades estruturais relevantes envolvem as posições relativas dos nodos:
+</p>
+
+<ul>
+<li><code>x[0]</code> é o primeiro nodo e <code>x[n-1]</code> é o último nodo;</li>
+<li><code>x[k]</code> é precedido por <code>x[k-1]</code> e sucedido por <code>x[k+1]</code>;</li>
+<li><code>n = 0</code> representa a lista vazia.</li>
+</ul>
+
+<hr />
+
+<h2>3. Aplicações</h2>
+
+<ul>
+<li>Notas de alunos;</li>
+<li>Cadastro de funcionários de uma empresa;</li>
+<li>Dias da semana;</li>
+<li>Letras de uma palavra;</li>
+<li>Cartas de baralho.</li>
+</ul>
+
+<hr />
+
+<h2>4. Operações</h2>
+
+<ul>
+<li>Criação;</li>
+<li>Destruição;</li>
+<li><b>Inserção de um nodo na i-ésima posição;</b></li>
+<li><b>Exclusão do i-ésimo nodo;</b></li>
+<li><b>Acesso ao i-ésimo nodo;</b></li>
+<li>Alteração do i-ésimo nodo;</li>
+<li>Concatenação de duas listas;</li>
+<li>Cópia da lista;</li>
+<li><b>Localizar nodo a partir da informação (busca);</b></li>
+<li>Contar elementos da lista.</li>
+</ul>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>As operações em destaque acima são as mais comuns — e por isso precisam ser eficientes.</b>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>5. Relação com TAD</h2>
+
+<p>
+Uma lista linear é uma <b>implementação concreta</b> do TAD Lista (visto na Aula 2b, com seus dois papéis: dados + operações):
+</p>
+
+<ul>
+<li>O <b>cliente</b> não precisa saber como a lista é implementada internamente;</li>
+<li>O <b>programador</b> deve conhecer a estrutura interna para implementá-la corretamente.</li>
+</ul>
+
+<p>
+Essa implementação pode ser feita de duas formas:
+</p>
+
+<ul>
+<li><b>Contiguidade física</b> (assunto desta aula);</li>
+<li><b>Encadeamento</b> (veremos em aulas futuras).</li>
+</ul>
+
+<p>
+A partir dessas duas formas de implementação, surgem diversos tipos de listas que estudaremos ao longo da disciplina:
+</p>
+
+<ul>
+<li>Linear (estática/dinâmica);</li>
+<li>Linear circular (estática/dinâmica);</li>
+<li>Simplesmente encadeada;</li>
+<li>Duplamente encadeada;</li>
+<li>Circular encadeada;</li>
+<li>Pilhas;</li>
+<li>Filas;</li>
+<li>Deques.</li>
+</ul>
+
+<hr />
+
+<h2>6. Contiguidade física</h2>
+
+<ul>
+<li>A representação utiliza a estrutura linear da memória para armazenar a lista;</li>
+<li>Um arranjo de uma dimensão (vetor) é usado;</li>
+<li>Nodos logicamente adjacentes são mantidos em posições de memória fisicamente adjacentes;</li>
+<li>A lista <b>sempre começa no índice 0</b> do vetor — basta guardar <b>quantos</b> elementos estão ocupados (o <b>tamanho</b> da lista) para saber exatamente onde ela termina;</li>
+<li>A lista possui uma capacidade máxima estabelecida (tamanho do vetor);</li>
+<li>Pode ser <b>estática</b> (capacidade fixada em tempo de compilação) ou <b>dinâmica</b> (capacidade definida em tempo de execução, com <code>malloc()</code>) — veremos a estática nesta aula, que será o padrão adotado no restante da disciplina.</li>
+</ul>
+
+<p>
+A ideia é manter os elementos sempre a partir da posição <code>0</code>, ocupando as primeiras <code>tamanho</code> posições de um vetor de capacidade fixa:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+índice:   0    1    2    3    4    5    6    7   ...  CAPACIDADE-1
+dados:  [ L0 ][ L1 ][ L2 ][ L3 ][ L4 ][    ][    ]...[            ]
+                                    ^
+                                    |
+                          tamanho = 5 (posições 0 a 4 ocupadas)
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Estática × dinâmica.</b> Nesta disciplina, a implementação <b>padrão</b> (usada por padrão em todas as aulas, laboratórios e trabalhos, a menos que indicado o contrário) é a <b>estática</b> (<code>ListaContEst</code>), com um vetor de tamanho fixo declarado diretamente na <i>struct</i>: <code>Produto dados[CAPACIDADE];</code>. Existe também uma variação <b>dinâmica</b> (<code>ListaContDin</code>), em que esse campo passa a ser um <b>ponteiro</b> alocado com <code>malloc()</code> — <code>Produto *dados;</code> — permitindo que a capacidade seja definida em tempo de execução, e não fixada em tempo de compilação. As duas variações compartilham a mesma <b>interface</b> (as mesmas operações, com o mesmo comportamento); a única diferença está em como o campo <code>dados</code> é declarado e alocado.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>7. TAD Lista Linear (estática)</h2>
+
+<p>
+Vamos implementar uma lista de <code>Produto</code>, onde cada nodo guarda um código, um nome e um preço. Esse é o dado a ser armazenado em cada nodo da lista — poderia ser um simples <code>int</code>, <code>float</code>, ou qualquer outro tipo:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> cod;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">float</span> preco;
+} Produto;
+</pre>
+
+<p>
+E o tipo da lista propriamente dita, com o vetor de capacidade fixa e um único campo de controle, <code>tamanho</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#define</span> CAPACIDADE 50
+
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> tamanho;
+    Produto dados[CAPACIDADE];
+} ListaContEst;
+</pre>
+
+<h3>Operações</h3>
+
+<p>
+<b>Inicialização</b> — uma lista vazia é representada por <code>tamanho = 0</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializar(ListaContEst *l) {
+    l-&gt;tamanho = 0;
+}
+</pre>
+
+<p>
+<b>Tamanho</b> — número de elementos atualmente armazenados na lista. Como o próprio campo <code>tamanho</code> já guarda esse valor, a operação apenas o devolve — mas continua sendo uma <b>função</b>, e não um acesso direto ao campo, para que quem usa a lista (o cliente) não precise conhecer o nome do campo interno:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(<span style="color: #0000ff; font-weight: bold;">const</span> ListaContEst *l) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> l-&gt;tamanho;
+}
+</pre>
+
+<p>
+<b>Acesso</b> — retorna o produto armazenado na posição <code>pos</code>, sem removê-lo. Como a lista sempre começa no índice <code>0</code>, a posição lógica <b>é</b> o índice físico no vetor:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Produto acessar(<span style="color: #0000ff; font-weight: bold;">const</span> ListaContEst *l, <span style="color: #0000ff; font-weight: bold;">int</span> pos) {
+    Produto pAux;
+    <span style="color: #0000ff; font-weight: bold;">if</span> (pos &gt;= l-&gt;tamanho || pos &lt; 0) <span style="color: #008000; font-style: italic;">// posição inválida</span>
+        pAux.cod = -1;
+    <span style="color: #0000ff; font-weight: bold;">else</span>
+        pAux = l-&gt;dados[pos];
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> pAux;
+}
+</pre>
+
+<p>
+<b>Inserção</b> — a posição <code>pos</code> indica onde o novo produto deve entrar (<code>0</code> é sempre o início da lista). Para abrir espaço, a função desloca todos os elementos a partir de <code>pos</code> uma posição <b>para a direita</b>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inserir(ListaContEst *l, Produto novo, <span style="color: #0000ff; font-weight: bold;">int</span> pos) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;tamanho == CAPACIDADE) <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// lista cheia</span>
+    <span style="color: #0000ff; font-weight: bold;">if</span> (pos &gt; l-&gt;tamanho || pos &lt; 0) <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// posição inválida</span>
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = l-&gt;tamanho; i &gt; pos; i--) <span style="color: #008000; font-style: italic;">// abre espaço, empurrando para a direita</span>
+        l-&gt;dados[i] = l-&gt;dados[i - 1];
+
+    l-&gt;dados[pos] = novo;
+    l-&gt;tamanho++;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+<b>Remoção</b> — remove o produto da posição <code>pos</code>, puxando os elementos seguintes uma posição <b>para a esquerda</b>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> remover(ListaContEst *l, <span style="color: #0000ff; font-weight: bold;">int</span> pos) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (pos &gt;= l-&gt;tamanho || pos &lt; 0) <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// posição inválida</span>
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = pos; i &lt; l-&gt;tamanho - 1; i++) <span style="color: #008000; font-style: italic;">// puxa elementos seguintes para a esquerda</span>
+        l-&gt;dados[i] = l-&gt;dados[i + 1];
+
+    l-&gt;tamanho--;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+<b>Busca</b> — diferente de <code>acessar</code> (que já sabe exatamente <b>onde</b> procurar), a busca recebe apenas um <b>código</b> e precisa <i>encontrar</i> a posição correspondente, comparando produto por produto até achar (ou até chegar ao fim da lista). É a mesma ideia da <b>busca sequencial</b> vista em aulas anteriores, aplicada agora sobre os elementos da lista:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> buscar(<span style="color: #0000ff; font-weight: bold;">const</span> ListaContEst *l, <span style="color: #0000ff; font-weight: bold;">int</span> cod) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; l-&gt;tamanho; i++) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;dados[i].cod == cod) {
+            <span style="color: #0000ff; font-weight: bold;">return</span> i; <span style="color: #008000; font-style: italic;">// posição onde o produto foi encontrado</span>
+        }
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> -1; <span style="color: #008000; font-style: italic;">// não encontrado</span>
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Por que <code>const ListaContEst *l</code>, e não apenas <code>ListaContEst l</code>?</b> Note que <code>tamanho</code>, <code>acessar</code> e <code>buscar</code> apenas <b>leem</b> a lista — nenhuma delas altera <code>l</code>. Ainda assim, elas recebem um <b>ponteiro</b> (<code>ListaContEst *l</code>), e não a <i>struct</i> inteira por valor (<code>ListaContEst l</code>): passar por valor copiaria todo o vetor <code>dados</code> a cada chamada, o que é caro e desnecessário. O <code>const</code> na frente do tipo comunica exatamente essa intenção — "recebo um ponteiro para não copiar os dados, mas prometo não alterá-los" — e o próprio compilador passa a impedir, em tempo de compilação, qualquer tentativa acidental de escrever em <code>l</code> dentro dessas funções. Por consistência, usaremos <code>const</code> sempre que uma função de um TAD receber um ponteiro apenas para leitura, ao longo do restante da disciplina.
+</td>
+</tr>
+</table>
+
+<p>
+<b>Destruição</b> — para esta implementação (estática, sem alocação dinâmica), basta invalidar o tamanho:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> destruir(ListaContEst *l) {
+    l-&gt;tamanho = 0;
+}
+</pre>
+
+<hr />
+
+<h2>8. Complexidade das operações</h2>
+
+<p>
+Retomando o que vimos na Aula 2a, podemos analisar o <b>pior caso</b> de cada operação em função do número de elementos <code>n</code> atualmente na lista:
+</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Operação</th>
+<th>Complexidade</th>
+<th>Motivo</th>
+</tr>
+<tr>
+<td><code>inicializar</code>, <code>tamanho</code>, <code>destruir</code></td>
+<td><code>O(1)</code></td>
+<td>Não dependem do número de elementos da lista.</td>
+</tr>
+<tr>
+<td><code>acessar</code></td>
+<td><code>O(1)</code></td>
+<td>Acesso direto pelo índice do vetor (<code>l-&gt;dados[pos]</code>), sem percorrer nenhum outro elemento.</td>
+</tr>
+<tr>
+<td><code>inserir</code></td>
+<td><code>O(n)</code></td>
+<td>No pior caso (inserir na posição <code>0</code>), é preciso deslocar todos os <code>n</code> elementos existentes.</td>
+</tr>
+<tr>
+<td><code>remover</code></td>
+<td><code>O(n)</code></td>
+<td>No pior caso (remover da posição <code>0</code>), é preciso deslocar todos os elementos seguintes.</td>
+</tr>
+<tr>
+<td><code>buscar</code></td>
+<td><code>O(n)</code></td>
+<td>No pior caso (produto não encontrado, ou encontrado apenas na última posição), é preciso comparar com todos os <code>n</code> elementos.</td>
+</tr>
+</table>
+
+<p>
+Note a diferença entre <code>acessar</code> e <code>buscar</code>, apesar de ambas "lerem" elementos da lista: <code>acessar</code> já sabe exatamente <b>qual índice</b> acessar (recebido como parâmetro), então é sempre <code>O(1)</code>; <code>buscar</code> não sabe onde está o elemento procurado, e por isso pode precisar examinar a lista inteira até encontrá-lo (ou concluir que ele não existe).
+</p>
+
+<p>
+Já <code>inserir</code> e <code>remover</code> só são <code>O(1)</code> no melhor caso — quando a operação ocorre exatamente na <b>última posição</b> da lista (<code>pos == tamanho(l)</code> para inserir, <code>pos == tamanho(l) - 1</code> para remover), caso em que nenhum elemento precisa ser deslocado.
+</p>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Lista linear:</b> coleção ordenada e finita de nodos, onde cada um (exceto extremos) tem um predecessor e um sucessor bem definidos.</li>
+<li><b>TAD vs. implementação:</b> a lista é uma implementação concreta do TAD Lista; o cliente usa suas operações sem conhecer os detalhes internos, que são responsabilidade do programador.</li>
+<li><b>Contiguidade física:</b> os elementos ficam sempre a partir do índice <code>0</code> de um vetor, e um único campo <code>tamanho</code> indica quantas posições estão ocupadas.</li>
+<li><b>Estática × dinâmica:</b> a versão estática (padrão desta disciplina) usa <code>Produto dados[CAPACIDADE];</code>; a versão dinâmica usa <code>Produto *dados;</code>, alocado com <code>malloc()</code> — as duas compartilham a mesma interface.</li>
+<li><b>Acesso é <code>O(1)</code></b> (acesso direto por índice), mas <b>busca é <code>O(n)</code></b> (é preciso procurar, comparando elemento por elemento).</li>
+<li><b>Inserção/remoção são <code>O(n)</code> no pior caso</b> (deslocam elementos), e <code>O(1)</code> apenas quando ocorrem na última posição da lista.</li>
+<li>Essa é apenas uma das formas de implementar uma lista — a outra, por <b>encadeamento</b>, será vista em aulas futuras.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique, com suas próprias palavras, o que significa dizer que "a estrutura interna dos nodos é abstraída" em uma lista linear.
+</li>
+
+<li>
+Considerando a definição formal vista em aula (<code>x[0], x[1], ..., x[n-1]</code>), o que caracteriza <code>x[0]</code> e <code>x[n-1]</code>? O que representa <code>n = 0</code>?
+</li>
+
+<li>
+Na implementação por contiguidade física vista em aula, por que basta guardar o campo <code>tamanho</code> para saber quantos elementos a lista possui <b>e</b> onde ela termina, sem precisar de nenhuma outra variável de controle?
+</li>
+
+<li>
+Na função <code>inserir</code>, por que o <b>pior caso</b> ocorre ao inserir na posição <code>0</code>, e o <b>melhor caso</b> ocorre ao inserir na posição <code>tamanho(l)</code> (ou seja, no final da lista)?
+</li>
+
+<li>
+Explique por que a operação <code>acessar</code> tem complexidade <code>O(1)</code>, enquanto <code>buscar</code> tem complexidade <code>O(n)</code> no pior caso, mesmo as duas "lendo" elementos da lista.
+</li>
+
+<li>
+Cite uma situação em que inserir sempre no final da lista (posição <code>pos = tamanho(l)</code>) evitaria o custo de deslocar elementos. Essa situação ainda seria vantajosa se também precisássemos remover elementos com frequência do início da lista?
+</li>
+
+<li>
+A lista implementada nesta aula é chamada de "estática" (<code>ListaContEst</code>) porque sua capacidade (<code>CAPACIDADE</code>) é fixada em tempo de compilação. Reescreva a <i>struct</i> e a função <code>inicializar</code> para uma versão <b>dinâmica</b>, chamada <code>ListaContDin</code>, em que o vetor <code>dados</code> é alocado com <code>malloc()</code> (como visto nas Aulas 1b e 3), permitindo que a capacidade da lista seja definida em tempo de execução, através de um parâmetro. Lembre-se de também escrever uma função <code>destruir</code> que libere corretamente essa memória.
+</li>
+
+<li>
+Implemente uma função <code>void imprimir(ListaContEst *l)</code> que percorra a lista e imprima o código, o nome e o preço de cada produto, um por linha.
+</li>
+
+<li>
+Implemente uma função <code>int buscarPorNome(ListaContEst *l, char *nome)</code>, análoga a <code>buscar</code>, mas que procure pelo campo <code>nome</code> (usando <code>strcmp</code>) em vez do campo <code>cod</code>. Qual é a complexidade dessa nova função?
+</li>
+
+<li>
+Implemente uma função <code>float precoMedio(ListaContEst *l)</code> que retorne o preço médio dos produtos da lista. Tome cuidado com o caso da lista vazia.
+</li>
+
+<li>
+Escreva um pequeno <code>main()</code> que: inicialize uma <code>ListaContEst</code>; insira três produtos (nas posições 0, 1 e 1, nessa ordem, como no exemplo de uso das aulas anteriores); e então chame <code>imprimir</code> para exibir o resultado. Qual é a ordem final dos produtos na lista?
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Significa que a lista, enquanto estrutura, não precisa saber <i>o que</i> cada nodo guarda internamente (se é um <code>int</code>, uma <i>struct</i> como <code>Produto</code>, ou qualquer outro tipo). A lista se preocupa apenas com a <b>organização e a ordem</b> dos nodos; o conteúdo de cada nodo é um detalhe à parte, definido por quem usa a lista.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+<code>x[0]</code> é o primeiro nodo da lista, e <code>x[n-1]</code> é o último. Cada nodo intermediário <code>x[k]</code> é precedido por <code>x[k-1]</code> e sucedido por <code>x[k+1]</code>, ou seja, existe uma relação de ordem bem definida entre eles.
+</p>
+
+<p>
+<code>n = 0</code> representa a <b>lista vazia</b>, ou seja, uma coleção sem nenhum nodo.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Porque, nesta implementação, a lista <b>sempre começa no índice <code>0</code></b> do vetor <code>dados</code> — diferente de uma versão que permitisse a lista "deslizar" pelo vetor, aqui não existe a possibilidade de o primeiro elemento estar em outra posição. Assim, sabendo apenas que existem <code>tamanho</code> elementos, já sabemos exatamente onde eles estão: nas posições <code>0</code> até <code>tamanho - 1</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+Inserir na posição <code>0</code> é o pior caso porque <b>todos</b> os <code>n</code> elementos já existentes precisam ser deslocados uma posição para a direita, para abrir espaço no início. Já inserir na posição <code>tamanho(l)</code> (logo após o último elemento) é o melhor caso porque <b>nenhum</b> elemento precisa ser deslocado — o novo produto é simplesmente colocado na primeira posição livre do vetor.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+<code>acessar</code> é <code>O(1)</code> porque já recebe, como parâmetro, exatamente qual posição acessar — basta um acesso direto ao vetor (<code>l-&gt;dados[pos]</code>), sem percorrer nenhum outro elemento.
+</p>
+
+<p>
+<code>buscar</code>, por outro lado, não sabe de antemão onde está o elemento procurado: no pior caso (elemento não encontrado, ou encontrado apenas na última posição), é preciso comparar com <b>todos</b> os <code>n</code> elementos da lista até encontrá-lo ou concluir que ele não existe — por isso <code>O(n)</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<p>
+Inserir sempre no final evita o deslocamento de elementos <b>na inserção</b>, desde que ainda haja espaço livre no vetor — nesse caso, a operação é <code>O(1)</code>.
+</p>
+
+<p>
+Porém, se também precisarmos remover com frequência do <b>início</b> da lista, cada remoção continuará custando <code>O(n)</code>, pois é necessário deslocar os elementos restantes para preencher o espaço aberto. Ou seja, otimizar apenas a inserção não resolve o custo da remoção — esse é exatamente o tipo de situação em que uma implementação por <b>encadeamento</b> (vista em aulas futuras) tende a ser mais vantajosa.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<p>
+A struct passa a guardar um <b>ponteiro</b> para os produtos (em vez de um vetor de tamanho fixo) e a capacidade real da lista, definida em tempo de execução:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> tamanho;
+    <span style="color: #0000ff; font-weight: bold;">int</span> capacidade;
+    Produto *dados; <span style="color: #008000; font-style: italic;">// vetor alocado dinamicamente, em vez de tamanho fixo</span>
+} ListaContDin;
+</pre>
+
+<p>
+A função <code>inicializar</code> agora recebe a capacidade desejada e aloca o vetor com <code>malloc()</code>, verificando a falha de alocação:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializar(ListaContDin *l, <span style="color: #0000ff; font-weight: bold;">int</span> capacidade) {
+    l-&gt;tamanho = 0;
+    l-&gt;capacidade = capacidade;
+    l-&gt;dados = (Produto *) malloc(capacidade * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(Produto));
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;dados == NULL) {
+        printf(<span style="color: #a31515;">"Erro: memoria insuficiente.\n"</span>);
+        exit(1);
+    }
+}
+</pre>
+
+<p>
+Todas as demais funções (<code>inserir</code>, <code>acessar</code>, <code>remover</code>, <code>buscar</code>) continuam praticamente iguais — basta trocar toda ocorrência da constante <code>CAPACIDADE</code> pelo campo <code>l-&gt;capacidade</code>. Por exemplo, a verificação de lista cheia em <code>inserir</code> passa a ser:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;tamanho == l-&gt;capacidade) <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// lista cheia</span>
+</pre>
+
+<p>
+Por fim, como agora existe memória alocada no heap, a função <code>destruir</code> precisa liberá-la de fato, e não apenas zerar o tamanho:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> destruir(ListaContDin *l) {
+    free(l-&gt;dados);
+    l-&gt;dados = NULL;
+    l-&gt;tamanho = 0;
+}
+</pre>
+
+<p>
+Note que, mesmo com a mudança de "onde" o vetor mora (pilha, na versão estática; heap, na dinâmica), a forma de <b>acessar</b> os elementos continua idêntica (<code>l-&gt;dados[pos]</code>) — exatamente o que discutimos na Material Extra — Conceitos de Linguagens de Programação sobre vetores contíguos.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 8</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimir(ListaContEst *l) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; tamanho(l); i++) {
+        Produto p = acessar(l, i);
+        printf(<span style="color: #a31515;">"%d - %s - %.2f\n"</span>, p.cod, p.nome, p.preco);
+    }
+}
+</pre>
+
+<p>
+Note que a função reaproveita <code>tamanho</code> e <code>acessar</code>, que já lidam com o acesso aos elementos — não é preciso acessar <code>l-&gt;dados</code> diretamente.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 9</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> buscarPorNome(ListaContEst *l, <span style="color: #0000ff; font-weight: bold;">char</span> *nome) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; l-&gt;tamanho; i++) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (strcmp(l-&gt;dados[i].nome, nome) == 0) {
+            <span style="color: #0000ff; font-weight: bold;">return</span> i; <span style="color: #008000; font-style: italic;">// posição onde o produto foi encontrado</span>
+        }
+    }
+    <span style="color: #0000ff; font-weight: bold;">return</span> -1; <span style="color: #008000; font-style: italic;">// não encontrado</span>
+}
+</pre>
+
+<p>
+A complexidade continua sendo <code>O(n)</code>, pelo mesmo motivo de <code>buscar</code>: no pior caso (produto não encontrado, ou encontrado apenas na última posição), é preciso comparar com todos os <code>n</code> elementos da lista — a única diferença é <b>qual</b> campo é comparado (<code>nome</code>, com <code>strcmp</code>, em vez de <code>cod</code>, com <code>==</code>).
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 10</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">float</span> precoMedio(ListaContEst *l) {
+    <span style="color: #0000ff; font-weight: bold;">int</span> i;
+    <span style="color: #0000ff; font-weight: bold;">float</span> soma = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (tamanho(l) == 0) {
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0; <span style="color: #008000; font-style: italic;">// evita divisão por zero</span>
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">for</span> (i = 0; i &lt; tamanho(l); i++) {
+        Produto p = acessar(l, i);
+        soma += p.preco;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> soma / tamanho(l);
+}
+</pre>
+
+<p>
+O caso da lista vazia precisa de tratamento especial, já que dividir por <code>tamanho(l) == 0</code> resultaria em uma divisão por zero.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 11</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    ListaContEst l;
+    Produto p1 = {1, <span style="color: #a31515;">"Caneta"</span>, 2.50};
+    Produto p2 = {2, <span style="color: #a31515;">"Caderno"</span>, 15.90};
+    Produto p3 = {3, <span style="color: #a31515;">"Lapis"</span>, 1.20};
+
+    inicializar(&amp;l);
+
+    inserir(&amp;l, p1, 0); <span style="color: #008000; font-style: italic;">// lista: [Caneta]</span>
+    inserir(&amp;l, p2, 1); <span style="color: #008000; font-style: italic;">// lista: [Caneta, Caderno]</span>
+    inserir(&amp;l, p3, 1); <span style="color: #008000; font-style: italic;">// lista: [Caneta, Lapis, Caderno]</span>
+
+    imprimir(&amp;l);
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+A ordem final é <b>Caneta, Lapis, Caderno</b>. A terceira inserção, na posição 1, empurra o "Caderno" (que estava na posição 1) uma posição para a direita, abrindo espaço para o "Lapis" exatamente no meio da lista.
+</p>
+
+</details>
+
+<hr />
+
+<h2>Código para Download</h2>
+
+<p>
+O TAD <code>ListaContEst</code> completo, exatamente como visto nesta aula, dividido em interface (<code>listaContEst.h</code>) e implementação (<code>listaContEst.c</code>), junto com um <code>main.c</code> de exemplo:
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<a href="listaContEst.zip">listaContEst.zip</a> — <code>listaContEst.h</code>, <code>listaContEst.c</code> e <code>main.c</code>.
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

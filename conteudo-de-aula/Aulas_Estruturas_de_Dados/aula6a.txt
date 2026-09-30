@@ -1,0 +1,606 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Aula 6a - Listas Duplamente Encadeadas</h1>
+</div>
+
+<p>
+Nesta aula estudamos uma variação da lista simplesmente encadeada (Aula 4): a <b>lista duplamente encadeada</b>, em que cada nodo conhece tanto o seu sucessor quanto o seu antecessor. Veremos como isso resolve algumas limitações da versão simples, ao custo de mais memória e mais cuidado ao manter os ponteiros consistentes.
+</p>
+
+<hr />
+
+<h2>1. Motivação: limitações da lista simplesmente encadeada</h2>
+
+<p>
+Na lista simplesmente encadeada (<code>ListaEnc</code>), cada nodo aponta apenas para o <b>próximo</b>. Isso traz algumas limitações que já sentimos na prática nas Aulas 4 e 5:
+</p>
+
+<ul>
+<li>Para <b>percorrer a lista de trás para frente</b>, não há como — só existe o ponteiro <code>prox</code>, nunca um caminho de volta;</li>
+<li>Para <b>inserir no final</b> (<code>inserirFim</code>), é preciso percorrer a lista inteira até encontrar o último nodo, custando <code>O(n)</code>, mesmo sendo "só uma inserção";</li>
+<li>Para <b>remover um nodo</b>, mesmo que já tenhamos um ponteiro direto para ele, ainda precisamos percorrer a lista desde o início só para descobrir quem é o seu <i>antecessor</i> (o nodo <code>ant</code>, necessário para "religar" a lista) — como fizemos em <code>removerPorCod</code>.</li>
+</ul>
+
+<p>
+A lista duplamente encadeada ataca exatamente esses três pontos, adicionando um segundo ponteiro a cada nodo.
+</p>
+
+<hr />
+
+<h2>2. Listas duplamente encadeadas</h2>
+
+<p>
+Em uma lista duplamente encadeada, cada nodo contém:
+</p>
+
+<ul>
+<li>Os <b>dados</b> propriamente ditos;</li>
+<li>Um ponteiro <code>prox</code> para o <b>próximo</b> nodo (como antes);</li>
+<li>Um ponteiro <code>ant</code> para o nodo <b>anterior</b> — a novidade desta aula.</li>
+</ul>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+        ini                                           fim
+         |                                             |
+         v                                             v
+NULL &lt;--[ant| dado |prox]&lt;--&gt;[ant| dado |prox]&lt;--&gt;[ant| dado |prox]--&gt; NULL
+</pre>
+
+<p>
+O primeiro nodo tem <code>ant == NULL</code>, e o último tem <code>prox == NULL</code> — assim como na lista simples, esses valores continuam marcando as extremidades. A diferença é que agora também guardamos, na própria <i>struct</i> da lista, um ponteiro para o <b>último</b> nodo (<code>fim</code>), além do ponteiro para o primeiro (<code>ini</code>):
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Por que guardar também <code>fim</code>?</b> Sem um ponteiro direto para o último nodo, inserir no final continuaria exigindo percorrer a lista inteira, mesmo com os ponteiros <code>ant</code> — o problema não é "não saber voltar", é "não saber onde a lista termina" sem procurar. Guardando <code>fim</code>, resolvemos justamente a limitação de <code>inserirFim</code> ser <code>O(n)</code> na Aula 4.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>3. TAD Lista Duplamente Encadeada (LDE)</h2>
+
+<h3>Dados</h3>
+
+<p>
+Reaproveitamos o mesmo <code>Produto</code> das aulas anteriores:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    <span style="color: #0000ff; font-weight: bold;">int</span> cod;
+    <span style="color: #0000ff; font-weight: bold;">char</span> nome[50];
+    <span style="color: #0000ff; font-weight: bold;">float</span> preco;
+} Produto;
+</pre>
+
+<p>
+O nodo agora tem dois ponteiros:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> str_NodoD NodoD;
+
+<span style="color: #0000ff; font-weight: bold;">struct</span> str_NodoD {
+    NodoD *ant;
+    NodoD *prox;
+    Produto dado;
+};
+</pre>
+
+<p>
+E a <i>struct</i> da lista guarda os dois extremos:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">typedef struct</span> {
+    NodoD *ini;
+    NodoD *fim;
+} ListaDuplaEnc;
+</pre>
+
+<h3>Operações</h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span>    inicializar(ListaDuplaEnc *l);
+<span style="color: #0000ff; font-weight: bold;">void</span>    imprimir(ListaDuplaEnc *l);
+<span style="color: #0000ff; font-weight: bold;">void</span>    imprimirInverso(ListaDuplaEnc *l);
+Produto acessar(ListaDuplaEnc *l, <span style="color: #0000ff; font-weight: bold;">int</span> cod);
+<span style="color: #0000ff; font-weight: bold;">int</span>     inserirInicio(ListaDuplaEnc *l, Produto prod);
+<span style="color: #0000ff; font-weight: bold;">int</span>     inserirFim(ListaDuplaEnc *l, Produto prod);
+<span style="color: #0000ff; font-weight: bold;">int</span>     removerPorCod(ListaDuplaEnc *l, <span style="color: #0000ff; font-weight: bold;">int</span> cod);
+<span style="color: #0000ff; font-weight: bold;">void</span>    destruir(ListaDuplaEnc *l);
+<span style="color: #0000ff; font-weight: bold;">int</span>     tamanho(ListaDuplaEnc *l);
+</pre>
+
+<hr />
+
+<h2>4. Implementação em C</h2>
+
+<h3><code>inicializar</code></h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> inicializar(ListaDuplaEnc *l) {
+    l-&gt;ini = NULL;
+    l-&gt;fim = NULL;
+}
+</pre>
+
+<h3><code>imprimir</code> e <code>imprimirInverso</code></h3>
+
+<p>
+A grande vantagem prática do ponteiro <code>ant</code> aparece aqui: percorrer a lista de trás para frente é tão simples quanto percorrê-la para frente, bastando partir de <code>l-&gt;fim</code> e seguir por <code>ant</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimir(ListaDuplaEnc *l) {
+    NodoD *aux = l-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        printf(<span style="color: #a31515;">"%d - %s - %.2f\n"</span>, aux-&gt;dado.cod, aux-&gt;dado.nome, aux-&gt;dado.preco);
+        aux = aux-&gt;prox;
+    }
+}
+
+<span style="color: #0000ff; font-weight: bold;">void</span> imprimirInverso(ListaDuplaEnc *l) {
+    NodoD *aux = l-&gt;fim;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        printf(<span style="color: #a31515;">"%d - %s - %.2f\n"</span>, aux-&gt;dado.cod, aux-&gt;dado.nome, aux-&gt;dado.preco);
+        aux = aux-&gt;ant;
+    }
+}
+</pre>
+
+<h3><code>acessar</code></h3>
+
+<p>
+Igual à Aula 4 — a busca por código continua sendo sequencial, o ponteiro <code>ant</code> não ajuda a "pular" nodos:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Produto acessar(ListaDuplaEnc *l, <span style="color: #0000ff; font-weight: bold;">int</span> cod) {
+    NodoD *aux = l-&gt;ini;
+    Produto prod = {-1, <span style="color: #a31515;">""</span>, 0.0f};
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (aux-&gt;dado.cod == cod)
+            <span style="color: #0000ff; font-weight: bold;">return</span> aux-&gt;dado;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> prod;
+}
+</pre>
+
+<h3><code>inserirInicio</code></h3>
+
+<p>
+Além de encaixar o novo nodo antes do início, é preciso lembrar de <b>duas</b> atualizações que não existiam na lista simples: o <code>ant</code> do antigo início precisa passar a apontar para o novo nodo, e, se a lista estava vazia, o novo nodo também é o <code>fim</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inserirInicio(ListaDuplaEnc *l, Produto prod) {
+    NodoD *novo = (NodoD*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(NodoD));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo-&gt;dado = prod;
+    novo-&gt;ant = NULL;
+    novo-&gt;prox = l-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;ini != NULL)
+        l-&gt;ini-&gt;ant = novo; <span style="color: #008000; font-style: italic;">// o antigo início passa a ter um antecessor</span>
+    <span style="color: #0000ff; font-weight: bold;">else</span>
+        l-&gt;fim = novo;      <span style="color: #008000; font-style: italic;">// lista estava vazia: novo nodo também é o fim</span>
+
+    l-&gt;ini = novo;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<h3><code>inserirFim</code></h3>
+
+<p>
+Graças ao ponteiro <code>l-&gt;fim</code>, esta operação deixa de percorrer a lista inteira — vira uma inserção direta, assim como <code>inserirInicio</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inserirFim(ListaDuplaEnc *l, Produto prod) {
+    NodoD *novo = (NodoD*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(NodoD));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo-&gt;dado = prod;
+    novo-&gt;prox = NULL;
+    novo-&gt;ant = l-&gt;fim;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (l-&gt;fim != NULL)
+        l-&gt;fim-&gt;prox = novo; <span style="color: #008000; font-style: italic;">// o antigo fim passa a apontar para o novo nodo</span>
+    <span style="color: #0000ff; font-weight: bold;">else</span>
+        l-&gt;ini = novo;       <span style="color: #008000; font-style: italic;">// lista estava vazia: novo nodo também é o início</span>
+
+    l-&gt;fim = novo;
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<h3><code>removerPorCod</code></h3>
+
+<p>
+Aqui está o segundo grande ganho da lista duplamente encadeada: uma vez localizado o nodo a remover, <b>não precisamos mais de um ponteiro auxiliar <code>ant</code> obtido durante a busca</b> — o próprio nodo já sabe quem é o seu antecessor, através de <code>aux-&gt;ant</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> removerPorCod(ListaDuplaEnc *l, <span style="color: #0000ff; font-weight: bold;">int</span> cod) {
+    NodoD *aux = l-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL &amp;&amp; aux-&gt;dado.cod != cod)
+        aux = aux-&gt;prox;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (aux == NULL) <span style="color: #008000; font-style: italic;">// não encontrado</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (aux-&gt;ant != NULL) <span style="color: #008000; font-style: italic;">// existe antecessor: religa por ele</span>
+        aux-&gt;ant-&gt;prox = aux-&gt;prox;
+    <span style="color: #0000ff; font-weight: bold;">else</span>                  <span style="color: #008000; font-style: italic;">// removendo o próprio início</span>
+        l-&gt;ini = aux-&gt;prox;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (aux-&gt;prox != NULL) <span style="color: #008000; font-style: italic;">// existe sucessor: religa por ele</span>
+        aux-&gt;prox-&gt;ant = aux-&gt;ant;
+    <span style="color: #0000ff; font-weight: bold;">else</span>                   <span style="color: #008000; font-style: italic;">// removendo o próprio fim</span>
+        l-&gt;fim = aux-&gt;ant;
+
+    free(aux);
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Comparando com a Aula 4.</b> Em <code>ListaEnc</code>, precisávamos de dois ponteiros (<code>ant</code> e <code>aux</code>) andando <b>juntos</b> pela lista só para descobrir o antecessor. Aqui, ainda percorremos a lista para <b>encontrar</b> o nodo pelo código (isso não muda — a busca continua sendo <code>O(n)</code>), mas, uma vez encontrado, a remoção em si não depende mais de nenhum ponteiro auxiliar extra: <code>aux-&gt;ant</code> e <code>aux-&gt;prox</code> já bastam.
+</td>
+</tr>
+</table>
+
+<h3><code>destruir</code></h3>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> destruir(ListaDuplaEnc *l) {
+    NodoD *ant;
+    NodoD *aux = l-&gt;ini;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        ant = aux;
+        aux = aux-&gt;prox;
+        free(ant);
+    }
+
+    l-&gt;ini = NULL;
+    l-&gt;fim = NULL;
+}
+</pre>
+
+<h3><code>tamanho</code></h3>
+
+<p>
+Assim como decidimos na Aula 4, não guardamos um contador na <i>struct</i> — <code>tamanho</code> continua sendo <code>O(n)</code>:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> tamanho(ListaDuplaEnc *l) {
+    NodoD *aux = l-&gt;ini;
+    <span style="color: #0000ff; font-weight: bold;">int</span> contador = 0;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        contador++;
+        aux = aux-&gt;prox;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> contador;
+}
+</pre>
+
+<hr />
+
+<h2>5. Vantagens, desvantagens e complexidade</h2>
+
+<table border="1" cellpadding="5" cellspacing="0">
+<tr bgcolor="#EEEEEE">
+<th>Aspecto</th>
+<th>Simplesmente encadeada (Aula 4)</th>
+<th>Duplamente encadeada (esta aula)</th>
+</tr>
+<tr>
+<td>Memória por nodo</td>
+<td>1 ponteiro (<code>prox</code>) + dado.</td>
+<td>2 ponteiros (<code>ant</code>, <code>prox</code>) + dado — um pouco mais de memória.</td>
+</tr>
+<tr>
+<td>Percorrer de trás para frente</td>
+<td>Não é possível diretamente.</td>
+<td><code>O(n)</code>, partindo de <code>l-&gt;fim</code> e seguindo <code>ant</code>.</td>
+</tr>
+<tr>
+<td>Inserir no final (<code>inserirFim</code>)</td>
+<td><code>O(n)</code> (percorre até achar o último nodo).</td>
+<td><code>O(1)</code>, graças ao ponteiro <code>l-&gt;fim</code>.</td>
+</tr>
+<tr>
+<td>Remover um nodo já localizado</td>
+<td>Exige ponteiro <code>ant</code> obtido durante a busca.</td>
+<td><code>O(1)</code> a partir do nodo, via <code>aux-&gt;ant</code>.</td>
+</tr>
+<tr>
+<td>Buscar por código (<code>acessar</code>, <code>removerPorCod</code>)</td>
+<td><code>O(n)</code></td>
+<td><code>O(n)</code> — sem diferença, a busca continua sequencial.</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Resumo</h2>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<ul>
+<li><b>Lista duplamente encadeada:</b> cada nodo tem dois ponteiros, <code>ant</code> e <code>prox</code>, permitindo percurso nos dois sentidos.</li>
+<li><b><code>ListaDuplaEnc</code>:</b> guarda <code>ini</code> <b>e</b> <code>fim</code>, tornando <code>inserirFim</code> tão rápido (<code>O(1)</code>) quanto <code>inserirInicio</code>.</li>
+<li><b>Remoção mais simples:</b> com um ponteiro para o nodo, já temos acesso direto ao seu antecessor (<code>aux-&gt;ant</code>) e sucessor (<code>aux-&gt;prox</code>), sem precisar de um ponteiro auxiliar extra percorrendo a lista.</li>
+<li><b>Custo:</b> mais memória por nodo, e mais pontos onde os ponteiros precisam ser atualizados corretamente a cada inserção/remoção.</li>
+<li><b>O que não muda:</b> buscar um elemento por código continua sendo <code>O(n)</code> — os ponteiros extras não aceleram a busca, só o acesso às pontas e a remoção de um nodo já conhecido.</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Por que a lista duplamente encadeada precisa de <b>duas</b> atualizações extras em <code>inserirInicio</code> (o <code>ant</code> do antigo início, e possivelmente <code>l-&gt;fim</code>), que não existiam na versão simplesmente encadeada?
+</li>
+
+<li>
+Explique por que <code>inserirFim</code> passa a ser <code>O(1)</code> na lista duplamente encadeada, mesmo sem alterar em nada a forma como <code>acessar</code> ou <code>removerPorCod</code> localizam um nodo pelo código.
+</li>
+
+<li>
+Na função <code>removerPorCod</code>, por que é necessário tratar separadamente os casos em que o nodo removido é o início (<code>aux-&gt;ant == NULL</code>) ou o fim (<code>aux-&gt;prox == NULL</code>) da lista?
+</li>
+
+<li>
+Se um nodo estiver "sozinho" na lista (é ao mesmo tempo o início e o fim), o que deve acontecer com <code>l-&gt;ini</code> e <code>l-&gt;fim</code> ao removê-lo? Verifique se o código de <code>removerPorCod</code> apresentado trata esse caso corretamente.
+</li>
+
+<li>
+Cite uma situação prática em que ser capaz de percorrer uma lista "de trás para frente" (com <code>imprimirInverso</code>) é útil.
+</li>
+
+<li>
+Implemente uma função <code>int inserirAntes(ListaDuplaEnc *l, int cod, Produto prod)</code> que insira <code>prod</code> imediatamente <b>antes</b> do nodo cujo código é <code>cod</code>, retornando <code>1</code> em caso de sucesso ou <code>0</code> caso o código não seja encontrado. Dica: use o ponteiro <code>ant</code> do nodo encontrado para "encaixar" o novo nodo entre os dois.
+</li>
+
+<li>
+Implemente uma função <code>Produto ultimoAcimaDe(ListaDuplaEnc *l, float valor)</code> que percorra a lista <b>de trás para frente</b> (usando <code>imprimirInverso</code> como inspiração) e retorne o primeiro produto encontrado, nesse sentido, com preço maior que <code>valor</code>. Caso nenhum seja encontrado, retorne um produto com <code>cod = -1</code>.
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque, além de o novo nodo passar a ser o início da lista (o que já acontecia na versão simples), agora existe um ponteiro <code>ant</code> que também precisa ficar correto: o nodo que <b>era</b> o início da lista precisa passar a apontar, através de <code>ant</code>, para o novo nodo — senão o encadeamento reverso ficaria quebrado logo na primeira inserção. Além disso, se a lista estava vazia, o novo nodo é ao mesmo tempo o início <b>e</b> o fim, então <code>l-&gt;fim</code> também precisa ser atualizado.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Porque <code>inserirFim</code> não depende de <b>buscar</b> nada — ela só precisa saber onde está o último nodo, e isso já está disponível diretamente em <code>l-&gt;fim</code>, sem percorrer a lista. Já <code>acessar</code> e <code>removerPorCod</code> continuam precisando <b>localizar</b> um nodo específico pelo seu código, o que exige examinar os nodos um a um até encontrar (ou não) o código procurado — os ponteiros extras não ajudam nesse tipo de busca por conteúdo, apenas no acesso direto às duas pontas da lista.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 3</b></summary>
+
+<p>
+Porque o nodo do início não possui antecessor (<code>aux-&gt;ant == NULL</code>), então não há um <code>aux-&gt;ant-&gt;prox</code> válido para atualizar — nesse caso, é a própria <i>struct</i> da lista (<code>l-&gt;ini</code>) que precisa passar a apontar para o novo início. Da mesma forma, o nodo do fim não possui sucessor (<code>aux-&gt;prox == NULL</code>), então é <code>l-&gt;fim</code> quem precisa ser atualizado diretamente. Sem esses casos especiais, o código tentaria acessar campos de um ponteiro <code>NULL</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 4</b></summary>
+
+<p>
+Nesse caso, tanto <code>l-&gt;ini</code> quanto <code>l-&gt;fim</code> devem passar a ser <code>NULL</code> após a remoção. O código apresentado já trata isso corretamente: como <code>aux-&gt;ant == NULL</code> (não há antecessor), a condição <code>if (aux-&gt;ant != NULL)</code> é falsa, então cai no <code>else</code> e faz <code>l-&gt;ini = aux-&gt;prox</code>, que também é <code>NULL</code> (pois <code>aux-&gt;prox</code> também é <code>NULL</code>, já que é o único nodo). O mesmo raciocínio, de forma simétrica, atualiza <code>l-&gt;fim</code> para <code>aux-&gt;ant</code>, também <code>NULL</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 5</b></summary>
+
+<p>
+Um exemplo é o histórico de navegação de um navegador: os botões "voltar" e "avançar" precisam se mover pela sequência de páginas visitadas nos dois sentidos — algo natural de implementar com uma lista duplamente encadeada, em que a página atual é um nodo, e "voltar"/"avançar" apenas seguem <code>ant</code>/<code>prox</code>.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 6</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">int</span> inserirAntes(ListaDuplaEnc *l, <span style="color: #0000ff; font-weight: bold;">int</span> cod, Produto prod) {
+    NodoD *aux = l-&gt;ini;
+    NodoD *novo;
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL &amp;&amp; aux-&gt;dado.cod != cod)
+        aux = aux-&gt;prox;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (aux == NULL) <span style="color: #008000; font-style: italic;">// código não encontrado</span>
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo = (NodoD*) malloc(<span style="color: #0000ff; font-weight: bold;">sizeof</span>(NodoD));
+    <span style="color: #0000ff; font-weight: bold;">if</span> (novo == NULL)
+        <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+
+    novo-&gt;dado = prod;
+    novo-&gt;prox = aux;
+    novo-&gt;ant = aux-&gt;ant;
+
+    <span style="color: #0000ff; font-weight: bold;">if</span> (aux-&gt;ant != NULL)
+        aux-&gt;ant-&gt;prox = novo;
+    <span style="color: #0000ff; font-weight: bold;">else</span>
+        l-&gt;ini = novo; <span style="color: #008000; font-style: italic;">// aux era o início: novo nodo passa a ser o início</span>
+
+    aux-&gt;ant = novo;
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 1;
+}
+</pre>
+
+<p>
+A lógica é semelhante à de <code>removerPorCod</code>: primeiro localizamos o nodo de referência (<code>aux</code>), e depois tratamos separadamente o caso em que ele é o início da lista (sem antecessor).
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 7</b></summary>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+Produto ultimoAcimaDe(ListaDuplaEnc *l, <span style="color: #0000ff; font-weight: bold;">float</span> valor) {
+    NodoD *aux = l-&gt;fim;
+    Produto prod = {-1, <span style="color: #a31515;">""</span>, 0.0f};
+
+    <span style="color: #0000ff; font-weight: bold;">while</span> (aux != NULL) {
+        <span style="color: #0000ff; font-weight: bold;">if</span> (aux-&gt;dado.preco &gt; valor)
+            <span style="color: #0000ff; font-weight: bold;">return</span> aux-&gt;dado;
+        aux = aux-&gt;ant;
+    }
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> prod;
+}
+</pre>
+
+<p>
+Partir de <code>l-&gt;fim</code> e seguir por <code>ant</code> é exatamente o mesmo padrão usado em <code>imprimirInverso</code> — a diferença é que, em vez de imprimir cada elemento, paramos e retornamos assim que encontramos o primeiro produto (percorrendo de trás para frente) que satisfaz a condição.
+</p>
+
+</details>
+
+<hr />
+
+<h2>Código para Download</h2>
+
+<p>
+O TAD <code>ListaDuplaEnc</code> completo, exatamente como visto nesta aula, dividido em interface (<code>listaDuplaEnc.h</code>) e implementação (<code>listaDuplaEnc.c</code>), junto com um <code>main.c</code> de exemplo:
+</p>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<a href="listaDuplaEnc.zip">listaDuplaEnc.zip</a> — <code>listaDuplaEnc.h</code>, <code>listaDuplaEnc.c</code> e <code>main.c</code>.
+</td>
+</tr>
+</table>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Dennis Giovani Balreira homepage</title>
+
+<link href="defaultstyles.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="branding.js"></script>
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="ucb">
+        <script type="text/javascript">ucbheader();</script>
+    </div>
+
+    <div id="wrapper">
+
+        <div id="banner">
+            <h1>Dennis Giovani Balreira</h1>
+            <p>Institute of Informatics - UFRGS</p>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/index.html"><b>Home</b></a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/teaching/index.html">Teaching</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/research/index.html">Research</a></li>
+                <li><a href="https://www.inf.ufrgs.br/~dgbalreira/students/index.html">Students</a></li>
+                <li><a href="http://lattes.cnpq.br/6593632051996659">CV Lattes</a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+
+            <div id="content">
+
+            <!-- Conteudo começa aqui -->
+
+
+
+<div align="center">
+<b>INF01203 - Estruturas de Dados - Instituto de Informática (UFRGS) - Prof. Dennis Giovani Balreira</b><br />
+</div><br /><hr /><br />
+
+<div align="center">
+<h1>Material Extra - C Avançado</h1>
+</div>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Esta aula é <i>EXTRA</i>.</b> O conteúdo abaixo não é cobrado nas avaliações da disciplina e não é pré-requisito para as próximas aulas. Ele existe para quem quiser aprofundar um pouco mais em C: matrizes dinâmicas, ponteiros genéricos, ponteiros para função e compilação com <code>Makefile</code>. Uma introdução (obrigatória) a C++ para quem já sabe C será vista mais adiante, na <b>Aula 15b</b>.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h3>Matrizes dinâmicas (vetores de ponteiros)</h3>
+
+<p>
+Diferentemente de um vetor unidimensional, uma matriz dinamicamente alocada normalmente é construída como um <b>vetor de ponteiros</b>, onde cada ponteiro aponta para um vetor (uma linha da matriz), alocado separadamente.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #0000ff; font-weight: bold;">int</span> linhas = 3, colunas = 4;
+
+    <span style="color: #008000; font-style: italic;">// 1. Aloca o vetor de ponteiros (uma posição por linha)</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> **matriz = (<span style="color: #0000ff; font-weight: bold;">int</span> **) malloc(linhas * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(<span style="color: #0000ff; font-weight: bold;">int</span> *));
+
+    <span style="color: #008000; font-style: italic;">// 2. Aloca cada linha individualmente</span>
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; linhas; i++) {
+        matriz[i] = (<span style="color: #0000ff; font-weight: bold;">int</span> *) malloc(colunas * <span style="color: #0000ff; font-weight: bold;">sizeof</span>(<span style="color: #0000ff; font-weight: bold;">int</span>));
+    }
+
+    <span style="color: #008000; font-style: italic;">// 3. A matriz pode ser utilizada normalmente, com dois índices</span>
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; linhas; i++) {
+        <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> j = 0; j &lt; colunas; j++) {
+            matriz[i][j] = i + j;
+        }
+    }
+
+    <span style="color: #008000; font-style: italic;">// 4. Libera cada linha e, por último, o vetor de ponteiros</span>
+    <span style="color: #0000ff; font-weight: bold;">for</span> (<span style="color: #0000ff; font-weight: bold;">int</span> i = 0; i &lt; linhas; i++) {
+        free(matriz[i]);
+    }
+    free(matriz);
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Observação.</b> A liberação de uma matriz dinâmica deve seguir a <b>ordem inversa</b> da alocação: primeiro liberamos cada linha individualmente e, somente depois, o vetor de ponteiros que as armazenava. Liberar o vetor de ponteiros antes das linhas faria perdermos o único acesso a elas, causando vazamento de memória.
+</td>
+</tr>
+</table>
+
+<hr />
+
+<h3>Ponteiros genéricos (<code>void *</code>)</h3>
+
+<p>
+Um ponteiro do tipo <code>void *</code> é chamado de <b>ponteiro genérico</b>: ele armazena um endereço de memória, mas não possui um tipo associado, não podendo ser diretamente desreferenciado. É esse o tipo de ponteiro retornado por <code>malloc()</code>, justamente para que a função possa ser utilizada com qualquer tipo de dado.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #0000ff; font-weight: bold;">void</span> *ponteiroGenerico;
+
+<span style="color: #0000ff; font-weight: bold;">int</span> x = 10;
+ponteiroGenerico = &amp;x;
+
+<span style="color: #008000; font-style: italic;">// Para utilizar o valor, é necessário convertê-lo (cast) para o tipo correto</span>
+printf(<span style="color: #a31515;">"%d\n"</span>, *((<span style="color: #0000ff; font-weight: bold;">int</span> *) ponteiroGenerico));
+</pre>
+
+<p>
+Esse recurso será revisitado mais adiante na disciplina, ao implementarmos estruturas de dados genéricas, capazes de armazenar diferentes tipos de dados através de ponteiros <code>void *</code>.
+</p>
+
+<hr />
+
+<h3>Ponteiros para função</h3>
+
+<p>
+Assim como podemos ter um ponteiro que armazena o endereço de uma variável, também é possível ter um ponteiro que armazena o <b>endereço de uma função</b>. Esse recurso é bastante utilizado para tornar o comportamento de uma função configurável, permitindo, por exemplo, indicar qual critério de comparação deve ser utilizado em um algoritmo de ordenação.
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+<span style="color: #800080;">#include</span> <span style="color: #a31515;">&lt;stdio.h&gt;</span>
+
+<span style="color: #0000ff; font-weight: bold;">int</span> soma(<span style="color: #0000ff; font-weight: bold;">int</span> a, <span style="color: #0000ff; font-weight: bold;">int</span> b) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> a + b;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> subtracao(<span style="color: #0000ff; font-weight: bold;">int</span> a, <span style="color: #0000ff; font-weight: bold;">int</span> b) {
+    <span style="color: #0000ff; font-weight: bold;">return</span> a - b;
+}
+
+<span style="color: #0000ff; font-weight: bold;">int</span> main() {
+    <span style="color: #008000; font-style: italic;">// 'operacao' é um ponteiro para uma função que recebe (int, int) e retorna int</span>
+    <span style="color: #0000ff; font-weight: bold;">int</span> (*operacao)(<span style="color: #0000ff; font-weight: bold;">int</span>, <span style="color: #0000ff; font-weight: bold;">int</span>);
+
+    operacao = soma;
+    printf(<span style="color: #a31515;">"%d\n"</span>, operacao(4, 3)); <span style="color: #008000; font-style: italic;">// Imprime: 7</span>
+
+    operacao = subtracao;
+    printf(<span style="color: #a31515;">"%d\n"</span>, operacao(4, 3)); <span style="color: #008000; font-style: italic;">// Imprime: 1</span>
+
+    <span style="color: #0000ff; font-weight: bold;">return</span> 0;
+}
+</pre>
+
+<p>
+Este é apenas um primeiro contato com o conceito; ponteiros para função voltarão a ser úteis mais adiante na disciplina, especialmente ao implementarmos estruturas de dados genéricas.
+</p>
+
+<hr />
+
+<h3>Compilação e execução em linha de comando</h3>
+
+<p>
+Um programa em C passa por duas etapas até virar algo executável: a <b>compilação</b> (o código-fonte é traduzido para um arquivo executável) e a <b>execução</b> (o sistema operacional roda esse executável):
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+gcc -Wall main.c -o programa   <span style="color: #008000; font-style: italic;"># compila main.c e gera o executável "programa"</span>
+./programa                    <span style="color: #008000; font-style: italic;"># executa o programa (Linux/macOS)</span>
+programa.exe                  <span style="color: #008000; font-style: italic;"># executa o programa (Windows)</span>
+</pre>
+
+<p>
+Quando o programa está dividido em vários arquivos-fonte (como vimos ao separar interface e implementação de um TAD, na Aula 2b), todos precisam ser informados ao compilador de uma só vez:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+gcc -Wall main.c aluno.c turma.c -o programa
+</pre>
+
+<p>
+Digitar esse comando à mão, listando manualmente todo arquivo <code>.c</code> do projeto, é cansativo e cresce junto com o projeto — e é exatamente esse problema que o <code>Makefile</code> resolve.
+</p>
+
+<h4>Automatizando com <code>Makefile</code></h4>
+
+<p>
+Um <code>Makefile</code> é um arquivo de configuração lido pelo programa <code>make</code>, que descreve <b>como construir</b> um projeto: quais arquivos dependem de quais, e qual comando executar para gerar cada um. Em vez de lembrar (e digitar) o comando completo do <code>gcc</code>, basta rodar:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+make
+</pre>
+
+<p>
+Um <code>Makefile</code> simples para o exemplo com <code>main.c</code>, <code>aluno.c</code> e <code>turma.c</code> poderia ser:
+</p>
+
+<pre style="line-height: 1.2; background: #fafafa; color: #222; border: 1px solid #ddd; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 10px 0;">
+programa: main.c aluno.c turma.c
+	gcc -Wall main.c aluno.c turma.c -o programa
+
+clean:
+	rm -f programa
+</pre>
+
+<table border="1" cellpadding="8" width="100%">
+<tr bgcolor="#EEEEEE">
+<td>
+<b>Estrutura de uma regra.</b> Cada regra do <code>Makefile</code> segue o formato <code>alvo: dependências</code>, seguido de uma linha de comando (que deve começar com um caractere de <b>tabulação</b>, não espaços). A regra <code>programa: main.c aluno.c turma.c</code> diz que o alvo <code>programa</code> depende desses três arquivos; se qualquer um deles for modificado, rodar <code>make</code> novamente recompila o projeto. A regra <code>clean</code> é uma convenção comum para remover os arquivos gerados, executada com <code>make clean</code>.
+</td>
+</tr>
+</table>
+
+<p>
+Para projetos maiores, o <code>make</code> também evita recompilar arquivos que não mudaram, tornando a compilação mais rápida — mas essa otimização (usando arquivos <code>.o</code> intermediários) foge do escopo desta disciplina. Por ora, o importante é reconhecer que um <code>Makefile</code> existe para automatizar exatamente o comando de compilação que já conhecemos.
+</p>
+
+<hr />
+
+<h2>Exercícios</h2>
+
+<ol>
+
+<li>
+Explique por que a liberação de uma matriz dinâmica (vetor de ponteiros) precisa seguir a ordem inversa da alocação.
+</li>
+
+<li>
+Por que um <code>Makefile</code> é útil mesmo sendo possível compilar um projeto digitando o comando <code>gcc</code> completo manualmente? O que aconteceria se a linha de comando de uma regra do <code>Makefile</code> começasse com espaços em vez de uma tabulação?
+</li>
+
+</ol>
+
+<hr />
+
+<h2>Sugestões de Respostas dos Exercícios</h2>
+
+<details>
+
+<summary><b>Exercício 1</b></summary>
+
+<p>
+Porque, para acessar qualquer linha da matriz, é preciso primeiro passar pelo vetor de ponteiros (<code>matriz</code>) para depois chegar a cada linha (<code>matriz[i]</code>). Se liberássemos <code>matriz</code> antes de liberar cada <code>matriz[i]</code>, perderíamos a única referência que tínhamos para essas linhas, tornando-as inacessíveis e impossíveis de liberar — um vazamento de memória. Por isso, é preciso liberar primeiro as linhas, e só depois o vetor de ponteiros.
+</p>
+
+</details>
+
+<br />
+
+<details>
+
+<summary><b>Exercício 2</b></summary>
+
+<p>
+Um <code>Makefile</code> é útil porque evita ter que <b>lembrar e redigitar</b> o comando de compilação completo (com todos os arquivos <code>.c</code> do projeto) toda vez que algo precisar ser recompilado — especialmente à medida que o projeto cresce. Com o <code>Makefile</code>, basta digitar <code>make</code>.
+</p>
+
+<p>
+Se a linha de comando de uma regra começasse com espaços em vez de uma tabulação, o programa <code>make</code> não reconheceria aquela linha como o comando da regra, e o processo de compilação falharia com um erro — o caractere de tabulação faz parte da sintaxe exigida pelo formato do <code>Makefile</code>.
+</p>
+
+</details>
+
+            <!-- Conteudo termina aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <script type="text/javascript">ucbfooter();</script>
+    </div>
+
+</div>
+
+</body>
+</html>
