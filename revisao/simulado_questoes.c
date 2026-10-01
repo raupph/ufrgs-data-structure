@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 /* =====================================================================================
  * 1. DEFINIÇÃO DOS TIPOS E TADs (CONFORME DADO NO SIMULADO)
@@ -650,26 +651,51 @@ int mesmasElementos(PilhaEnc *pilha, FilaEnc *fila) {
 
 /* C1. Implemente recursivamente abpTodosPares, que retorna 1 se todos os produtos possuem cod par, e 0 se algum é ímpar. Retorne 1 para árvore vazia. */
 int abpTodosPares(const NodoArv *raiz) {
-    // TODO: Escreva sua implementação aqui
-    return 1;
+    int par = 1;
+    if(raiz == NULL)
+        return 1;
+
+    if(0 != (raiz->dado.cod % 2))
+        par = 0;
+
+    return par && abpTodosPares(raiz->dir) && abpTodosPares(raiz->esq);
 }
 
 /* C2. Implemente recursivamente abpContarComUmFilho, que retorna a quantidade de nodos com exatamente um filho (esquerdo ou direito, mas não ambos). */
 int abpContarComUmFilho(const NodoArv *raiz) {
-    // TODO: Escreva sua implementação aqui
-    return 0;
+    int cont = 0;
+    if(raiz == NULL){
+        return 0;
+    }
+    if((raiz->dir == NULL) != (raiz->esq == NULL)){
+        cont = 1;
+    }
+
+    return cont + abpContarComUmFilho(raiz->dir) + abpContarComUmFilho(raiz->esq);
 }
 
 /* C3. Implemente recursivamente abpContarMenoresQue, que retorna a quantidade de produtos cujo cod é estritamente menor que x. Dica: use a propriedade da ABP para podar subárvores. */
 int abpContarMenoresQue(const NodoArv *raiz, int x) {
-    // TODO: Escreva sua implementação aqui
-    return 0;
+    int cont = 0;
+    if(raiz == NULL){
+        return 0;
+    }
+
+    if(raiz->dado.cod < x){
+        cont = 1;
+        return cont + abpContarMenoresQue(raiz->dir, x) + abpContarMenoresQue(raiz->esq, x); 
+    }
+    else{
+        return abpContarMenoresQue(raiz->esq, x);
+    }
+
 }
 
 /* C4. Implemente recursivamente abpMaiorCod, que retorna o maior cod aproveitando a propriedade da ABP (sem percorrer toda a árvore). Assuma árvore não vazia. */
 int abpMaiorCod(const NodoArv *raiz) {
-    // TODO: Escreva sua implementação aqui
-    return 0;
+    if(raiz->dir == NULL) return raiz->dado.cod;
+
+    return abpMaiorCod(raiz->dir);
 }
 
 /* C5. Implemente recursivamente abpImprimirIntervalo, que imprime em ordem crescente todos os produtos com cod ∈ [minCod, maxCod]. Dica: use a propriedade da ABP para evitar subárvores fora do intervalo. */
